@@ -27,8 +27,8 @@ export default function Login() {
     }
 
     return (
-        <main className="flex h-screen w-screen items-center justify-center bg-secondary">
-            <div className="flex min-h-96 flex-col items-center gap-3 rounded-xl bg-white px-10 py-5 shadow-2xl">
+        <main className="flex h-screen w-screen items-center justify-center">
+            <div className="flex min-h-96 flex-col items-center gap-3 rounded-xl bg-background px-10 py-5 shadow-2xl">
                 <Image alt="logo" src="/logo.jpeg" width={200} height={200} />
                 <h2 className="font-bold">FAÇA SEU LOGIN</h2>
                 <h3 className="text-sm">Informe seu usuário e senha</h3>
@@ -71,7 +71,7 @@ export default function Login() {
                         <Button className="w-full text-lg">Login</Button>
                     </form>
                 </Form>
-
+                <span className="text-xs">2025 © Gestão de Clientes</span>
             </div>
         </main>
     );
