@@ -15,6 +15,7 @@ import {
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./collapsible";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronRight, LogOut, TableProperties, User } from "lucide-react";
+import Link from "next/link";
 
 interface NavigationItem {
   isDropdown: boolean;
@@ -36,33 +37,40 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
     console.log("User logged out");
   };
 
+  const handleMenuClick = (nav: NavigationItem, event: React.MouseEvent) => {
+    if (!isOpen) {
+      event.preventDefault();
+      sidebar.setOpen(true);
+    }
+  };
+
   const navigations: NavigationItem[] = [
     {
       isDropdown: true,
-      title: "Cadastro de Clientes",
+      title: "Cadastro Clientes",
       sons: [
-        { title: "Cadastro Geral", path: "cadastro_geral" },
-        { title: "Pacientes", path: "pacientes" },
-        { title: "Alunos", path: "alunos" },
+        { title: "Cadastro Geral", path: "/cc/cadastro_geral" },
+        { title: "Pacientes", path: "/cc/pacientes" },
+        { title: "Alunos", path: "/cc/alunos" },
       ],
     },
     {
       isDropdown: false,
       title: "Funcionários",
-      path: "funcionarios",
+      path: "/funcionarios",
     },
     {
       isDropdown: false,
       title: "Atendimento",
-      path: "atendimento",
+      path: "/atendimento",
     },
     {
       isDropdown: true,
       title: "Treinamentos",
       sons: [
-        { title: "Cursos", path: "cursos" },
-        { title: "Turmas", path: "turmas" },
-        { title: "Lista de Presença", path: "lista_de_presenca" },
+        { title: "Cursos", path: "/treinamentos/cursos" },
+        { title: "Turmas", path: "/treinamentos/turmas" },
+        { title: "Lista de Presença", path: "/treinamentos/lista_de_presenca" },
       ],
     },
     {
@@ -78,8 +86,8 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
       isDropdown: true,
       title: "Financeiro",
       sons: [
-        { title: "Contas a Pagar", path: "contas_a_pagar" },
-        { title: "Contas a Receber", path: "contas_a_receber" },
+        { title: "Contas a Pagar", path: "/financeiro/contas_a_pagar" },
+        { title: "Contas a Receber", path: "/financeiro/contas_a_receber" },
       ],
     },
   ];
@@ -87,13 +95,16 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="cursor-pointer">
-        {isOpen ? (
-          <p className="h-9 w-full overflow-hidden text-center text-2xl font-bold">
-            Gestão de Clientes
-          </p>
-        ) : (
-          <p className="h-10 w-full text-center text-2xl font-bold">G</p>
-        )}
+        <Link href={'/'}>
+          {isOpen ? (
+            <p className="h-9 w-full overflow-hidden text-center text-2xl font-bold">
+              Gestão de Clientes
+            </p>
+          ) : (
+            <p className="h-10 w-full text-center text-2xl font-bold">G</p>
+          )}
+        </Link>
+
       </SidebarHeader>
 
       <SidebarContent className="gap-0 bg-[#222D32] text-[#b8c7ce]">
@@ -117,6 +128,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                   <SidebarMenuButton
                     tooltip={nav.title}
                     className="py-6 hover:!bg-[#1E282C] hover:!text-white"
+                    onClick={(event) => handleMenuClick(nav, event)}
                   >
                     <TableProperties />
                     <span>{nav.title}</span>
@@ -131,9 +143,9 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                           className="py-3 text-[#b8c7ce] hover:bg-[#1E282C] hover:text-white active:bg-[#1E282C] active:text-white"
                           asChild
                         >
-                          <a href={subnav.path}>
+                          <Link href={subnav.path}>
                             <span>{subnav.title}</span>
-                          </a>
+                          </Link>
                         </SidebarMenuSubButton>
                       </div>
                     ))}
@@ -143,13 +155,16 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
             </Collapsible>
           ) : (
             <div key={nav.title}>
-              <SidebarMenuButton
-                className="py-6 hover:bg-[#1E282C] hover:text-white active:bg-[#1E282C] active:text-white"
-                tooltip={nav.title}
-              >
-                <TableProperties />
-                <span>{nav.title}</span>
-              </SidebarMenuButton>
+              <Link href={nav.path!}>
+                <SidebarMenuButton
+                  className="py-6 hover:bg-[#1E282C] hover:text-white active:bg-[#1E282C] active:text-white"
+                  tooltip={nav.title}
+                  onClick={(event) => handleMenuClick(nav, event)}
+                >
+                  <TableProperties />
+                  <span>{nav.title}</span>
+                </SidebarMenuButton>
+              </Link>
             </div>
           )
         )}
@@ -157,14 +172,17 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 
       {/* LOGOUT DROPDOWN MENU IN SIDEBAR FOOTER */}
       <SidebarFooter className="border-t border-[#1a2226] bg-[#222D32] p-4">
-        <DropdownMenu >
+        <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button className="flex gap-3 text-[#b8c7ce] hover:bg-[#1E282C] hover:text-white">
               <User size={20} />
               {isOpen && <span>Nome do Usuário</span>}
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-48 border-none bg-[#2C3B41] p-2 !text-[#b8c7ce]">
+          <DropdownMenuContent
+            align="start"
+            className="w-48 border-none bg-[#2C3B41] p-2 !text-[#b8c7ce]"
+          >
             <DropdownMenuItem
               className="cursor-pointer hover:!bg-[#1E282C] hover:!text-[#b8c7ce]"
               onClick={handleLogout}
@@ -177,6 +195,6 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
 
       <SidebarRail />
-    </Sidebar>
+    </Sidebar >
   );
 }

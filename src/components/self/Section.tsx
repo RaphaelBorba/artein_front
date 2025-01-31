@@ -5,7 +5,7 @@ import React from "react";
 
 interface SectionProps {
     children: React.ReactNode;
-    title: string
+    title?: string
 }
 
 export default function Section({ title, children }: SectionProps) {
@@ -15,12 +15,11 @@ export default function Section({ title, children }: SectionProps) {
             <div className="flex size-full flex-col">
                 <SidebarTrigger className="" />
                 <div className="flex flex-col gap-3 p-3.5">
-                    <h1 className=" text-2xl text-[#333]">{title}</h1>
-                    <div className="size-full bg-white">
-                        SEJA BEM VINDO
+                    {title && <h1 className=" text-2xl text-[#333]">{title}</h1>}
+                    <div className="size-full bg-white p-3">
+                        {children}
                     </div>
                 </div>
-                {children}
             </div>
         </SidebarProvider>
     );

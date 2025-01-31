@@ -2,11 +2,8 @@ import Section from "@/components/self/Section";
 
 export default function Home() {
   return (
-    <main className="">
-      
-      <Section title="Funcionários" >
-    <div></div>
-      </Section>
-    </main>
+    <Section >
+      <h1 className="py-5 text-3xl">Seja bem-vindo(a)!</h1>
+    </Section>
   );
 }
