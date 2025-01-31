@@ -4,7 +4,9 @@ export default function Home() {
   return (
     <main className="">
       
-      <Section/>
+      <Section title="Funcionários" >
+    <div></div>
+      </Section>
     </main>
   );
 }

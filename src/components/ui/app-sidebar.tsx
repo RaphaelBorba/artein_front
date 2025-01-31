@@ -13,7 +13,8 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./collapsible";
-import { ChevronRight, TableProperties } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { ChevronRight, LogOut, TableProperties, User } from "lucide-react";
 
 interface NavigationItem {
   isDropdown: boolean;
@@ -30,6 +31,10 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   const isOpen = sidebar.state === "expanded";
 
   const [activeCollapsible, setActiveCollapsible] = React.useState<string | null>(null);
+
+  const handleLogout = () => {
+    console.log("User logged out");
+  };
 
   const navigations: NavigationItem[] = [
     {
@@ -81,7 +86,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="cursor-pointer">
         {isOpen ? (
           <p className="h-9 w-full overflow-hidden text-center text-2xl font-bold">
             Gestão de Clientes
@@ -150,8 +155,27 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
         )}
       </SidebarContent>
 
-      {/* Footer can be uncommented and customized if needed */}
-      {/* <SidebarFooter></SidebarFooter> */}
+      {/* LOGOUT DROPDOWN MENU IN SIDEBAR FOOTER */}
+      <SidebarFooter className="border-t border-[#1a2226] bg-[#222D32] p-4">
+        <DropdownMenu >
+          <DropdownMenuTrigger asChild>
+            <button className="flex gap-3 text-[#b8c7ce] hover:bg-[#1E282C] hover:text-white">
+              <User size={20} />
+              {isOpen && <span>Nome do Usuário</span>}
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-48 border-none bg-[#2C3B41] p-2 !text-[#b8c7ce]">
+            <DropdownMenuItem
+              className="cursor-pointer hover:!bg-[#1E282C] hover:!text-[#b8c7ce]"
+              onClick={handleLogout}
+            >
+              <LogOut className="mr-2" size={16} />
+              Sair
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </SidebarFooter>
+
       <SidebarRail />
     </Sidebar>
   );
