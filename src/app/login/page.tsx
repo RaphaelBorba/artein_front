@@ -10,10 +10,17 @@ import { Toggle } from "@/components/ui/toggle";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import api from "@/lib/api";
+import { useAuthStore } from "@/stores/authStore";
+import { useRouter } from "next/navigation";
+import { useLoader } from "@/hooks/useLoader";
+import AuthLoader from "@/components/self/Loader";
 
 export default function Login() {
 
     const [togglePassword, setTogglePassword] = useState(false)
+    const { loading, toggleLoader } = useLoader(false);
+    const router = useRouter();
     const form = useForm<UserFormData>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
@@ -22,9 +29,27 @@ export default function Login() {
         }
     })
 
-    function onSubmit(values: UserFormData) {
-        console.log(values)
+    async function onSubmit(values: UserFormData) {
+        toggleLoader(true)
+        try {
+            const response = await api.post('/auth/login', {
+                username: values.name,
+                password: values.password,
+            });
+            const token = response.data.access_token;
+
+            useAuthStore.getState().setToken(token);
+            localStorage.setItem("jwt_token", token);
+
+            router.push('/');
+        } catch (error) {
+            console.log(error);
+        } finally {
+            toggleLoader(false)
+        }
     }
+
+
 
     return (
         <main className="flex h-screen w-screen items-center justify-center">
@@ -73,6 +98,11 @@ export default function Login() {
                 </Form>
                 <span className="text-xs">2025 © Gestão de Clientes</span>
             </div>
+            {loading && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 opacity-30">
+                    <AuthLoader />
+                </div>
+            )}
         </main>
     );
 }
