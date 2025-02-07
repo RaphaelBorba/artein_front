@@ -25,7 +25,6 @@ export function validateAndUpdateAuthToken(token: string): boolean {
     if (decoded.exp * 1000 < Date.now()) {
       return false;
     }
-    console.log(decoded)
     // Update the global auth store with user data
     useAuthStore.getState().setUser({
       userId: decoded.userId,

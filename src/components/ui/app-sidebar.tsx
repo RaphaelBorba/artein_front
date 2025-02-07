@@ -16,6 +16,8 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./collapsib
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronRight, LogOut, TableProperties, User } from "lucide-react";
 import Link from "next/link";
+import { useAuthStore } from "@/stores/authStore";
+import { useLogout } from "@/hooks/useLogout";
 
 interface NavigationItem {
   isDropdown: boolean;
@@ -32,10 +34,8 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   const isOpen = sidebar.state === "expanded";
 
   const [activeCollapsible, setActiveCollapsible] = React.useState<string | null>(null);
-
-  const handleLogout = () => {
-    console.log("User logged out");
-  };
+  const { user} = useAuthStore()
+  const logout = useLogout()
 
   const handleMenuClick = (nav: NavigationItem, event: React.MouseEvent) => {
     if (!isOpen) {
@@ -176,7 +176,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
           <DropdownMenuTrigger asChild>
             <button className="flex gap-3 text-[#b8c7ce] hover:bg-[#1E282C] hover:text-white">
               <User size={20} />
-              {isOpen && <span>Nome do Usuário</span>}
+              {isOpen && <span>{user?.name}</span>}
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -185,7 +185,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
           >
             <DropdownMenuItem
               className="cursor-pointer hover:!bg-[#1E282C] hover:!text-[#b8c7ce]"
-              onClick={handleLogout}
+              onClick={logout}
             >
               <LogOut className="mr-2" size={16} />
               Sair
