@@ -43,10 +43,7 @@ export default function AuthValidator({ children }: AuthValidatorProps) {
     <div className="relative">
       {children}
       {loading && (
-        // Overlay loader with semi-transparent background
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 opacity-30">
           <AuthLoader />
-        </div>
       )}
     </div>
   );

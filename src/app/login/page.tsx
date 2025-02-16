@@ -15,10 +15,13 @@ import { useAuthStore } from "@/stores/authStore";
 import { useRouter } from "next/navigation";
 import { useLoader } from "@/hooks/useLoader";
 import AuthLoader from "@/components/self/Loader";
+import { useToast } from "@/hooks/use-toast";
+import axios from "axios";
 
 export default function Login() {
 
     const [togglePassword, setTogglePassword] = useState(false)
+    const { toast } = useToast()
     const { loading, toggleLoader } = useLoader(false);
     const router = useRouter();
     const form = useForm<UserFormData>({
@@ -43,7 +46,18 @@ export default function Login() {
 
             router.push('/');
         } catch (error) {
-            console.log(error);
+            if (axios.isAxiosError(error) && error.response) {
+                toast({
+                    title: error.response?.data?.message,
+                    variant: "destructive",
+                });
+            } else {
+                toast({
+                    title: "Erro!",
+                    description: "Erro não esperado, consulte o suporte.",
+                    variant: "destructive",
+                });
+            }
         } finally {
             toggleLoader(false)
         }
@@ -99,9 +113,7 @@ export default function Login() {
                 <span className="text-xs">2025 © Gestão de Clientes</span>
             </div>
             {loading && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 opacity-30">
-                    <AuthLoader />
-                </div>
+                <AuthLoader />
             )}
         </main>
     );
