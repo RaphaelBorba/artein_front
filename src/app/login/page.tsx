@@ -38,7 +38,7 @@ export default function Login() {
             const response = await api.post('/auth/login', {
                 username: values.name,
                 password: values.password,
-            });
+            }, { skipAuth: true });
             const token = response.data.access_token;
 
             useAuthStore.getState().setToken(token);

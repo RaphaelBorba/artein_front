@@ -20,6 +20,7 @@ const eslintConfig = [
       tailwindcss,
     },
     rules: {
+      "@typescript-eslint/no-explicit-any": "off",
       "tailwindcss/classnames-order": "warn",
       "react/prop-types": "off",
       "@typescript-eslint/no-unused-vars": [
