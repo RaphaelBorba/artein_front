@@ -8,6 +8,7 @@ interface InputWithLabelI {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   inputType?: string;
+  value:string;
 }
 
 export default function InputWithLabel({
@@ -16,6 +17,7 @@ export default function InputWithLabel({
   onChange,
   placeholder = "",
   inputType = "text",
+  value
 }: InputWithLabelI) {
   return (
     <div className="flex flex-col gap-2">
@@ -27,7 +29,7 @@ export default function InputWithLabel({
           id={idLabel}
           placeholder={placeholder}
           onChange={onChange}
-          className=""
+          value={value}
         />
     </div>
   );

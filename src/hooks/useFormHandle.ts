@@ -17,5 +17,5 @@ export function useFormHandler<T>(initialValues: T) {
     setValues((prev) => ({ ...prev, [field]: newValue }));
   };
 
-  return { values, handleChange, setValue };
+  return { values, handleChange, setValue, setValues };
 }

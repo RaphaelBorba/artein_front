@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useFormHandler } from "@/hooks/useFormHandle";
 import { useLoader } from "@/hooks/useLoader";
 import api from "@/lib/api";
+import { Button } from "@/components/ui/button";
 
 // Use a default value that's not an empty string
 const defaultOptionValue = "default";
@@ -20,11 +21,11 @@ const interessedOptions = [
   },
   {
     value: "1",
-    label: "Desinteressado",
+    label: "Interessado",
   },
   {
     value: "2",
-    label: "Interessado",
+    label: "Desinteressado",
   },
 ];
 
@@ -35,7 +36,7 @@ export default function Studants() {
   const [communicationMethod, setCommunicationMethod] = useState<any[]>([]);
 
   // Set initial state with default non-empty string for select fields
-  const { values, handleChange, setValue } = useFormHandler({
+  const { values, handleChange, setValue, setValues } = useFormHandler({
     registerName: "",
     cpf: "",
     cnpj: "",
@@ -73,6 +74,18 @@ export default function Studants() {
   const handleSelectChange = (field: "interessed" | "infoThrow") => (value: string) => {
     setValue(field, value);
   };
+  console.log(values)
+
+  const cleanInputs = () => {
+    setValues({
+      registerName: "",
+      cpf: "",
+      cnpj: "",
+      cellphone: "",
+      interessed: defaultOptionValue,
+      infoThrow: defaultOptionValue,
+    })
+  }
 
   return (
     <Section title="Cadastro Geral">
@@ -84,20 +97,24 @@ export default function Studants() {
               idLabel="registerName"
               labelText="Nome Completo"
               onChange={handleChange("registerName")}
+              value={values.registerName}
             />
             <MaskInputWithLabel
+              value={values.cpf}
               labelText="CPF"
               idLabel="cpf"
               onChange={handleChange("cpf", "___.___.___-__")}
               mask="___.___.___-__"
             />
             <MaskInputWithLabel
+              value={values.cnpj}
               labelText="CNPJ"
               idLabel="cnpj"
               onChange={handleChange("cnpj", "__.___.___/____-__")}
               mask="__.___.___/____-__"
             />
             <MaskInputWithLabel
+              value={values.cellphone}
               labelText="Celular"
               idLabel="cellphone"
               onChange={handleChange("cellphone", "(__) _____-____")}
@@ -106,7 +123,7 @@ export default function Studants() {
           </div>
 
           {/* Grid for the two select inputs */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
+          <div className="grid grid-cols-1 items-end gap-4 sm:grid-cols-4">
             <SelectWithLabel
               idLabel="interessed"
               labelText="Interessados em Cursos"
@@ -129,6 +146,8 @@ export default function Studants() {
               placeholder="Selecione um método"
               value={values.infoThrow}
             />
+            <Button type="button" onClick={() => console.log("Pesquisar")} className="bg-[#00c0ef] hover:bg-[#5bc0de]">Pesquisar</Button>
+            <Button type="button" onClick={cleanInputs} variant="outline">Limpar</Button>
           </div>
         </div>
       </form>
