@@ -46,39 +46,39 @@ export function DataTable<T>({
     footer,
 }: DataTableProps<T>) {
     return (
-        <Table className="overflow-hidden">
-            {caption && <TableCaption>{caption}</TableCaption>}
-            <TableHeader>
-                <TableRow>
-                    {columns.map((col, index) => (
-                        <TableHead key={index}>{col.header}</TableHead>
-                    ))}
-                    {actions && <TableHead>Ações</TableHead>}
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {data.map((row, rowIndex) => (
-                    <TableRow key={rowIndex}>
-                        {columns.map((col, colIndex) => (
-                            <TableCell key={colIndex}>
-                                {typeof col.accessor === "function"
-                                    ? col.accessor(row)
-                                    : (row[col.accessor] as unknown as React.ReactNode)}
-                            </TableCell>
-                        ))}
-                        {actions && <TableCell>{actions(row)}</TableCell>}
-                    </TableRow>
-                ))}
-            </TableBody>
-            {footer && (
-                <TableFooter>
+            <Table className="w-full table-auto">
+                {caption && <TableCaption>{caption}</TableCaption>}
+                <TableHeader>
                     <TableRow>
-                        <TableCell colSpan={columns.length + (actions ? 1 : 0)}>
-                            {footer}
-                        </TableCell>
+                        {columns.map((col, index) => (
+                            <TableHead key={index}>{col.header}</TableHead>
+                        ))}
+                        {actions && <TableHead>Ações</TableHead>}
                     </TableRow>
-                </TableFooter>
-            )}
-        </Table>
+                </TableHeader>
+                <TableBody>
+                    {data.map((row, rowIndex) => (
+                        <TableRow key={rowIndex}>
+                            {columns.map((col, colIndex) => (
+                                <TableCell key={colIndex}>
+                                    {typeof col.accessor === "function"
+                                        ? col.accessor(row)
+                                        : (row[col.accessor] as unknown as React.ReactNode)}
+                                </TableCell>
+                            ))}
+                            {actions && <TableCell>{actions(row)}</TableCell>}
+                        </TableRow>
+                    ))}
+                </TableBody>
+                {footer && (
+                    <TableFooter>
+                        <TableRow>
+                            <TableCell colSpan={columns.length + (actions ? 1 : 0)}>
+                                {footer}
+                            </TableCell>
+                        </TableRow>
+                    </TableFooter>
+                )}
+            </Table>
     );
 }
