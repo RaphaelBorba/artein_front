@@ -18,8 +18,21 @@ export interface Column<T> {
     /**
      * Either the key of the row data or a render function.
      */
-    accessor: keyof T | ((row: T) => React.ReactNode);
+    accessor?: keyof T | ((row: T) => React.ReactNode);
+    /**
+     * Optional render function that receives the computed cell value and the entire row record.
+     */
+    render?: (text: React.ReactNode, record: T) => React.ReactNode;
+    /**
+     * Optional CSS min-width for the column (e.g., "100px").
+     */
+    minWidth?: string;
+    /**
+     * Optional CSS max-width for the column (e.g., "300px").
+     */
+    maxWidth?: string;
 }
+
 
 export interface DataTableProps<T> {
     data: T[];
@@ -46,39 +59,61 @@ export function DataTable<T>({
     footer,
 }: DataTableProps<T>) {
     return (
-            <Table className="w-full table-auto">
-                {caption && <TableCaption>{caption}</TableCaption>}
-                <TableHeader>
-                    <TableRow>
-                        {columns.map((col, index) => (
-                            <TableHead key={index}>{col.header}</TableHead>
-                        ))}
-                        {actions && <TableHead>Ações</TableHead>}
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {data.map((row, rowIndex) => (
-                        <TableRow key={rowIndex}>
-                            {columns.map((col, colIndex) => (
-                                <TableCell key={colIndex}>
-                                    {typeof col.accessor === "function"
-                                        ? col.accessor(row)
-                                        : (row[col.accessor] as unknown as React.ReactNode)}
-                                </TableCell>
-                            ))}
-                            {actions && <TableCell>{actions(row)}</TableCell>}
-                        </TableRow>
+        <Table className="w-full table-auto">
+            {caption && <TableCaption>{caption}</TableCaption>}
+            <TableHeader>
+                <TableRow>
+                    {columns.map((col, index) => (
+                        <TableHead
+                            className="border"
+                            key={index}
+                            style={{
+                                minWidth: col.minWidth,
+                                maxWidth: col.maxWidth,
+                            }}
+                        >
+                            {col.header}
+                        </TableHead>
                     ))}
-                </TableBody>
-                {footer && (
-                    <TableFooter>
-                        <TableRow>
-                            <TableCell colSpan={columns.length + (actions ? 1 : 0)}>
-                                {footer}
-                            </TableCell>
-                        </TableRow>
-                    </TableFooter>
-                )}
-            </Table>
+                    {actions && <TableHead>Ações</TableHead>}
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {data.map((row, rowIndex) => (
+                    <TableRow key={rowIndex}>
+                        {columns.map((col, colIndex) => {
+                            const cellValue: React.ReactNode | string =
+                                typeof col.accessor === "function"
+                                    ? col.accessor(row)
+                                    : col.accessor
+                                        ? (row[col.accessor] as unknown as React.ReactNode)
+                                        : null;
+                            return (
+                                <TableCell
+                                    key={colIndex}
+                                    style={{
+                                        minWidth: col.minWidth,
+                                        maxWidth: col.maxWidth,
+                                    }}
+                                >
+                                    {col.render ? col.render(cellValue, row) : cellValue}
+                                </TableCell>
+                            );
+                        })}
+                        {actions && <TableCell>{actions(row)}</TableCell>}
+                    </TableRow>
+                ))}
+            </TableBody>
+            {footer && (
+                <TableFooter>
+                    <TableRow>
+                        <TableCell colSpan={columns.length + (actions ? 1 : 0)}>
+                            {footer}
+                        </TableCell>
+                    </TableRow>
+                </TableFooter>
+            )}
+        </Table>
     );
 }
+
