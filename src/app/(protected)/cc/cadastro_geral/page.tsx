@@ -12,12 +12,14 @@ import api from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { CommunicationMethod } from "@/types/smallModels";
 import { GeneralRegister as GeneralRegisterI } from "@/types/generalRegister";
-import { Column, DataTable } from "@/components/self/DataTable";
-import { Edit, Eye, Trash } from "lucide-react";
-import { calculateAge, formatDate } from "@/lib/utils";
+import { DataTable } from "@/components/self/DataTable";
+import { Edit, Eye, Plus, Trash } from "lucide-react";
+import { formatDate } from "@/lib/utils";
 import { format } from "@react-input/mask";
+import { ColumnDef } from "@tanstack/react-table";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
-// Use a default value that's not an empty string
 const defaultOptionValue = "default";
 
 const interessedOptions = [
@@ -42,222 +44,281 @@ const masks = {
   cep: "_____-___"
 }
 
-const columns: Column<GeneralRegisterI>[] = [
+
+export const columns: ColumnDef<GeneralRegisterI, any>[] = [
   {
+    accessorKey: "id",
     header: "Id do Cadastro",
-    accessor: "id",
-    minWidth: '150px'
+    size: 150,
   },
   {
+    accessorKey: "photo",
     header: "Foto",
-    accessor: "photo",
-    minWidth: '50px', maxWidth: "250px"
+    size: 150,
+
   },
   {
+    accessorKey: "fullName",
     header: "Nome Completo",
-    accessor: "fullName",
-    minWidth: '350px'
+    size: 350,
   },
   {
+    accessorKey: "personType",
     header: "Tipo Pessoa",
-    accessor: "personType",
-    minWidth: '150px',
-    render: (text) => (text === 'pf' ? 'Pessoa Física' : 'Pessoa Jurídica')
+    size: 150,
+    cell: (info) =>
+      info.getValue() === "pf" ? "Pessoa Física" : "Pessoa Jurídica",
   },
   {
+    accessorKey: "birthDate",
     header: "Data de Nascimento",
-    accessor: "birthDate",
-    minWidth: '160px',
-    render: (text) => ((typeof text === "string") ? formatDate(text) : text)
+    size: 160,
+    cell: (info) => {
+      const val = info.getValue();
+      return typeof val === "string" ? formatDate(val) : val;
+    },
   },
   {
+    accessorKey: "age",
     header: "Idade",
-    accessor: "birthDate",
-    minWidth: '80px',
-    render: (text) => ((typeof text === "string") ? calculateAge(text) : text)
+    size: 80,
   },
   {
+    accessorKey: "placeOfBirth",
     header: "Nacionalidade",
-    accessor: "placeOfBirth",
-    minWidth: '150px'
+    size: 150,
   },
   {
+    accessorKey: "nationality",
     header: "Naturalidade",
-    accessor: "nationality",
-    minWidth: '150px'
+    size: 150,
   },
   {
+    accessorKey: "maritalStatusId",
     header: "Estado Civil",
-    accessor: "maritalStatusId",
-    minWidth: '50px',
-    render: (text, record) => record.maritalStatus?.name
+    size: 150,
+    cell: (info) => info.row.original.maritalStatus?.name,
   },
   {
+    accessorKey: "cpf",
     header: "CPF",
-    accessor: "cpf",
-    minWidth: '140px',
-    render: (text) => typeof text === "string" && format(text, { mask: masks.cpf, replacement: { _: /\d/ } })
+    size: 140,
+    cell: (info) => {
+      const val = info.getValue();
+      return typeof val === "string"
+        ? format(val, { mask: masks.cpf, replacement: { _: /\d/ } })
+        : val;
+    },
   },
   {
+    accessorKey: "cnpj",
     header: "CNPJ",
-    accessor: "cnpj",
-    minWidth: '180px',
-    render: (text) => typeof text === "string" && format(text, { mask: masks.cnpj, replacement: { _: /\d/ } })
+    size: 180,
+    cell: (info) => {
+      const val = info.getValue();
+      return typeof val === "string"
+        ? format(val, { mask: masks.cnpj, replacement: { _: /\d/ } })
+        : val;
+    },
   },
   {
+    accessorKey: "companyName",
     header: "Razão Social",
-    accessor: "companyName",
-    minWidth: '350px'
+    size: 350,
   },
   {
+    accessorKey: "educationLevelId",
     header: "Escolaridade",
-    accessor: "educationLevelId",
-    minWidth: '250px',
-    render: (text, record) => record.educationLevel?.name
+    size: 250,
+    cell: (info) => info.row.original.educationLevel?.name,
   },
   {
+    accessorKey: "profession",
     header: "Profissão",
-    accessor: "profession",
-    minWidth: '150px'
+    size: 150,
   },
   {
+    accessorKey: "workplace",
     header: "Local de Trabalho",
-    accessor: "workplace",
-    minWidth: '200px'
+    size: 200,
   },
   {
+    accessorKey: "currentJob",
     header: "Ocupação Atual",
-    accessor: "currentJob",
-    minWidth: '200px'
+    size: 200,
   },
   {
+    accessorKey: "phoneNumber",
     header: "Celular",
-    accessor: "phoneNumber",
-    minWidth: '150px',
-    render: (text) => typeof text === "string" && format(text, { mask: masks.cellphone, replacement: { _: /\d/ } })
+    size: 150,
+    cell: (info) => {
+      const val = info.getValue();
+      return typeof val === "string"
+        ? format(val, { mask: masks.cellphone, replacement: { _: /\d/ } })
+        : val;
+    },
   },
   {
+    accessorKey: "email",
     header: "Email",
-    accessor: "email",
-    minWidth: '300px'
+    size: 300,
   },
   {
+    accessorKey: "firstContactDate",
     header: "Data 1º Contato",
-    accessor: "firstContactDate",
-    minWidth: '150px',
-    render: (text) => ((typeof text === "string") ? formatDate(text) : text)
+    size: 150,
+    cell: (info) => {
+      const val = info.getValue();
+      return typeof val === "string" ? formatDate(val) : val;
+    },
   },
   {
+    accessorKey: "cep",
     header: "CEP",
-    accessor: "cep",
-    minWidth: '100px',
-    render: (text) => typeof text === "string" && format(text, { mask: masks.cep, replacement: { _: /\d/ } })
+    size: 100,
+    cell: (info) => {
+      const val = info.getValue();
+      return typeof val === "string"
+        ? format(val, { mask: masks.cep, replacement: { _: /\d/ } })
+        : val;
+    },
   },
   {
+    accessorKey: "address",
     header: "Endereço",
-    accessor: "address",
-    minWidth: '350px'
+    size: 350,
   },
   {
+    accessorKey: "complement",
     header: "Complemento",
-    accessor: "complement",
-    minWidth: '250px'
+    size: 250,
   },
   {
+    accessorKey: "city",
     header: "Cidade",
-    accessor: "city",
-    minWidth: '150px'
+    size: 150,
   },
   {
+    accessorKey: "neighborhood",
     header: "Bairro",
-    accessor: "neighborhood",
-    minWidth: '150px'
+    size: 150,
   },
   {
+    accessorKey: "state",
     header: "Estado",
-    accessor: "state",
-    minWidth: '150px'
+    size: 150,
   },
   {
+    accessorKey: "country",
     header: "País",
-    accessor: "country",
-    minWidth: '150px'
+    size: 150,
   },
   {
+    accessorKey: "countryCode",
     header: "Código do País",
-    accessor: "countryCode",
-    minWidth: '150px'
+    size: 150,
   },
   {
+    accessorKey: "religion",
     header: "Religião",
-    accessor: "religion",
-    minWidth: '150px'
+    size: 150,
   },
   {
+    accessorKey: "genderId",
     header: "Sexo",
-    accessor: "genderId",
-    minWidth: '150px',
-    render: (text, record) => record.gender?.name
+    size: 150,
+    cell: (info) => info.row.original.gender?.name,
   },
   {
+    accessorKey: "status",
     header: "Status",
-    accessor: "status",
-    minWidth: '100px',
-    render: (text) => (text ? 'Ativo' : "Inativo")
+    size: 100,
+    cell: (info) => (info.getValue() ? "Ativo" : "Inativo"),
   },
   {
+    accessorKey: "isPatient",
     header: "Paciente",
-    accessor: "isPatient",
-    minWidth: '150px',
-    render: (text) => (text ? 'Paciente' : "Não-Paciente")
+    size: 150,
+    cell: (info) => (info.getValue() ? "Paciente" : "Não-Paciente"),
   },
   {
+    accessorKey: "isStudent",
     header: "Aluno",
-    accessor: "isStudent",
-    minWidth: '150px',
-    render: (text) => (text ? 'Aluno' : "Não-Aluno")
+    size: 150,
+    cell: (info) => (info.getValue() ? "Aluno" : "Não-Aluno"),
   },
   {
+    accessorKey: "interestedInCourses",
     header: "Interessados em Cursos",
-    accessor: "interestedInCourses",
-    minWidth: '200px',
-    render: (text) => (text ? 'Sim' : "Não")
+    size: 200,
+    cell: (info) => (info.getValue() ? "Sim" : "Não"),
   },
   {
+    accessorKey: "receiveInfoMethodId",
     header: "Receber Informações Via:",
-    accessor: "receiveInfoMethodId",
-    minWidth: '200px',
-    render: (text, record) => record.receiveInfoMethod?.name
+    size: 200,
+    cell: (info) => info.row.original.receiveInfoMethod?.name,
   },
   {
+    accessorKey: "additionalInfo",
     header: "Informações Adicionais",
-    accessor: "additionalInfo",
-    minWidth: '500px'
+    size: 500,
   },
   {
+    accessorKey: "referralSourceId",
     header: "Por Qual Meio Nos Encontrou?",
-    accessor: "referralSourceId",
-    minWidth: '230px',
-    render: (text, record) => record.referralSource?.name
+    size: 230,
+    cell: (info) => info.row.original.referralSource?.name,
   },
   {
+    accessorKey: "otherReferral",
     header: "Outro",
-    accessor: "otherReferral",
-    minWidth: '250px'
+    size: 250,
   },
   {
+    accessorKey: "referredByName",
     header: "Nome da Indicação",
-    accessor: "referredByName",
-    minWidth: '250px'
+    size: 250,
+    // THIS IS HOW YOU CENTER THE TEXT AND THE HEADER
+    // meta: {
+    //   style: {
+    //     textAlign: 'center'
+    //   }
+    // }
   },
-  // { header: "", accessor: "" },
+  {
+    id: "actions",
+    header: "Ações",
+    meta: {
+      style: {
+        textAlign: 'center'
+      }
+    },
+    cell: ({ row }) => (
+      <div className="flex justify-center gap-2">
+        <button onClick={() => console.log('view', row)} title="View">
+          <Eye className="text-blue-500" />
+        </button>
+        <button onClick={() => console.log('edit', row)} title="Edit">
+          <Edit className="text-green-500" />
+        </button>
+        <button onClick={() => console.log('delete', row)} title="Delete">
+          <Trash className="text-red-500" />
+        </button>
+      </div>
+    )
+  }
 ];
+
 
 export default function GeneralRegister() {
   const { toast } = useToast();
   const { toggleLoader } = useLoader();
   const [registers, setRegisters] = useState<GeneralRegisterI[]>([]);
   const [communicationMethod, setCommunicationMethod] = useState<CommunicationMethod[]>([]);
+  const [valuesChanged, setValuesChanged] = useState<boolean>(false)
+
+  const router = useRouter();
 
   // Set initial state with default non-empty string for select fields
   const { values, handleChange, setValue, setValues } = useFormHandler({
@@ -269,36 +330,54 @@ export default function GeneralRegister() {
     infoThrow: defaultOptionValue,
   });
 
-  console.log(registers, communicationMethod)
 
   useEffect(() => {
     const fetchData = async () => {
       toggleLoader(true);
       try {
         const [generalRes, communicationRes] = await Promise.all([
-          api.get<GeneralRegisterI[]>("/general-register"),
+          api.get<GeneralRegisterI[]>("/general-register", {
+            params: {
+              'name': values.registerName || undefined,
+              'cpf': values.cpf || undefined,
+              'cnpj': values.cnpj || undefined,
+              'phoneNumber': values.cellphone || undefined,
+              'interestedInCourses': values.interessed === '1' ? true : values.interessed === '2' ? false : undefined,
+              'receiveInfoMethodId': values.infoThrow !== 'default' ? values.infoThrow : undefined,
+            }
+          }),
           api.get<CommunicationMethod[]>("/general-register/communication-method"),
         ]);
         setRegisters(generalRes.data);
         setCommunicationMethod(communicationRes.data);
       } catch (error) {
-        console.log(error)
-        toast({
-          title: "Erro",
-          description: JSON.stringify(error),
-        });
+        if (axios.isAxiosError(error)) {
+          if (error.status !== 401) {
+            toast({
+              title: "Erro",
+              description: JSON.stringify(error?.response?.data),
+            });
+          }
+        } else {
+          console.log(error)
+          toast({
+            title: "Erro",
+            description: JSON.stringify(error),
+          });
+        }
+
       } finally {
         toggleLoader(false);
       }
     };
 
     fetchData();
-  }, [toggleLoader, toast]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [toggleLoader, toast, valuesChanged]);
 
   const handleSelectChange = (field: "interessed" | "infoThrow") => (value: string) => {
     setValue(field, value);
   };
-  console.log(values)
 
   const cleanInputs = () => {
     setValues({
@@ -369,29 +448,34 @@ export default function GeneralRegister() {
             placeholder="Selecione um método"
             value={values.infoThrow}
           />
-          <Button type="button" onClick={() => console.log("Pesquisar")} className="bg-[#00c0ef] hover:bg-[#5bc0de]">Pesquisar</Button>
-          <Button type="button" onClick={cleanInputs} variant="outline">Limpar</Button>
+          <Button
+            type="button"
+            onClick={() => setValuesChanged(!valuesChanged)}
+            className="bg-[#00c0ef] hover:bg-[#5bc0de]"
+          >
+            Pesquisar
+          </Button>
+          <Button
+            type="button"
+            onClick={cleanInputs}
+            variant="outline"
+          >
+            Limpar
+          </Button>
         </div>
       </div>
       <div className="overflow-x-auto">
-        <DataTable<GeneralRegisterI>
+        <DataTable<GeneralRegisterI, unknown>
           data={registers}
           columns={columns}
-          actions={(row) => (
-            <div className="flex gap-2">
-              <button onClick={() => console.log('view', row)} title="View">
-                <Eye className="text-blue-500" />
-              </button>
-              <button onClick={() => console.log('edit')} title="Edit">
-                <Edit className="text-green-500" />
-              </button>
-              <button onClick={() => console.log('delete')} title="Delete">
-                <Trash className="text-red-500" />
-              </button>
-            </div>
-          )}
-          footer={`Total: ${registers.length}`}
         />
+      </div>
+      <div className="flex w-full justify-end">
+        <Button
+          onClick={() => router.push('cadastro_geral/create')}
+          type="button"
+          variant="outline"
+          className="flex items-center justify-between text-base"><Plus strokeWidth={5} /> Cadastrar</Button>
       </div>
     </Section>
   );

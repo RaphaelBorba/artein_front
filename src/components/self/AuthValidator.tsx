@@ -1,8 +1,7 @@
-// src/components/AuthValidator.tsx
 "use client";
 
 import React, { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { validateAndUpdateAuthToken } from "@/lib/auth"; // Your JWT validation function (e.g., check expiration)
 import AuthLoader from "./Loader"; // Your loader component
 import { useLoader } from "@/hooks/useLoader";
@@ -14,6 +13,7 @@ interface AuthValidatorProps {
 
 export default function AuthValidator({ children }: AuthValidatorProps) {
   const router = useRouter();
+  const pathname = usePathname(); // ✅ Detects route changes
   const { loading, toggleLoader } = useLoader(true);
   const token = useAuthStore((state) => state.token);
   const setToken = useAuthStore((state) => state.setToken);
@@ -32,19 +32,17 @@ export default function AuthValidator({ children }: AuthValidatorProps) {
 
     // Validate the token. If it doesn't exist or is invalid, redirect to login.
     if (!currentToken || !validateAndUpdateAuthToken(currentToken)) {
-      router.push("/login");
+      router.replace("/login"); // ✅ Use replace to avoid back button issues
     } else {
       // Token exists and is valid; hide the loader.
       toggleLoader(false);
     }
-  }, [router, token, setToken, toggleLoader]);
+  }, [pathname, token, setToken, toggleLoader, router]); // ✅ Runs on every page change
 
   return (
     <div className="relative">
       {children}
-      {loading && (
-          <AuthLoader />
-      )}
+      {loading && <AuthLoader />}
     </div>
   );
 }

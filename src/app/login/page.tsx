@@ -63,8 +63,6 @@ export default function Login() {
         }
     }
 
-
-
     return (
         <main className="flex h-screen w-screen items-center justify-center">
             <div className="flex min-h-96 flex-col items-center gap-3 rounded-xl bg-background px-10 py-5 shadow-2xl">

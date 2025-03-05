@@ -16,7 +16,7 @@ export default function Section({ title, children }: SectionProps) {
                 <SidebarTrigger className="" />
                 <div className="flex flex-col gap-3 p-3.5">
                     {title && <h1 className=" text-2xl text-[#333]">{title}</h1>}
-                    <div className="size-full rounded-sm bg-white p-5">
+                    <div className="flex size-full flex-col gap-10 rounded-sm bg-white p-5">
                         {children}
                     </div>
                 </div>
