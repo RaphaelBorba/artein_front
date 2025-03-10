@@ -11,10 +11,12 @@ export const generalRegisterSchema = z.object({
     { message: "Data de nascimento inválida" }
   ),
 
+  age: z.string().optional(),
+
   nationality: z.string().optional(),
   placeOfBirth: z.string().optional(),
 
-  maritalStatusId: z.number().int().positive().optional(),
+  maritalStatusId: z.string().optional(),
 
   cpf: z.string().length(11, "CPF deve ter 11 dígitos").optional(),
   cnpj: z.string().length(14, "CNPJ deve ter 14 dígitos").optional(),
@@ -41,21 +43,21 @@ export const generalRegisterSchema = z.object({
   state: z.string().optional(),
   complement: z.string().optional(),
   country: z.string().optional(),
-  countryCode: z.number().int().positive().optional(),
+  countryCode: z.string().optional(),
 
   religion: z.string().optional(),
 
-  genderId: z.number().int().positive().optional(),
+  genderId: z.string().optional(),
 
   status: z.boolean(),
   isPatient: z.boolean(),
   isStudent: z.boolean(),
   interestedInCourses: z.boolean(),
 
-  receiveInfoMethodId: z.number().int().positive().optional(),
+  receiveInfoMethodId: z.string().optional(),
   additionalInfo: z.string().optional(),
 
-  referralSourceId: z.number().int().positive().optional(),
+  referralSourceId: z.string().optional(),
   otherReferral: z.string().optional(),
   referredByName: z.string().optional(),
 });

@@ -11,14 +11,15 @@ interface FormInputWithLabelI {
     field:any,
     label:string,
     placeholder?:string,
-
+    className?:string,
+    labelBold?: boolean
 }
 
-export default function FormInputWithLabel({field, label, placeholder}:FormInputWithLabelI) {
+export default function FormInputWithLabel({field, label, placeholder, className, labelBold}:FormInputWithLabelI) {
 
     return (
-        <FormItem>
-            <FormLabel>{label}</FormLabel>
+        <FormItem className={className} >
+            <FormLabel className={labelBold ? "font-bold" : ""}>{label}</FormLabel>
             <FormControl>
                 <Input placeholder={placeholder} {...field} />
             </FormControl>
