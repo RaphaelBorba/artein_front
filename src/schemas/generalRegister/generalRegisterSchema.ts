@@ -18,8 +18,8 @@ export const generalRegisterSchema = z.object({
 
   maritalStatusId: z.string().optional(),
 
-  cpf: z.string().length(11, "CPF deve ter 11 dígitos").optional(),
-  cnpj: z.string().length(14, "CNPJ deve ter 14 dígitos").optional(),
+  cpf: z.string().optional(),
+  cnpj: z.string().optional(),
   companyName: z.string().optional(),
 
   educationLevelId: z.number().int().positive().optional(),
@@ -28,15 +28,15 @@ export const generalRegisterSchema = z.object({
   workplace: z.string().optional(),
   currentJob: z.string().optional(),
 
-  phoneNumber: z.string().max(15, "Número de telefone inválido").optional(),
-  email: z.string().email("E-mail inválido").optional(),
+  phoneNumber: z.string().optional(),
+  email: z.string().optional(),
 
   firstContactDate: z.string().optional().refine(
     (date) => !date || !isNaN(Date.parse(date)),
     { message: "Data do primeiro contato inválida" }
   ),
 
-  cep: z.string().length(8, "CEP deve ter 8 dígitos").optional(),
+  cep: z.string().optional(),
   address: z.string().optional(),
   city: z.string().optional(),
   neighborhood: z.string().optional(),

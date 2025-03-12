@@ -19,6 +19,7 @@ import { format } from "@react-input/mask";
 import { ColumnDef } from "@tanstack/react-table";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { masks } from "@/lib/masks";
 
 const defaultOptionValue = "default";
 
@@ -36,13 +37,6 @@ const interessedOptions = [
     label: "Desinteressado",
   },
 ];
-
-const masks = {
-  cpf: "___.___.___-__",
-  cnpj: "__.___.___/____-__",
-  cellphone: "(__) _____-____",
-  cep: "_____-___"
-}
 
 
 export const columns: ColumnDef<GeneralRegisterI, any>[] = [
@@ -106,7 +100,7 @@ export const columns: ColumnDef<GeneralRegisterI, any>[] = [
     cell: (info) => {
       const val = info.getValue();
       return typeof val === "string"
-        ? format(val, { mask: masks.cpf, replacement: { _: /\d/ } })
+        ? format(val, { mask: masks.cpf, replacement: masks.replacement })
         : val;
     },
   },
@@ -117,7 +111,7 @@ export const columns: ColumnDef<GeneralRegisterI, any>[] = [
     cell: (info) => {
       const val = info.getValue();
       return typeof val === "string"
-        ? format(val, { mask: masks.cnpj, replacement: { _: /\d/ } })
+        ? format(val, { mask: masks.cnpj, replacement: masks.replacement })
         : val;
     },
   },
@@ -154,7 +148,7 @@ export const columns: ColumnDef<GeneralRegisterI, any>[] = [
     cell: (info) => {
       const val = info.getValue();
       return typeof val === "string"
-        ? format(val, { mask: masks.cellphone, replacement: { _: /\d/ } })
+        ? format(val, { mask: masks.cellphone, replacement: masks.replacement })
         : val;
     },
   },
@@ -179,7 +173,7 @@ export const columns: ColumnDef<GeneralRegisterI, any>[] = [
     cell: (info) => {
       const val = info.getValue();
       return typeof val === "string"
-        ? format(val, { mask: masks.cep, replacement: { _: /\d/ } })
+        ? format(val, { mask: masks.cep, replacement: masks.replacement })
         : val;
     },
   },

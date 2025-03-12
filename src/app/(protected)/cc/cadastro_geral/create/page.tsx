@@ -10,6 +10,9 @@ import {
 import { Button } from "@/components/ui/button";
 import FormInputWithLabel from "@/components/self/FormInputWithLabel";
 import { Plus } from "lucide-react";
+import FormMaskInputWithLabel from "@/components/self/FormMaskInputWIthLabel";
+import { masks } from "@/lib/masks";
+import { unformat } from "@react-input/mask";
 
 export default function GeneralRegisterForm() {
 
@@ -58,14 +61,19 @@ export default function GeneralRegisterForm() {
 
   console.log(form.formState.errors)
 
-  function onSubmita(values: GeneralRegisterSchemaType) {
+  function onSubmit(values: GeneralRegisterSchemaType) {
     console.log(values)
+    const cpf = typeof values.cpf === 'string' && unformat(values.cpf, { mask: masks.cpf, replacement: masks.replacement })
+    const cnpj = typeof values.cnpj === 'string' && unformat(values.cnpj, { mask: masks.cnpj, replacement: masks.replacement })
+    const cep = typeof values.cep === 'string' && unformat(values.cep, { mask: masks.cep, replacement: masks.replacement })
+    const cellphone = typeof values.phoneNumber === 'string' && unformat(values.phoneNumber, { mask: masks.cellphone, replacement: masks.replacement })
+    console.log([cpf, cnpj, cep, cellphone])
   }
 
   return (
     <Section title="Cadastro Geral">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmita)}
+        <form onSubmit={form.handleSubmit(onSubmit)}
           className="grid grid-cols-1 gap-4 text-black sm:grid-cols-2 lg:grid-cols-3">
 
           <FormField
@@ -157,10 +165,11 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="cpf"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormMaskInputWithLabel
                 field={field}
                 label="CPF"
                 labelBold
+                mask={masks.cpf}
               />
             )}
           />
@@ -169,10 +178,11 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="cnpj"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormMaskInputWithLabel
                 field={field}
                 label="CNPJ"
                 labelBold
+                mask={masks.cnpj}
               />
             )}
           />
@@ -237,10 +247,11 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="phoneNumber"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormMaskInputWithLabel
                 field={field}
                 label="Celular"
                 labelBold
+                mask={masks.cellphone}
               />
             )}
           />
@@ -274,10 +285,11 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="cep"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormMaskInputWithLabel
                 field={field}
                 label="CEP"
                 labelBold
+                mask={masks.cep}
               />
             )}
           />
