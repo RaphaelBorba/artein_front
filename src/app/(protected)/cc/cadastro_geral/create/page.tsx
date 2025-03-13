@@ -113,6 +113,7 @@ export default function GeneralRegisterForm() {
     }
     fetchData()
     console.log(123)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { ptBR } from "date-fns/locale";
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
   captionLabelClassName?: string;
@@ -198,6 +199,7 @@ function Calendar({
 
   return (
     <DayPicker
+      locale={ptBR}
       showOutsideDays={showOutsideDays}
       hideNavigation={hideNavigation}
       className={cn("p-3", className)}
