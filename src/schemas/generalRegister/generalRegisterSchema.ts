@@ -6,10 +6,7 @@ export const generalRegisterSchema = z.object({
 
   personType: z.string().optional(),
 
-  birthDate: z.string().optional().refine(
-    (date) => !date || !isNaN(Date.parse(date)),
-    { message: "Data de nascimento inválida" }
-  ),
+  birthDate: z.date().optional(),
 
   age: z.string().optional(),
 
@@ -31,10 +28,7 @@ export const generalRegisterSchema = z.object({
   phoneNumber: z.string().optional(),
   email: z.string().optional(),
 
-  firstContactDate: z.string().optional().refine(
-    (date) => !date || !isNaN(Date.parse(date)),
-    { message: "Data do primeiro contato inválida" }
-  ),
+  firstContactDate: z.date().optional(),
 
   cep: z.string().optional(),
   address: z.string().optional(),

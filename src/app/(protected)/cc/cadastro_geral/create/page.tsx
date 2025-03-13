@@ -13,6 +13,14 @@ import { Plus } from "lucide-react";
 import FormMaskInputWithLabel from "@/components/self/FormMaskInputWIthLabel";
 import { masks } from "@/lib/masks";
 import { unformat } from "@react-input/mask";
+import FormSelectWithLabel from "@/components/self/FormSelectWithLabel";
+import FormDatePicker from "@/components/self/FormDatePicker";
+import { useEffect, useState } from "react";
+import { useLoader } from "@/hooks/useLoader";
+import axios from "axios";
+import { useToast } from "@/hooks/use-toast";
+import api from "@/lib/api";
+import { CommunicationMethod } from "@/types/smallModels";
 
 export default function GeneralRegisterForm() {
 
@@ -21,8 +29,8 @@ export default function GeneralRegisterForm() {
     defaultValues: {
       photo: "",
       fullName: "",
-      personType: "",
-      birthDate: "",
+      personType: "null",
+      birthDate: undefined,
       nationality: "",
       placeOfBirth: "",
       age: "",
@@ -36,7 +44,7 @@ export default function GeneralRegisterForm() {
       currentJob: "",
       phoneNumber: "",
       email: "",
-      firstContactDate: "",
+      firstContactDate: undefined,
       cep: "",
       address: "",
       complement: "",
@@ -59,8 +67,10 @@ export default function GeneralRegisterForm() {
     },
   })
 
-  console.log(form.formState.errors)
-
+  const { toggleLoader } = useLoader();
+  const { toast } = useToast();
+  const [communicationMethod, setCommunicationMethod] = useState<CommunicationMethod[]>([])
+  console.log(communicationMethod)
   function onSubmit(values: GeneralRegisterSchemaType) {
     console.log(values)
     const cpf = typeof values.cpf === 'string' && unformat(values.cpf, { mask: masks.cpf, replacement: masks.replacement })
@@ -69,6 +79,41 @@ export default function GeneralRegisterForm() {
     const cellphone = typeof values.phoneNumber === 'string' && unformat(values.phoneNumber, { mask: masks.cellphone, replacement: masks.replacement })
     console.log([cpf, cnpj, cep, cellphone])
   }
+
+  const fetchCommunicationMethods = async () =>{
+    const response = await api.get<CommunicationMethod[]>("/general-register/communication-method")
+    setCommunicationMethod(response.data)
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      toggleLoader(true)
+      try {
+        await Promise.all([
+          fetchCommunicationMethods()
+        ])
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.status !== 401) {
+            toast({
+              title: "Erro",
+              description: JSON.stringify(error?.response?.data),
+            });
+          }
+        } else {
+          console.log(error)
+          toast({
+            title: "Erro",
+            description: JSON.stringify(error),
+          });
+        }
+      } finally {
+        toggleLoader(false);
+      }
+    }
+    fetchData()
+    console.log(123)
+  }, [])
 
   return (
     <Section title="Cadastro Geral">
@@ -93,10 +138,12 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="personType"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormSelectWithLabel
                 field={field}
-                label="Tipo Pessoa"
                 labelBold
+                idLabel="personType"
+                labelText="Tipo Pessoa"
+                options={[{ label: "---", value: "null" }, { label: "Pessoa Física", value: "Pessoa Física" }, { label: "Pessoa Jurídica", value: "Pessoa Jurídica" }]}
               />
             )}
           />
@@ -105,9 +152,9 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="birthDate"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormDatePicker
                 field={field}
-                label="Data de Nascimento"
+                labelText="Data de Nascimento"
                 labelBold
               />
             )}
@@ -260,9 +307,9 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="firstContactDate"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormDatePicker
                 field={field}
-                label="Data 1º Contato"
+                labelText="Data 1º Contato"
                 labelBold
               />
             )}
@@ -444,10 +491,18 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="receiveInfoMethodId"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormSelectWithLabel
                 field={field}
-                label="Receber Informações Via"
+                labelText="Receber Informações Via"
                 labelBold
+                idLabel=""
+                options={[
+                  { value: 'null', label: "---" },
+                  ...communicationMethod.map((cm: CommunicationMethod) => ({
+                    value: String(cm.id),
+                    label: cm.name,
+                  })),
+                ]}
               />
             )}
           />

@@ -27,7 +27,7 @@ export default function FormMaskInputWithLabel({ field, label, className, labelB
 
     return (
         <FormItem className={className} >
-            <FormLabel className={labelBold ? "font-bold" : ""}>{label}</FormLabel>
+            <FormLabel className={`pl-1 ${labelBold ? "font-bold" : ""}`}>{label}</FormLabel>
             <FormControl>
                 <Input placeholder={mask} {...field} ref={inputRef} value={defaultValue} />
             </FormControl>

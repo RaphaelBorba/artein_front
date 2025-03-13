@@ -19,7 +19,7 @@ export default function FormInputWithLabel({field, label, placeholder, className
 
     return (
         <FormItem className={className} >
-            <FormLabel className={labelBold ? "font-bold" : ""}>{label}</FormLabel>
+            <FormLabel className={`pl-1 ${labelBold ? "font-bold" : ""}`}>{label}</FormLabel>
             <FormControl>
                 <Input placeholder={placeholder} {...field} />
             </FormControl>
