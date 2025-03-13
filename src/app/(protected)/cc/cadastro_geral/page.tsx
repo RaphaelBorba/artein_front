@@ -91,7 +91,7 @@ export const columns: ColumnDef<GeneralRegisterI, any>[] = [
     accessorKey: "maritalStatusId",
     header: "Estado Civil",
     size: 150,
-    cell: (info) => info.row.original.maritalStatus?.name,
+    cell: (info) => info.row.original.maritalStatus?.label,
   },
   {
     accessorKey: "cpf",
@@ -124,7 +124,7 @@ export const columns: ColumnDef<GeneralRegisterI, any>[] = [
     accessorKey: "educationLevelId",
     header: "Escolaridade",
     size: 250,
-    cell: (info) => info.row.original.educationLevel?.name,
+    cell: (info) => info.row.original.educationLevel?.label,
   },
   {
     accessorKey: "profession",
@@ -251,7 +251,7 @@ export const columns: ColumnDef<GeneralRegisterI, any>[] = [
     accessorKey: "receiveInfoMethodId",
     header: "Receber Informações Via:",
     size: 200,
-    cell: (info) => info.row.original.receiveInfoMethod?.name,
+    cell: (info) => info.row.original.receiveInfoMethod?.label,
   },
   {
     accessorKey: "additionalInfo",
@@ -262,7 +262,7 @@ export const columns: ColumnDef<GeneralRegisterI, any>[] = [
     accessorKey: "referralSourceId",
     header: "Por Qual Meio Nos Encontrou?",
     size: 230,
-    cell: (info) => info.row.original.referralSource?.name,
+    cell: (info) => info.row.original.referralSource?.label,
   },
   {
     accessorKey: "otherReferral",
@@ -434,10 +434,7 @@ export default function GeneralRegister() {
             onValueChange={handleSelectChange("infoThrow")}
             options={[
               { value: defaultOptionValue, label: "---" },
-              ...communicationMethod.map((cm: any) => ({
-                value: String(cm.id),
-                label: cm.name,
-              })),
+              ...communicationMethod
             ]}
             placeholder="Selecione um método"
             value={values.infoThrow}

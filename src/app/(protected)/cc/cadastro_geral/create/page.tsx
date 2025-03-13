@@ -20,7 +20,7 @@ import { useLoader } from "@/hooks/useLoader";
 import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import api from "@/lib/api";
-import { CommunicationMethod } from "@/types/smallModels";
+import { CommunicationMethod, EducationLevel, Gender, MaritalStatus, ReferralSource } from "@/types/smallModels";
 
 export default function GeneralRegisterForm() {
 
@@ -34,11 +34,11 @@ export default function GeneralRegisterForm() {
       nationality: "",
       placeOfBirth: "",
       age: "",
-      maritalStatusId: "",
+      maritalStatusId: "null",
       cpf: "",
       cnpj: "",
       companyName: "",
-      educationLevelId: undefined,
+      educationLevelId: "null",
       profession: "",
       workplace: "",
       currentJob: "",
@@ -54,14 +54,14 @@ export default function GeneralRegisterForm() {
       country: "",
       countryCode: undefined,
       religion: "",
-      genderId: undefined,
-      status: false,
-      isPatient: false,
-      isStudent: false,
-      interestedInCourses: false,
-      receiveInfoMethodId: undefined,
+      genderId: "null",
+      status: "null",
+      isPatient: "null",
+      isStudent: "null",
+      interestedInCourses: "null",
+      receiveInfoMethodId: "null",
       additionalInfo: "",
-      referralSourceId: undefined,
+      referralSourceId: "null",
       otherReferral: "",
       referredByName: ""
     },
@@ -70,19 +70,56 @@ export default function GeneralRegisterForm() {
   const { toggleLoader } = useLoader();
   const { toast } = useToast();
   const [communicationMethod, setCommunicationMethod] = useState<CommunicationMethod[]>([])
-  console.log(communicationMethod)
+  const [maritalStatus, setMaritalStatus] = useState<MaritalStatus[]>([])
+  const [educationLevel, setEducationLevel] = useState<EducationLevel[]>([])
+  const [gender, setGender] = useState<Gender[]>([])
+  const [referralSource, setReferralSource] = useState<ReferralSource[]>([])
+
   function onSubmit(values: GeneralRegisterSchemaType) {
     console.log(values)
     const cpf = typeof values.cpf === 'string' && unformat(values.cpf, { mask: masks.cpf, replacement: masks.replacement })
     const cnpj = typeof values.cnpj === 'string' && unformat(values.cnpj, { mask: masks.cnpj, replacement: masks.replacement })
     const cep = typeof values.cep === 'string' && unformat(values.cep, { mask: masks.cep, replacement: masks.replacement })
     const cellphone = typeof values.phoneNumber === 'string' && unformat(values.phoneNumber, { mask: masks.cellphone, replacement: masks.replacement })
+
+    const maritalStatus = values.maritalStatusId === "null" ? undefined : Number(values.maritalStatusId)
+    const educationLevel = values.educationLevelId === "null" ? undefined : Number(values.educationLevelId)
+    const gender = values.genderId === "null" ? undefined : Number(values.genderId)
+    const referralSource = values.referralSourceId === "null" ? undefined : Number(values.referralSourceId)
+
+    const status = values.status === '1' ? true : values.status === '0' ? false : undefined
+    const pacient = values.isPatient === '1' ? true : values.isPatient === '0' ? false : undefined
+    const studant = values.isStudent === '1' ? true : values.isStudent === '0' ? false : undefined
+    const interested = values.interestedInCourses === '1' ? true : values.interestedInCourses === '0' ? false : undefined
+
     console.log([cpf, cnpj, cep, cellphone])
+    console.log([maritalStatus, educationLevel, gender, referralSource])
+    console.log([status, pacient, studant, interested])
   }
 
-  const fetchCommunicationMethods = async () =>{
+  const fetchCommunicationMethods = async () => {
     const response = await api.get<CommunicationMethod[]>("/general-register/communication-method")
     setCommunicationMethod(response.data)
+  }
+
+  const fetchMaritalStatus = async () => {
+    const response = await api.get<CommunicationMethod[]>("/general-register/marital-status")
+    setMaritalStatus(response.data)
+  }
+
+  const fetchEducationLevel = async () => {
+    const response = await api.get<CommunicationMethod[]>("/general-register/education-level")
+    setEducationLevel(response.data)
+  }
+
+  const fetchGender = async () => {
+    const response = await api.get<CommunicationMethod[]>("/general-register/gender")
+    setGender(response.data)
+  }
+
+  const fetchReferralSource = async () => {
+    const response = await api.get<CommunicationMethod[]>("/general-register/referral-source")
+    setReferralSource(response.data)
   }
 
   useEffect(() => {
@@ -90,7 +127,11 @@ export default function GeneralRegisterForm() {
       toggleLoader(true)
       try {
         await Promise.all([
-          fetchCommunicationMethods()
+          fetchCommunicationMethods(),
+          fetchMaritalStatus(),
+          fetchEducationLevel(),
+          fetchGender(),
+          fetchReferralSource()
         ])
       } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -113,7 +154,7 @@ export default function GeneralRegisterForm() {
     }
     fetchData()
     console.log(123)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
@@ -201,10 +242,15 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="maritalStatusId"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormSelectWithLabel
                 field={field}
-                label="Estado Civil"
+                labelText="Estado Civil"
                 labelBold
+                idLabel=""
+                options={[
+                  { value: 'null', label: "---" },
+                  ...maritalStatus
+                ]}
               />
             )}
           />
@@ -250,10 +296,15 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="educationLevelId"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormSelectWithLabel
                 field={field}
-                label="Escolaridade"
+                labelText="Escolaridade"
                 labelBold
+                idLabel=""
+                options={[
+                  { value: 'null', label: "---" },
+                  ...educationLevel
+                ]}
               />
             )}
           />
@@ -437,10 +488,15 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="genderId"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormSelectWithLabel
                 field={field}
-                label="Sexo"
+                labelText="Sexo"
                 labelBold
+                idLabel=""
+                options={[
+                  { value: 'null', label: "---" },
+                  ...gender
+                ]}
               />
             )}
           />
@@ -448,10 +504,16 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="status"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormSelectWithLabel
                 field={field}
-                label="Status"
+                labelText="Status"
                 labelBold
+                idLabel=""
+                options={[
+                  { value: 'null', label: "---" },
+                  { value: '1', label: "Ativo" },
+                  { value: '0', label: "Inativo" },
+                ]}
               />
             )}
           />
@@ -459,10 +521,16 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="isPatient"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormSelectWithLabel
                 field={field}
-                label="Paciente"
+                labelText="Paciente"
                 labelBold
+                idLabel=""
+                options={[
+                  { value: 'null', label: "---" },
+                  { value: "1", label: "Paciente" },
+                  { value: "0", label: "Não-Paciente" },
+                ]}
               />
             )}
           />
@@ -470,10 +538,16 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="isStudent"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormSelectWithLabel
                 field={field}
-                label="Aluno"
+                labelText="Aluno"
                 labelBold
+                idLabel=""
+                options={[
+                  { value: 'null', label: "---" },
+                  { value: "1", label: "Aluno" },
+                  { value: "0", label: "Não-Aluno" },
+                ]}
               />
             )}
           />
@@ -481,10 +555,16 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="interestedInCourses"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormSelectWithLabel
                 field={field}
-                label="Interessado em Cursos"
+                labelText="Interessado em Cursos"
                 labelBold
+                idLabel=""
+                options={[
+                  { value: 'null', label: "---" },
+                  { value: "1", label: "Interessado" },
+                  { value: "0", label: "Desinteressado" },
+                ]}
               />
             )}
           />
@@ -499,10 +579,7 @@ export default function GeneralRegisterForm() {
                 idLabel=""
                 options={[
                   { value: 'null', label: "---" },
-                  ...communicationMethod.map((cm: CommunicationMethod) => ({
-                    value: String(cm.id),
-                    label: cm.name,
-                  })),
+                  ...communicationMethod
                 ]}
               />
             )}
@@ -525,10 +602,15 @@ export default function GeneralRegisterForm() {
             control={form.control}
             name="referralSourceId"
             render={({ field }) => (
-              <FormInputWithLabel
+              <FormSelectWithLabel
                 field={field}
-                label="Por Qual Meio Nos Encontrou"
+                labelText="Por Qual Meio Nos Encontrou?"
                 labelBold
+                idLabel=""
+                options={[
+                  { value: 'null', label: "---" },
+                  ...referralSource
+                ]}
               />
             )}
           />

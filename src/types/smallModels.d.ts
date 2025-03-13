@@ -1,39 +1,39 @@
 // Role
 export interface Role {
-    id: number;
-    name: string;
+    value: string;
+    label: string;
   }
   
   export interface MaritalStatus {
-    id: number;
-    name: string;
+    value: string;
+    label: string;
   }
   
   // EducationLevel
   
   export interface EducationLevel {
-    id: number;
-    name: string;
+    value: string;
+    label: string;
   }
   
   // ReferralSource
   
   export interface ReferralSource {
-    id: number;
-    name: string;
+    value: string;
+    label: string;
   }
   
   // CommunicationMethod
   
   export interface CommunicationMethod {
-    id: number;
-    name: string;
+    value: string;
+    label: string;
   }
   
   // Gender
   
   export interface Gender {
-    id: number;
-    name: string;
+    value: string;
+    label: string;
   }
   

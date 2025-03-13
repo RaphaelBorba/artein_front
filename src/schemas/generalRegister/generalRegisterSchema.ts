@@ -19,7 +19,7 @@ export const generalRegisterSchema = z.object({
   cnpj: z.string().optional(),
   companyName: z.string().optional(),
 
-  educationLevelId: z.number().int().positive().optional(),
+  educationLevelId: z.string().optional(),
 
   profession: z.string().optional(),
   workplace: z.string().optional(),
@@ -43,10 +43,10 @@ export const generalRegisterSchema = z.object({
 
   genderId: z.string().optional(),
 
-  status: z.boolean(),
-  isPatient: z.boolean(),
-  isStudent: z.boolean(),
-  interestedInCourses: z.boolean(),
+  status: z.string().optional(),
+  isPatient: z.string().optional(),
+  isStudent: z.string().optional(),
+  interestedInCourses: z.string().optional(),
 
   receiveInfoMethodId: z.string().optional(),
   additionalInfo: z.string().optional(),
