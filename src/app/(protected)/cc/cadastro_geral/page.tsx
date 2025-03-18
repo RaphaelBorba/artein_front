@@ -91,7 +91,7 @@ export const columns: ColumnDef<GeneralRegisterI, any>[] = [
     accessorKey: "maritalStatusId",
     header: "Estado Civil",
     size: 150,
-    cell: (info) => info.row.original.maritalStatus?.label,
+    cell: (info) => info.row.original.maritalStatus?.name,
   },
   {
     accessorKey: "cpf",
@@ -124,7 +124,7 @@ export const columns: ColumnDef<GeneralRegisterI, any>[] = [
     accessorKey: "educationLevelId",
     header: "Escolaridade",
     size: 250,
-    cell: (info) => info.row.original.educationLevel?.label,
+    cell: (info) => info.row.original.educationLevel?.name,
   },
   {
     accessorKey: "profession",
@@ -227,31 +227,31 @@ export const columns: ColumnDef<GeneralRegisterI, any>[] = [
     accessorKey: "status",
     header: "Status",
     size: 100,
-    cell: (info) => (info.getValue() ? "Ativo" : "Inativo"),
+    cell: (info) => (info.getValue() === null ? "" : info.getValue() ? "Ativo" : "Inativo"),
   },
   {
     accessorKey: "isPatient",
     header: "Paciente",
     size: 150,
-    cell: (info) => (info.getValue() ? "Paciente" : "Não-Paciente"),
+    cell: (info) => (info.getValue() === null ? "" : info.getValue() ? "Paciente" : "Não-Paciente"),
   },
   {
     accessorKey: "isStudent",
     header: "Aluno",
     size: 150,
-    cell: (info) => (info.getValue() ? "Aluno" : "Não-Aluno"),
+    cell: (info) => (info.getValue() === null ? "" : info.getValue() ? "Aluno" : "Não-Aluno"),
   },
   {
     accessorKey: "interestedInCourses",
     header: "Interessados em Cursos",
     size: 200,
-    cell: (info) => (info.getValue() ? "Sim" : "Não"),
+    cell: (info) => (info.getValue() === null ? "" : info.getValue() ? "Sim" : "Não"),
   },
   {
     accessorKey: "receiveInfoMethodId",
     header: "Receber Informações Via:",
     size: 200,
-    cell: (info) => info.row.original.receiveInfoMethod?.label,
+    cell: (info) => info.row.original.receiveInfoMethod?.name,
   },
   {
     accessorKey: "additionalInfo",
@@ -262,7 +262,7 @@ export const columns: ColumnDef<GeneralRegisterI, any>[] = [
     accessorKey: "referralSourceId",
     header: "Por Qual Meio Nos Encontrou?",
     size: 230,
-    cell: (info) => info.row.original.referralSource?.label,
+    cell: (info) => info.row.original.referralSource?.name,
   },
   {
     accessorKey: "otherReferral",

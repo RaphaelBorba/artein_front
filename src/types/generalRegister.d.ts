@@ -1,4 +1,3 @@
-import { CommunicationMethod, EducationLevel, MaritalStatus, ReferralSource } from "./smallModels";
 
 export interface GeneralRegister {
     id: number;

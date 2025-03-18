@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 import Section from "@/components/self/Section";
 import { generalRegisterSchema, GeneralRegisterSchemaType } from "@/schemas/generalRegister/generalRegisterSchema";
@@ -21,6 +22,7 @@ import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import api from "@/lib/api";
 import { CommunicationMethod, EducationLevel, Gender, MaritalStatus, ReferralSource } from "@/types/smallModels";
+import { calculateAge } from "@/lib/utils";
 
 export default function GeneralRegisterForm() {
 
@@ -52,7 +54,7 @@ export default function GeneralRegisterForm() {
       neighborhood: "",
       state: "",
       country: "",
-      countryCode: undefined,
+      countryCode: 0,
       religion: "",
       genderId: "null",
       status: "null",
@@ -76,25 +78,41 @@ export default function GeneralRegisterForm() {
   const [referralSource, setReferralSource] = useState<ReferralSource[]>([])
 
   function onSubmit(values: GeneralRegisterSchemaType) {
+
+    const parseField = (
+      value: unknown,
+      mask: string
+    ): string | undefined => {
+      return typeof value === 'string'
+        ? unformat(value, { mask, replacement: masks.replacement })
+        : undefined;
+    };
+
+    const parseNullableNumber = (value: string | undefined): string | undefined =>
+      value === "null" ? undefined : value;
+
+    const parseBoolean = (value: string | undefined): string | undefined =>
+      value === '1' ? 'true' : value === '0' ? 'false' : undefined;
+
+    values.cpf = parseField(values.cpf, masks.cpf);
+    values.cnpj = parseField(values.cnpj, masks.cnpj);
+    values.cep = parseField(values.cep, masks.cep);
+    values.phoneNumber = parseField(values.phoneNumber, masks.cellphone);
+
+    // Convert IDs to numbers, treating "null" as undefined
+    values.maritalStatusId = parseNullableNumber(values.maritalStatusId);
+    values.educationLevelId = parseNullableNumber(values.educationLevelId);
+    values.genderId = parseNullableNumber(values.genderId);
+    values.referralSourceId = parseNullableNumber(values.referralSourceId);
+    values.receiveInfoMethodId = parseNullableNumber(values.receiveInfoMethodId);
+
+    values.status = parseBoolean(values.status);
+    values.isPatient = parseBoolean(values.isPatient);
+    values.isStudent = parseBoolean(values.isStudent);
+    values.interestedInCourses = parseBoolean(values.interestedInCourses);
     console.log(values)
-    const cpf = typeof values.cpf === 'string' && unformat(values.cpf, { mask: masks.cpf, replacement: masks.replacement })
-    const cnpj = typeof values.cnpj === 'string' && unformat(values.cnpj, { mask: masks.cnpj, replacement: masks.replacement })
-    const cep = typeof values.cep === 'string' && unformat(values.cep, { mask: masks.cep, replacement: masks.replacement })
-    const cellphone = typeof values.phoneNumber === 'string' && unformat(values.phoneNumber, { mask: masks.cellphone, replacement: masks.replacement })
-
-    const maritalStatus = values.maritalStatusId === "null" ? undefined : Number(values.maritalStatusId)
-    const educationLevel = values.educationLevelId === "null" ? undefined : Number(values.educationLevelId)
-    const gender = values.genderId === "null" ? undefined : Number(values.genderId)
-    const referralSource = values.referralSourceId === "null" ? undefined : Number(values.referralSourceId)
-
-    const status = values.status === '1' ? true : values.status === '0' ? false : undefined
-    const pacient = values.isPatient === '1' ? true : values.isPatient === '0' ? false : undefined
-    const studant = values.isStudent === '1' ? true : values.isStudent === '0' ? false : undefined
-    const interested = values.interestedInCourses === '1' ? true : values.interestedInCourses === '0' ? false : undefined
-
-    console.log([cpf, cnpj, cep, cellphone])
-    console.log([maritalStatus, educationLevel, gender, referralSource])
-    console.log([status, pacient, studant, interested])
+    delete values.age
+    api.post('/general-register', values)
   }
 
   const fetchCommunicationMethods = async () => {
@@ -153,9 +171,53 @@ export default function GeneralRegisterForm() {
       }
     }
     fetchData()
-    console.log(123)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    async function fetchAddressByCep() {
+      const cepMask = form.getValues('cep');
+
+      if (typeof cepMask !== 'string') return;
+
+      const cep = unformat(cepMask, { mask: masks.cep, replacement: masks.replacement });
+      if (cep.length !== 8) return;
+
+      toggleLoader(true);
+
+      try {
+        const { data } = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+        if (data?.erro) {
+          toast({
+            title: "CEP Inválido!",
+            variant: "destructive"
+          })
+        }
+        form.setValue('address', data?.logradouro)
+        form.setValue('city', data?.localidade)
+        form.setValue('neighborhood', data?.bairro)
+        form.setValue('state', data?.estado)
+        form.setValue('address', data?.logradouro)
+      } catch (error) {
+        console.error('Error fetching address data:', error);
+        toast({
+          title: "Erro na API de CEP!",
+          description: "Contate Suporte",
+          variant: "destructive"
+        })
+      } finally {
+        toggleLoader(false);
+      }
+    }
+
+    fetchAddressByCep();
+  }, [form.watch('cep')]);
+
+  useEffect(() => {
+    const date = form.watch('birthDate') as Date | undefined
+    if (date) {
+      form.setValue('age', String(calculateAge(date.toISOString())))
+    }
+  }, [form.watch('birthDate')])
 
   return (
     <Section title="Cadastro Geral">
@@ -210,6 +272,7 @@ export default function GeneralRegisterForm() {
                 field={field}
                 label="Idade"
                 labelBold
+                isDisabled
               />
             )}
           />
@@ -470,6 +533,7 @@ export default function GeneralRegisterForm() {
                 field={field}
                 label="Código do País"
                 labelBold
+                type='number'
               />
             )}
           />

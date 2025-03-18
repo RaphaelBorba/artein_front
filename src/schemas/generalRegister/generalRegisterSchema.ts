@@ -26,7 +26,7 @@ export const generalRegisterSchema = z.object({
   currentJob: z.string().optional(),
 
   phoneNumber: z.string().optional(),
-  email: z.string().optional(),
+  email: z.string().email(),
 
   firstContactDate: z.date().optional(),
 
@@ -37,7 +37,7 @@ export const generalRegisterSchema = z.object({
   state: z.string().optional(),
   complement: z.string().optional(),
   country: z.string().optional(),
-  countryCode: z.string().optional(),
+  countryCode: z.number().optional(),
 
   religion: z.string().optional(),
 
