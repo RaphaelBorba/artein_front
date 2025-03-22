@@ -31,6 +31,7 @@ export default function Login() {
             password: ''
         }
     })
+    const actualYear = new Date().getFullYear()
 
     async function onSubmit(values: UserFormData) {
         toggleLoader(true)
@@ -105,10 +106,10 @@ export default function Login() {
                                     <FormMessage />
                                 </FormItem>
                             )} />
-                        <Button className="w-full text-lg">Login</Button>
+                        <Button className="w-full text-lg" type="submit">Login</Button>
                     </form>
                 </Form>
-                <span className="text-xs">2025 © Gestão de Clientes</span>
+                <span className="text-xs">{actualYear} © Gestão de Clientes</span>
             </div>
             {loading && (
                 <AuthLoader />

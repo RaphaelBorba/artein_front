@@ -22,7 +22,7 @@ import axios from "axios";
 import { useToast } from "@/hooks/use-toast";
 import api from "@/lib/api";
 import { CommunicationMethod, EducationLevel, Gender, MaritalStatus, ReferralSource } from "@/types/smallModels";
-import { calculateAge } from "@/lib/utils";
+import { calculateAge, parseBoolean, parseField, parseNullableNumber } from "@/lib/utils";
 
 export default function GeneralRegisterForm() {
 
@@ -79,21 +79,6 @@ export default function GeneralRegisterForm() {
 
   function onSubmit(values: GeneralRegisterSchemaType) {
 
-    const parseField = (
-      value: unknown,
-      mask: string
-    ): string | undefined => {
-      return typeof value === 'string'
-        ? unformat(value, { mask, replacement: masks.replacement })
-        : undefined;
-    };
-
-    const parseNullableNumber = (value: string | undefined): string | undefined =>
-      value === "null" ? undefined : value;
-
-    const parseBoolean = (value: string | undefined): string | undefined =>
-      value === '1' ? 'true' : value === '0' ? 'false' : undefined;
-
     values.cpf = parseField(values.cpf, masks.cpf);
     values.cnpj = parseField(values.cnpj, masks.cnpj);
     values.cep = parseField(values.cep, masks.cep);
@@ -110,7 +95,6 @@ export default function GeneralRegisterForm() {
     values.isPatient = parseBoolean(values.isPatient);
     values.isStudent = parseBoolean(values.isStudent);
     values.interestedInCourses = parseBoolean(values.interestedInCourses);
-    console.log(values)
     delete values.age
     api.post('/general-register', values)
   }

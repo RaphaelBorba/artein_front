@@ -1,5 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { masks } from "./masks";
+import { unformat } from "@react-input/mask";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -35,6 +37,23 @@ export function calculateAge(dateString: string): number {
   if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
     age--;
   }
-  
+
   return age;
+}
+
+export function parseField(
+  value: unknown,
+  mask: string
+): string | undefined {
+  return typeof value === 'string'
+    ? unformat(value, { mask, replacement: masks.replacement })
+    : undefined;
+};
+
+export function parseNullableNumber(value: string | undefined): string | undefined {
+  return value === "null" ? undefined : value;
+}
+
+export function parseBoolean(value: string | undefined): string | undefined {
+  return value === '1' ? 'true' : value === '0' ? 'false' : undefined;
 }
