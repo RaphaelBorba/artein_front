@@ -101,22 +101,22 @@ export default function GeneralRegisterForm() {
   }
 
   const fetchMaritalStatus = async () => {
-    const response = await api.get<CommunicationMethod[]>("/general-register/marital-status")
+    const response = await api.get<MaritalStatus[]>("/general-register/marital-status")
     setMaritalStatus(response.data)
   }
 
   const fetchEducationLevel = async () => {
-    const response = await api.get<CommunicationMethod[]>("/general-register/education-level")
+    const response = await api.get<EducationLevel[]>("/general-register/education-level")
     setEducationLevel(response.data)
   }
 
   const fetchGender = async () => {
-    const response = await api.get<CommunicationMethod[]>("/general-register/gender")
+    const response = await api.get<Gender[]>("/general-register/gender")
     setGender(response.data)
   }
 
   const fetchReferralSource = async () => {
-    const response = await api.get<CommunicationMethod[]>("/general-register/referral-source")
+    const response = await api.get<ReferralSource[]>("/general-register/referral-source")
     setReferralSource(response.data)
   }
 

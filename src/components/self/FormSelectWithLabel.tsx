@@ -38,7 +38,7 @@ export default function FormSelectWithLabel({
       <FormLabel className={`pl-1 ${labelBold ? 'font-bold' : ''}`} htmlFor={idLabel}>
         {labelText}
       </FormLabel>
-      <Select disabled={isDisabled} defaultValue={field.value} onValueChange={field.onChange}>
+      <Select disabled={isDisabled} value={field.value} onValueChange={field.onChange}>
         <FormControl>
           <SelectTrigger >
             <SelectValue placeholder={placeholder} />

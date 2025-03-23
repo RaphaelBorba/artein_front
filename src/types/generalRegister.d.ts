@@ -1,60 +1,60 @@
 
 export interface GeneralRegister {
-    id: number;
+    id: string;
     fullName: string;
-    photo?: string | null;
+    photo?: string | undefined;
     personType: string; // "pf" or "pj"
-    birthDate?: Date | null;
-    nationality?: string | null;
-    placeOfBirth?: string | null;
+    birthDate?: Date | undefined;
+    nationality?: string | undefined;
+    placeOfBirth?: string | undefined;
 
-    maritalStatusId?: number | null;
-    maritalStatus?: MaritalStatus | null; // Define MaritalStatus interface separately
+    maritalStatusId?: string | undefined;
+    maritalStatus?: MaritalStatus | undefined; // Define MaritalStatus interface separately
 
-    cpf?: string | null;        // Expected to be 11 characters
-    cnpj?: string | null;       // Expected to be 14 characters
-    companyName?: string | null;
+    cpf?: string | undefined;        // Expected to be 11 characters
+    cnpj?: string | undefined;       // Expected to be 14 characters
+    companyName?: string | undefined;
 
-    educationLevelId?: number | null;
-    educationLevel?: EducationLevel | null; // Define EducationLevel interface separately
+    educationLevelId?: string | undefined;
+    educationLevel?: EducationLevel | undefined; // Define EducationLevel interface separately
 
-    profession?: string | null;
-    workplace?: string | null;
-    currentJob?: string | null;
+    profession?: string | undefined;
+    workplace?: string | undefined;
+    currentJob?: string | undefined;
 
-    phoneNumber?: string | null; // Different formats possible
-    email?: string | null;
-    firstContactDate?: Date | null;
+    phoneNumber?: string | undefined; // Different formats possible
+    email?: string | undefined;
+    firstContactDate?: Date | undefined;
 
-    cep?: string | null;         // Expected to be 8 characters
-    address?: string | null;
-    city?: string | null;
-    neighborhood?: string | null;
-    state?: string | null;
-    complement?: string | null;
-    country?: string | null;
-    countryCode?: number | null;
+    cep?: string | undefined;         // Expected to be 8 characters
+    address?: string | undefined;
+    city?: string | undefined;
+    neighborhood?: string | undefined;
+    state?: string | undefined;
+    complement?: string | undefined;
+    country?: string | undefined;
+    countryCode?: number | undefined;
 
-    religion?: string | null;
+    religion?: string | undefined;
 
-    genderId?: number | null;
-    gender?: Gender | null; // Define Gender interface separately
+    genderId?: string | undefined;
+    gender?: Gender | undefined; // Define Gender interface separately
 
     status: boolean;
     isPatient: boolean;
     isStudent: boolean;
     interestedInCourses: boolean;
 
-    receiveInfoMethodId?: number | null;
-    receiveInfoMethod?: CommunicationMethod | null; // Define CommunicationMethod interface separately
+    receiveInfoMethodId?: string | undefined;
+    receiveInfoMethod?: CommunicationMethod | undefined; // Define CommunicationMethod interface separately
 
-    additionalInfo?: string | null;
+    additionalInfo?: string | undefined;
 
-    referralSourceId?: number | null;
-    referralSource?: ReferralSource | null; // Define ReferralSource interface separately
+    referralSourceId?: string | undefined;
+    referralSource?: ReferralSource | undefined; // Define ReferralSource interface separately
 
-    otherReferral?: string | null;
-    referredByName?: string | null;
+    otherReferral?: string | undefined;
+    referredByName?: string | undefined;
 
     createdAt: Date;
     updatedAt: Date;
