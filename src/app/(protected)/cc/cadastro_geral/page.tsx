@@ -277,13 +277,13 @@ export const columns: ColumnDef<GeneralRegisterI, any>[] = [
     },
     cell: ({ row }) => (
       <div className="flex justify-center gap-2">
-        <button onClick={() => console.log('view', row)} title="View">
+        <button onClick={() => console.log('view', row)} title="Visualizar">
           <Eye className="text-blue-500" />
         </button>
-        <button onClick={() => console.log('edit', row)} title="Edit">
+        <button onClick={() => console.log('edit', row)} title="Editar">
           <Edit className="text-green-500" />
         </button>
-        <button onClick={() => console.log('delete', row)} title="Delete">
+        <button onClick={() => console.log('delete', row)} title="Deletar">
           <Trash className="text-red-500" />
         </button>
       </div>

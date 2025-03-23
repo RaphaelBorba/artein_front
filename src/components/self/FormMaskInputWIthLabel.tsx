@@ -14,9 +14,10 @@ interface FormInputWithLabelI {
     className?: string,
     labelBold?: boolean,
     mask: string,
+    isDisabled?: boolean
 }
 
-export default function FormMaskInputWithLabel({ field, label, className, labelBold, mask }: FormInputWithLabelI) {
+export default function FormMaskInputWithLabel({ field, label, className, labelBold, mask, isDisabled }: FormInputWithLabelI) {
 
     const options = {
         mask,
@@ -29,7 +30,7 @@ export default function FormMaskInputWithLabel({ field, label, className, labelB
         <FormItem className={className} >
             <FormLabel className={`pl-1 ${labelBold ? "font-bold" : ""}`}>{label}</FormLabel>
             <FormControl>
-                <Input placeholder={mask} {...field} ref={inputRef} value={defaultValue} />
+                <Input disabled={isDisabled} placeholder={mask} {...field} ref={inputRef} value={defaultValue} />
             </FormControl>
             {/* <FormMessage /> */}
         </FormItem>

@@ -21,6 +21,7 @@ interface FormSelectWithLabelProps {
   placeholder?: string;
   field: any;
   labelBold?: boolean
+  isDisabled?:boolean
 }
 
 export default function FormSelectWithLabel({
@@ -29,14 +30,15 @@ export default function FormSelectWithLabel({
   options,
   placeholder = "Selecione uma opção",
   field,
-  labelBold
+  labelBold,
+  isDisabled
 }: FormSelectWithLabelProps) {
   return (
     <FormItem>
       <FormLabel className={`pl-1 ${labelBold ? 'font-bold' : ''}`} htmlFor={idLabel}>
         {labelText}
       </FormLabel>
-      <Select defaultValue={field.value} onValueChange={field.onChange}>
+      <Select disabled={isDisabled} defaultValue={field.value} onValueChange={field.onChange}>
         <FormControl>
           <SelectTrigger >
             <SelectValue placeholder={placeholder} />

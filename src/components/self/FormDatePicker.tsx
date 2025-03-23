@@ -12,21 +12,23 @@ import { useState } from "react";
 interface FormDatePickerProps {
   labelText: string;
   field: any;
-  labelBold?: boolean
+  labelBold?: boolean;
+  isDisabled?:boolean
 }
 
 export default function FormDatePicker({
   labelText,
   field,
-  labelBold
+  labelBold,
+  isDisabled
 }: FormDatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
     <FormItem className="flex w-full flex-col justify-end">
       <FormLabel className={`pl-1 ${labelBold ? 'font-bold' : ''}`}>{labelText}</FormLabel>
-      <Popover open={isOpen} onOpenChange={setIsOpen}>
-        <PopoverTrigger asChild>
+      <Popover open={isOpen} onOpenChange={setIsOpen} >
+        <PopoverTrigger asChild disabled={isDisabled}>
           <FormControl>
             <Button
               variant={"outline"}
