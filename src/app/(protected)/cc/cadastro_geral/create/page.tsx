@@ -7,8 +7,6 @@ import { useForm } from "react-hook-form"
 import {
   Form,
 } from "@/components/ui/form"
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
 import { masks } from "@/lib/masks";
 import { unformat } from "@react-input/mask";
 import { useEffect, useState } from "react";
@@ -19,6 +17,7 @@ import api from "@/lib/api";
 import { CommunicationMethod, EducationLevel, Gender, MaritalStatus, ReferralSource } from "@/types/smallModels";
 import { calculateAge, parseBoolean, parseField, parseNullableNumber } from "@/lib/utils";
 import GeneralRegisterFormFields from "../generalRegisterFields";
+import { useRouter } from "next/navigation";
 
 export default function GeneralRegisterForm() {
 
@@ -50,7 +49,7 @@ export default function GeneralRegisterForm() {
       neighborhood: "",
       state: "",
       country: "",
-      countryCode: 0,
+      countryCode: "",
       religion: "",
       genderId: "null",
       status: "null",
@@ -64,7 +63,7 @@ export default function GeneralRegisterForm() {
       referredByName: ""
     },
   })
-
+  const router = useRouter()
   const { toggleLoader } = useLoader();
   const { toast } = useToast();
   const [communicationMethod, setCommunicationMethod] = useState<CommunicationMethod[]>([])
@@ -74,7 +73,7 @@ export default function GeneralRegisterForm() {
   const [referralSource, setReferralSource] = useState<ReferralSource[]>([])
 
   function onSubmit(values: GeneralRegisterSchemaType) {
-
+    toggleLoader(true)
     values.cpf = parseField(values.cpf, masks.cpf);
     values.cnpj = parseField(values.cnpj, masks.cnpj);
     values.cep = parseField(values.cep, masks.cep);
@@ -93,6 +92,8 @@ export default function GeneralRegisterForm() {
     values.interestedInCourses = parseBoolean(values.interestedInCourses);
     delete values.age
     api.post('/general-register', values)
+    toggleLoader(false)
+    router.back()
   }
 
   const fetchCommunicationMethods = async () => {
@@ -214,12 +215,6 @@ export default function GeneralRegisterForm() {
           />
           {/* Se quiser que o botão ocupe uma linha inteira em qualquer breakpoint: 
         use col-span-1, col-span-2, ou col-span-3 de acordo com a necessidade */}
-          <div className="col-span-1 flex justify-end sm:col-span-2 lg:col-span-3">
-            <Button
-              type="submit"
-              variant="default"
-              className="flex w-fit items-center text-base"><Plus strokeWidth={5} /> Cadastrar</Button>
-          </div>
         </form>
       </Form>
 

@@ -37,7 +37,7 @@ export const generalRegisterSchema = z.object({
   state: z.string().optional(),
   complement: z.string().optional(),
   country: z.string().optional(),
-  countryCode: z.number().optional(),
+  countryCode: z.string().optional(),
 
   religion: z.string().optional(),
 

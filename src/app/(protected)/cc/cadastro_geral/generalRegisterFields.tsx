@@ -9,6 +9,9 @@ import FormMaskInputWithLabel from "@/components/self/FormMaskInputWIthLabel";
 import FormDatePicker from "@/components/self/FormDatePicker";
 import { masks } from "@/lib/masks";
 import { CommunicationMethod, EducationLevel, Gender, MaritalStatus, ReferralSource } from "@/types/smallModels";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArrowLeft, Plus } from "lucide-react";
 
 // Props for the reusable fields component
 interface GeneralRegisterFormFieldsProps {
@@ -541,6 +544,21 @@ const GeneralRegisterFormFields: FC<GeneralRegisterFormFieldsProps> = ({
                     />
                 )}
             />
+
+            <div className="col-span-1 flex justify-between sm:col-span-2 lg:col-span-3">
+                <Link href={'/cc/cadastro_geral'}>
+                    <Button
+                        type="submit"
+                        variant="outline"
+                        className="flex items-center text-base"><ArrowLeft strokeWidth={4} /> Voltar</Button>
+                </Link>
+                {!readOnly &&
+                    <Button
+                        type="submit"
+                        variant="default"
+                        className="flex items-center text-base"><Plus strokeWidth={5} /> Cadastrar</Button>
+                }
+            </div>
         </>
     );
 };

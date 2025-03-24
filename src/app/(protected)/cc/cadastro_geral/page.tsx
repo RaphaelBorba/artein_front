@@ -24,6 +24,7 @@ import { generalRegisterFilterSchema, GeneralRegisterFilterSchemaType } from "@/
 import FormInputWithLabel from "@/components/self/FormInputWithLabel";
 import FormMaskInputWithLabel from "@/components/self/FormMaskInputWIthLabel";
 import FormSelectWithLabel from "@/components/self/FormSelectWithLabel";
+import Link from "next/link";
 
 
 export const columns: ColumnDef<GeneralRegisterI, any>[] = [
@@ -275,15 +276,17 @@ export const columns: ColumnDef<GeneralRegisterI, any>[] = [
         textAlign: 'center'
       }
     },
-    cell: ({ row }) => (
+    cell: (info) => (
       <div className="flex justify-center gap-2">
-        <button onClick={() => console.log('view', row)} title="Visualizar">
-          <Eye className="text-blue-500" />
-        </button>
-        <button onClick={() => console.log('edit', row)} title="Editar">
+        <Link href={`/cc/cadastro_geral/${info.row.original.id}`}>
+          <button onClick={() => console.log('view', info.row.original)} title="Visualizar">
+            <Eye className="text-blue-500" />
+          </button>
+        </Link>
+        <button onClick={() => console.log('edit', info.row.original)} title="Editar">
           <Edit className="text-green-500" />
         </button>
-        <button onClick={() => console.log('delete', row)} title="Deletar">
+        <button onClick={() => console.log('delete', info.row.original)} title="Deletar">
           <Trash className="text-red-500" />
         </button>
       </div>
