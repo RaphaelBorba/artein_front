@@ -17,11 +17,12 @@ import { ArrowLeft, Plus } from "lucide-react";
 interface GeneralRegisterFormFieldsProps {
     form: UseFormReturn<GeneralRegisterSchemaType>;
     readOnly?: boolean;
-    maritalStatus: CommunicationMethod[];
-    educationLevel: MaritalStatus[];
-    gender: EducationLevel[];
-    communicationMethod: Gender[];
+    maritalStatus: MaritalStatus[];
+    educationLevel: EducationLevel[];
+    gender: Gender[];
+    communicationMethod: CommunicationMethod[];
     referralSource: ReferralSource[];
+    mode: 'create'|'edit'|'view'
 }
 
 const GeneralRegisterFormFields: FC<GeneralRegisterFormFieldsProps> = ({
@@ -31,6 +32,7 @@ const GeneralRegisterFormFields: FC<GeneralRegisterFormFieldsProps> = ({
     gender,
     communicationMethod,
     referralSource,
+    mode,
     readOnly = false }) => {
     return (
         <>
@@ -552,11 +554,11 @@ const GeneralRegisterFormFields: FC<GeneralRegisterFormFieldsProps> = ({
                         variant="outline"
                         className="flex items-center text-base"><ArrowLeft strokeWidth={4} /> Voltar</Button>
                 </Link>
-                {!readOnly &&
+                {mode !== 'view' &&
                     <Button
                         type="submit"
                         variant="default"
-                        className="flex items-center text-base"><Plus strokeWidth={5} /> Cadastrar</Button>
+                        className="flex items-center text-base"><Plus strokeWidth={5} /> {mode === 'create' ? 'Cadastrar' : 'Atualizar'}</Button>
                 }
             </div>
         </>

@@ -195,6 +195,7 @@ export default function GeneralRegisterViewPage() {
                         gender={gender}
                         maritalStatus={maritalStatus}
                         referralSource={referralSource}
+                        mode="view"
                         readOnly
                     />
                 </form>
