@@ -4,13 +4,10 @@ import Section from "@/components/self/Section";
 import { useToast } from "@/hooks/use-toast";
 import { useLoader } from "@/hooks/useLoader";
 import api from "@/lib/api";
-import { Button } from "@/components/ui/button";
 import { CommunicationMethod } from "@/types/smallModels";
 import { GeneralRegister as GeneralRegisterI } from "@/types/generalRegister";
 import { DataTable } from "@/components/self/DataTable";
-import { Plus } from "lucide-react";
 import { parseBoolean, parseField, parseNullableNumber } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 import axios from "axios";
 import { masks } from "@/lib/masks";
 import { IDataTableResposne, IPagination } from "@/types/dataTableResponse";
@@ -19,7 +16,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { generalRegisterFilterSchema, GeneralRegisterFilterSchemaType } from "@/schemas/generalRegister/generalRegisterFilterSchema";
 import { FiltersGeneralRegister } from "../filters";
-import { columns } from "../columns";
+import { getColumns } from "../columns";
 
 export default function GeneralRegister() {
   const { toast } = useToast();
@@ -47,8 +44,6 @@ export default function GeneralRegister() {
       receiveInfoMethodId: "null",
     },
   })
-
-  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -120,17 +115,10 @@ export default function GeneralRegister() {
       <div className="overflow-x-auto">
         <DataTable<GeneralRegisterI, unknown>
           data={registers}
-          columns={columns}
+          columns={getColumns('pacientes')}
           pagination={pagination}
           setPagination={setPagination}
         />
-      </div>
-      <div className="flex w-full justify-end">
-        <Button
-          onClick={() => router.push('cadastro_geral/create')}
-          type="button"
-          variant="outline"
-          className="flex items-center justify-between text-base"><Plus strokeWidth={5} /> Cadastrar</Button>
       </div>
     </Section>
   );

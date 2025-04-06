@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { generalRegisterFilterSchema, GeneralRegisterFilterSchemaType } from "@/schemas/generalRegister/generalRegisterFilterSchema";
 import { FiltersGeneralRegister } from "../filters";
-import { columns } from "../columns";
+import { getColumns } from "../columns";
 
 export default function GeneralRegister() {
   const { toast } = useToast();
@@ -120,7 +120,7 @@ export default function GeneralRegister() {
       <div className="overflow-x-auto">
         <DataTable<GeneralRegisterI, unknown>
           data={registers}
-          columns={columns}
+          columns={getColumns('alunos')}
           pagination={pagination}
           setPagination={setPagination}
         />

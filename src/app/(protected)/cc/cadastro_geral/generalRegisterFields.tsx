@@ -1,5 +1,5 @@
 // GeneralRegisterFormFields.tsx
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { GeneralRegisterSchemaType } from "@/schemas/generalRegister/generalRegisterSchema";
 import { FormField } from "@/components/ui/form";
@@ -22,8 +22,10 @@ interface GeneralRegisterFormFieldsProps {
     gender: Gender[];
     communicationMethod: CommunicationMethod[];
     referralSource: ReferralSource[];
-    mode: 'create'|'edit'|'view'
-}
+    mode: "create" | "edit" | "view";
+    path: "cadastro_geral" | "pacientes" | "alunos";
+    children?: ReactNode;
+  }
 
 const GeneralRegisterFormFields: FC<GeneralRegisterFormFieldsProps> = ({
     form,
@@ -32,8 +34,11 @@ const GeneralRegisterFormFields: FC<GeneralRegisterFormFieldsProps> = ({
     gender,
     communicationMethod,
     referralSource,
+    path,
     mode,
-    readOnly = false }) => {
+    readOnly = false,
+    children,
+}) => {
     return (
         <>
             <FormField
@@ -547,8 +552,10 @@ const GeneralRegisterFormFields: FC<GeneralRegisterFormFieldsProps> = ({
                 )}
             />
 
+            {children}
+
             <div className="col-span-1 flex justify-between sm:col-span-2 lg:col-span-3">
-                <Link href={'/cc/cadastro_geral'}>
+                <Link href={`/cc/${path}`}>
                     <Button
                         type="submit"
                         variant="outline"

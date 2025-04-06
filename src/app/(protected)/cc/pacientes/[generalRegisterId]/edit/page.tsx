@@ -1,4 +1,4 @@
- "use client";
+"use client";
 
 import React, { useEffect, useState, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import Section from "@/components/self/Section";
 import { Form } from "@/components/ui/form";
-import GeneralRegisterFormFields from "../../generalRegisterFields";
+import GeneralRegisterFormFields from "../../../cadastro_geral/generalRegisterFields";
 
 import api from "@/lib/api";
 import { CommunicationMethod, EducationLevel, Gender, MaritalStatus, ReferralSource } from "@/types/smallModels";
@@ -303,8 +303,10 @@ export default function GeneralRegisterViewPage() {
                         maritalStatus={maritalStatus}
                         referralSource={referralSource}
                         mode="edit"
-                        path="cadastro_geral"
-                    />
+                        readOnly
+                        path="pacientes"
+                    >
+                    </GeneralRegisterFormFields>
                 </form>
             </Form>
         </Section>

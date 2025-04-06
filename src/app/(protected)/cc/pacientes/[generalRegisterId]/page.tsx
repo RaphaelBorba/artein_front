@@ -2,7 +2,7 @@
 "use client";
 import Section from "@/components/self/Section";
 import { Form } from "@/components/ui/form";
-import GeneralRegisterFormFields from "../generalRegisterFields";
+import GeneralRegisterFormFields from "../../cadastro_geral/generalRegisterFields";
 import { useForm } from "react-hook-form";
 import { generalRegisterSchema, GeneralRegisterSchemaType } from "@/schemas/generalRegister/generalRegisterSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,7 +18,7 @@ import { calculateAge } from "@/lib/utils";
 import { format } from "@react-input/mask";
 import { masks } from "@/lib/masks";
 
-export default function GeneralRegisterViewPage() {
+export default function PatientViewPage() {
     const { generalRegisterId } = useParams<{ generalRegisterId: string }>();
 
     const { toggleLoader } = useLoader();
@@ -185,7 +185,7 @@ export default function GeneralRegisterViewPage() {
     }, [generalRegisterId, maritalStatus, educationLevel, gender, referralSource]);
 
     return (
-        <Section title="Cadastro Geral">
+        <Section title="Pacientes">
             <Form {...form}>
                 <form className="grid grid-cols-1 gap-4 text-black sm:grid-cols-2 lg:grid-cols-3">
                     <GeneralRegisterFormFields
@@ -197,7 +197,7 @@ export default function GeneralRegisterViewPage() {
                         referralSource={referralSource}
                         mode="view"
                         readOnly
-                        path="cadastro_geral"
+                        path="pacientes"
                     />
                 </form>
             </Form>
