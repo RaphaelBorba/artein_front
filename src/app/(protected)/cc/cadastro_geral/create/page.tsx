@@ -213,6 +213,7 @@ export default function GeneralRegisterForm() {
             maritalStatus={maritalStatus}
             referralSource={referralSource}
             mode="create"
+            path="cadastro_geral"
           />
           {/* Se quiser que o botão ocupe uma linha inteira em qualquer breakpoint: 
         use col-span-1, col-span-2, ou col-span-3 de acordo com a necessidade */}

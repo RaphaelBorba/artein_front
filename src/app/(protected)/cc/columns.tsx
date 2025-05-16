@@ -259,7 +259,7 @@ export const getColumns = (baseRoute: string): ColumnDef<GeneralRegisterI, any>[
     },
     cell: (info) => (
       <div className="flex justify-center gap-2">
-        <Link href={`${baseRoute}/${info.row.original.id}`}>
+        <Link className="flex align-bottom" href={`${baseRoute}/${info.row.original.id}`}>
           <button
             onClick={() => console.log("view", info.row.original)}
             title="Visualizar"
@@ -267,7 +267,7 @@ export const getColumns = (baseRoute: string): ColumnDef<GeneralRegisterI, any>[
             <Eye className="text-blue-500" />
           </button>
         </Link>
-        <Link href={`${baseRoute}/${info.row.original.id}/edit`}>
+        <Link className="flex align-bottom" href={`${baseRoute}/${info.row.original.id}/edit`}>
           <button
             onClick={() => console.log("edit", info.row.original)}
             title="Editar"

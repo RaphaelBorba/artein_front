@@ -12,10 +12,11 @@ import { CommunicationMethod, EducationLevel, Gender, MaritalStatus, ReferralSou
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowLeft, Plus } from "lucide-react";
+import { PatientWithGeneralSchemaType } from "@/schemas/patients/patientsSchema";
 
 // Props for the reusable fields component
 interface GeneralRegisterFormFieldsProps {
-    form: UseFormReturn<GeneralRegisterSchemaType>;
+    form: UseFormReturn<GeneralRegisterSchemaType | PatientWithGeneralSchemaType>;
     readOnly?: boolean;
     maritalStatus: MaritalStatus[];
     educationLevel: EducationLevel[];

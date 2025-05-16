@@ -36,4 +36,9 @@ export interface Role {
     value: string;
     label: string;
   }
+
+  export interface PsychologicalDisorders {
+    value: string;
+    label: string;
+  }
   
