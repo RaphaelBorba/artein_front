@@ -13,19 +13,21 @@ interface FormDatePickerProps {
   labelText: string;
   field: any;
   labelBold?: boolean;
-  isDisabled?:boolean
+  isDisabled?: boolean
+  isNextToTextarea?: boolean
 }
 
 export default function FormDatePicker({
   labelText,
   field,
   labelBold,
-  isDisabled
+  isDisabled,
+  isNextToTextarea
 }: FormDatePickerProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <FormItem className="flex w-full flex-col justify-end">
+    <FormItem className={`flex w-full flex-col ${isNextToTextarea ? "mt-2.5" : "justify-end"}`}>
       <FormLabel className={`pl-1 ${labelBold ? 'font-bold' : ''}`}>{labelText}</FormLabel>
       <Popover open={isOpen} onOpenChange={setIsOpen} >
         <PopoverTrigger asChild disabled={isDisabled}>

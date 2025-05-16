@@ -22,6 +22,7 @@ interface FormSelectWithLabelProps {
   field: any;
   labelBold?: boolean
   isDisabled?:boolean
+  className?:string
 }
 
 export default function FormSelectWithLabel({
@@ -31,10 +32,11 @@ export default function FormSelectWithLabel({
   placeholder = "Selecione uma opção",
   field,
   labelBold,
-  isDisabled
+  isDisabled,
+  className
 }: FormSelectWithLabelProps) {
   return (
-    <FormItem>
+    <FormItem className={className}>
       <FormLabel className={`pl-1 ${labelBold ? 'font-bold' : ''}`} htmlFor={idLabel}>
         {labelText}
       </FormLabel>
