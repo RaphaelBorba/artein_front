@@ -163,7 +163,6 @@ export default function PatientViewPage() {
       try {
         const response = await api.get<{ patient?: Patient, generalRegister: GeneralRegister }>(`/patient/${generalRegisterId}`);
         const { generalRegister, patient } = response.data;
-        console.log(generalRegister.personType || "null",)
         // Map fetched numeric IDs to strings (and use "null" if no value)
         form.reset({
           photo: generalRegister.photo || "",
@@ -233,7 +232,7 @@ export default function PatientViewPage() {
             "null" : patient?.ongoingLegalProcess ? "1" : "0",
           legalProcessDetails: patient?.legalProcessDetails || "",
           reasonForSeekingHelp: patient?.reasonForSeekingHelp || "",
-          psychologicalDisorders: patient?.psychologicalDisorders ? patient.psychologicalDisorders.length > 0 ? patient?.psychologicalDisorders : [] : [],
+          psychologicalDisorders: patient?.psychologicalDisorders ? patient.psychologicalDisorders.length > 0 ? patient?.psychologicalDisorders.map(v => v.value) : [] : [],
           observations: patient?.observations || "",
           physicalAndMentalDevelopment: patient?.physicalAndMentalDevelopment || "",
           educationalAndProfessionalHistory: patient?.educationalAndProfessionalHistory || "",
@@ -273,7 +272,8 @@ export default function PatientViewPage() {
             referralSource={referralSource}
             mode="view"
             readOnly
-            path="pacientes">
+            path="pacientes"
+          >
             <PatientsFormFields
               form={form}
               mode="edit"

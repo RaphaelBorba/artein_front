@@ -34,10 +34,7 @@ const patientSchema = z.object({
 
     reasonForSeekingHelp: z.string().optional(),
 
-    psychologicalDisorders: z.array(z.object({
-        value: z.string(),
-        label: z.string(),
-    })).optional(),
+    psychologicalDisorders: z.array(z.string()).optional(),
 
     observations: z.string().optional(),
     physicalAndMentalDevelopment: z.string().optional(),

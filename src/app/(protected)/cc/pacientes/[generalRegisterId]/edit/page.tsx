@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import React, { useEffect, useState, useCallback } from "react";
@@ -11,304 +12,340 @@ import { Form } from "@/components/ui/form";
 import GeneralRegisterFormFields from "../../../cadastro_geral/generalRegisterFields";
 
 import api from "@/lib/api";
-import { CommunicationMethod, EducationLevel, Gender, MaritalStatus, ReferralSource } from "@/types/smallModels";
-import { generalRegisterSchema, GeneralRegisterSchemaType } from "@/schemas/generalRegister/generalRegisterSchema";
+import { CommunicationMethod, EducationLevel, Gender, MaritalStatus, PsychologicalDisorders, ReferralSource } from "@/types/smallModels";
+import { GeneralRegisterSchemaType } from "@/schemas/generalRegister/generalRegisterSchema";
 import { useLoader } from "@/hooks/useLoader";
 import { useToast } from "@/hooks/use-toast";
 import { GeneralRegister } from "@/types/generalRegister";
 import { calculateAge, parseBoolean, parseField, parseNullableNumber } from "@/lib/utils";
 import { format, unformat } from "@react-input/mask";
 import { masks } from "@/lib/masks";
+import PatientsFormFields from "../patientsFormFields";
+import { patientWithGeneralSchema, PatientWithGeneralSchemaType } from "@/schemas/patients/patientsSchema";
+import { Patient } from "@/types/Patients";
 
 export default function GeneralRegisterViewPage() {
-    const { generalRegisterId } = useParams<{ generalRegisterId: string }>();
-    const router = useRouter();
-    const { toggleLoader } = useLoader();
-    const { toast } = useToast();
+  const { generalRegisterId } = useParams<{ generalRegisterId: string }>();
+  const router = useRouter();
+  const { toggleLoader } = useLoader();
+  const { toast } = useToast();
 
-    // State for the general register and options
-    const [generalRegister, setGeneralRegister] = useState<GeneralRegister | null>(null);
-    const [communicationMethod, setCommunicationMethod] = useState<CommunicationMethod[]>([]);
-    const [maritalStatus, setMaritalStatus] = useState<MaritalStatus[]>([]);
-    const [educationLevel, setEducationLevel] = useState<EducationLevel[]>([]);
-    const [gender, setGender] = useState<Gender[]>([]);
-    const [referralSource, setReferralSource] = useState<ReferralSource[]>([]);
+  // State for the general register and options
+  const [generalRegister, setGeneralRegister] = useState<GeneralRegister | null>(null);
+  const [psychologicalDisorders, setPsychologicalDisordersRes] = useState<PsychologicalDisorders[]>([]);
+  const [communicationMethod, setCommunicationMethod] = useState<CommunicationMethod[]>([]);
+  const [maritalStatus, setMaritalStatus] = useState<MaritalStatus[]>([]);
+  const [educationLevel, setEducationLevel] = useState<EducationLevel[]>([]);
+  const [gender, setGender] = useState<Gender[]>([]);
+  const [referralSource, setReferralSource] = useState<ReferralSource[]>([]);
 
-    // Initialize react-hook-form with Zod resolver and default values
-    const form = useForm<GeneralRegisterSchemaType>({
-        resolver: zodResolver(generalRegisterSchema),
-        defaultValues: {
-            photo: "",
-            fullName: "",
-            personType: "null",
-            birthDate: undefined,
-            nationality: "",
-            placeOfBirth: "",
-            age: "",
-            maritalStatusId: "null",
-            cpf: "",
-            cnpj: "",
-            companyName: "",
-            educationLevelId: "null",
-            profession: "",
-            workplace: "",
-            currentJob: "",
-            phoneNumber: "",
-            email: "",
-            firstContactDate: undefined,
-            cep: "",
-            address: "",
-            complement: "",
-            city: "",
-            neighborhood: "",
-            state: "",
-            country: "",
-            countryCode: "",
-            religion: "",
-            genderId: "null",
-            status: "null",
-            isPatient: "null",
-            isStudent: "null",
-            interestedInCourses: "null",
-            receiveInfoMethodId: "null",
-            additionalInfo: "",
-            referralSourceId: "null",
-            otherReferral: "",
-            referredByName: ""
-        },
-    });
+  // Initialize react-hook-form with Zod resolver and default values
+  const form = useForm<PatientWithGeneralSchemaType>({
+    resolver: zodResolver(patientWithGeneralSchema),
+    defaultValues: {
+      photo: "",
+      fullName: "",
+      personType: "null",
+      birthDate: undefined,
+      nationality: "",
+      placeOfBirth: "",
+      age: "",
+      maritalStatusId: "null",
+      cpf: "",
+      cnpj: "",
+      companyName: "",
+      educationLevelId: "null",
+      profession: "",
+      workplace: "",
+      currentJob: "",
+      phoneNumber: "",
+      email: "",
+      firstContactDate: undefined,
+      cep: "",
+      address: "",
+      complement: "",
+      city: "",
+      neighborhood: "",
+      state: "",
+      country: "",
+      countryCode: "",
+      religion: "",
+      genderId: "null",
+      status: "null",
+      isPatient: "null",
+      isStudent: "null",
+      interestedInCourses: "null",
+      receiveInfoMethodId: "null",
+      additionalInfo: "",
+      referralSourceId: "null",
+      otherReferral: "",
+      referredByName: "",
 
-    // onSubmit handler with error handling and proper formatting
-    const onSubmit = useCallback(async (values: GeneralRegisterSchemaType) => {
-        console.log(values);
-        toggleLoader(true);
-        try {
-            // Format fields based on masks
-            values.cpf = parseField(values.cpf, masks.cpf);
-            values.cnpj = parseField(values.cnpj, masks.cnpj);
-            values.cep = parseField(values.cep, masks.cep);
-            values.phoneNumber = parseField(values.phoneNumber, masks.cellphone);
+      // Patients Schema
+      attendanceType: "null",
+      attendanceLocation: "",
+      familyOfOrigin: "",
+      currentFamily: "",
+      peopleInHousehold: "",
+      previousPsychotherapyTreatment: "null",
+      psychotherapyTreatmentDetails: "",
+      pastPsychiatricTreatment: "null",
+      pastPsychiatricTreatmentDate: undefined,
+      currentPsychiatricTreatment: "null",
+      currentPsychiatricTreatmentStartDate: undefined,
+      psychiatrist: "",
+      psychiatristPhone: "",
+      currentMedications: "",
+      medicationDiagnosis: "",
+      generalMedicalTreatment: "null",
+      generalMedicalTreatmentDetails: "",
+      nonPsychiatricMedications: "",
+      ongoingLegalProcess: "null",
+      legalProcessDetails: "",
+      reasonForSeekingHelp: "",
+      psychologicalDisorders: [],
+      observations: "",
+      physicalAndMentalDevelopment: "",
+      educationalAndProfessionalHistory: "",
+      familyAndAffectiveHistory: "",
+      patientComplaintHistory: "",
+      therapyExpectations: "",
+      medicalRecord: "",
+    },
+  });
 
-            // Convert IDs from string to number (or undefined if "null")
-            values.maritalStatusId = parseNullableNumber(values.maritalStatusId);
-            values.educationLevelId = parseNullableNumber(values.educationLevelId);
-            values.genderId = parseNullableNumber(values.genderId);
-            values.referralSourceId = parseNullableNumber(values.referralSourceId);
-            values.receiveInfoMethodId = parseNullableNumber(values.receiveInfoMethodId);
+  // onSubmit handler with error handling and proper formatting
+  const onSubmit = useCallback(async (values: GeneralRegisterSchemaType) => {
+    console.log(values);
+    // toggleLoader(true);
+    // try {
+    //     // Format fields based on masks
+    //     values.cpf = parseField(values.cpf, masks.cpf);
+    //     values.cnpj = parseField(values.cnpj, masks.cnpj);
+    //     values.cep = parseField(values.cep, masks.cep);
+    //     values.phoneNumber = parseField(values.phoneNumber, masks.cellphone);
 
-            // Convert boolean fields
-            values.status = parseBoolean(values.status);
-            values.isPatient = parseBoolean(values.isPatient);
-            values.isStudent = parseBoolean(values.isStudent);
-            values.interestedInCourses = parseBoolean(values.interestedInCourses);
+    //     // Convert IDs from string to number (or undefined if "null")
+    //     values.maritalStatusId = parseNullableNumber(values.maritalStatusId);
+    //     values.educationLevelId = parseNullableNumber(values.educationLevelId);
+    //     values.genderId = parseNullableNumber(values.genderId);
+    //     values.referralSourceId = parseNullableNumber(values.referralSourceId);
+    //     values.receiveInfoMethodId = parseNullableNumber(values.receiveInfoMethodId);
 
-            delete values.age;
+    //     // Convert boolean fields
+    //     values.status = parseBoolean(values.status);
+    //     values.isPatient = parseBoolean(values.isPatient);
+    //     values.isStudent = parseBoolean(values.isStudent);
+    //     values.interestedInCourses = parseBoolean(values.interestedInCourses);
 
-            if (generalRegister) {
-                await api.patch(`/general-register/${generalRegister.id}`, values);
-                router.push('/cc/cadastro_geral');
-            } else {
-                toast({ title: "Erro", description: "Registro geral não encontrado.", variant: "destructive" });
-            }
-        } catch (error) {
-            console.error("Error updating general register:", error);
-            toast({
-                title: "Erro",
-                description: "Ocorreu um erro ao atualizar o registro geral.",
-                variant: "destructive"
-            });
-        } finally {
-            toggleLoader(false);
+    //     delete values.age;
+
+    //     if (generalRegister) {
+    //         await api.patch(`/general-register/${generalRegister.id}`, values);
+    //         router.push('/cc/cadastro_geral');
+    //     } else {
+    //         toast({ title: "Erro", description: "Registro geral não encontrado.", variant: "destructive" });
+    //     }
+    // } catch (error) {
+    //     console.error("Error updating general register:", error);
+    //     toast({
+    //         title: "Erro",
+    //         description: "Ocorreu um erro ao atualizar o registro geral.",
+    //         variant: "destructive"
+    //     });
+    // } finally {
+    //     toggleLoader(false);
+    // }
+  }, [generalRegister, router, toggleLoader, toast]);
+
+  // Fetch options data on mount
+  useEffect(() => {
+    const fetchOptions = async () => {
+      toggleLoader(true);
+      try {
+        const [
+          psychologicalDisordersRes,
+          communicationRes,
+          maritalRes,
+          educationRes,
+          genderRes,
+          referralRes
+        ] = await Promise.all([
+          api.get<PsychologicalDisorders[]>("/patient/psychological-disorders"),
+          api.get<CommunicationMethod[]>("/general-register/communication-method"),
+          api.get<MaritalStatus[]>("/general-register/marital-status"),
+          api.get<EducationLevel[]>("/general-register/education-level"),
+          api.get<Gender[]>("/general-register/gender"),
+          api.get<ReferralSource[]>("/general-register/referral-source")
+        ]);
+        setPsychologicalDisordersRes(psychologicalDisordersRes.data);
+        setCommunicationMethod(communicationRes.data);
+        setMaritalStatus(maritalRes.data);
+        setEducationLevel(educationRes.data);
+        setGender(genderRes.data);
+        setReferralSource(referralRes.data);
+      } catch (error) {
+        console.error("Error fetching options:", error);
+        if (axios.isAxiosError(error) && error.response?.status !== 401) {
+          toast({
+            title: "Erro",
+            description: JSON.stringify(error.response?.data),
+            variant: "destructive"
+          });
+        } else {
+          toast({
+            title: "Erro",
+            description: JSON.stringify(error),
+            variant: "destructive"
+          });
         }
-    }, [generalRegister, router, toggleLoader, toast]);
+      } finally {
+        toggleLoader(false);
+      }
+    };
 
-    // Fetch options data on mount
-    useEffect(() => {
-        const fetchOptions = async () => {
-            toggleLoader(true);
-            try {
-                const [
-                    communicationRes,
-                    maritalRes,
-                    educationRes,
-                    genderRes,
-                    referralRes
-                ] = await Promise.all([
-                    api.get<CommunicationMethod[]>("/general-register/communication-method"),
-                    api.get<MaritalStatus[]>("/general-register/marital-status"),
-                    api.get<EducationLevel[]>("/general-register/education-level"),
-                    api.get<Gender[]>("/general-register/gender"),
-                    api.get<ReferralSource[]>("/general-register/referral-source")
-                ]);
-                setCommunicationMethod(communicationRes.data);
-                setMaritalStatus(maritalRes.data);
-                setEducationLevel(educationRes.data);
-                setGender(genderRes.data);
-                setReferralSource(referralRes.data);
-            } catch (error) {
-                console.error("Error fetching options:", error);
-                if (axios.isAxiosError(error) && error.response?.status !== 401) {
-                    toast({
-                        title: "Erro",
-                        description: JSON.stringify(error.response?.data),
-                        variant: "destructive"
-                    });
-                } else {
-                    toast({
-                        title: "Erro",
-                        description: JSON.stringify(error),
-                        variant: "destructive"
-                    });
-                }
-            } finally {
-                toggleLoader(false);
-            }
-        };
+    fetchOptions();
+  }, []);
 
-        fetchOptions();
-    }, [toggleLoader, toast]);
+  // Fetch general register data when options are loaded and generalRegisterId is available
+  useEffect(() => {
+    if (!generalRegisterId) return;
+    if (!(maritalStatus.length &&
+      educationLevel.length &&
+      gender.length &&
+      referralSource.length &&
+      psychologicalDisorders.length)) return;
 
-    // Fetch general register data when options are loaded and generalRegisterId is available
-    useEffect(() => {
-        if (!generalRegisterId) return;
-        if (!(maritalStatus.length && educationLevel.length && gender.length && referralSource.length)) return;
+    const fetchGeneralRegister = async () => {
+      toggleLoader(true);
+      try {
+        const response = await api.get<{ patient?: Patient, generalRegister: GeneralRegister }>(`/patient/${generalRegisterId}`);
+        const { generalRegister, patient } = response.data;
+        setGeneralRegister(generalRegister);
 
-        const fetchGeneralRegister = async () => {
-            toggleLoader(true);
-            try {
-                const response = await api.get<GeneralRegister>(`general-register/${generalRegisterId}`);
-                const data = response.data;
-                setGeneralRegister(data);
-
-                form.reset({
-                    photo: data.photo || "",
-                    fullName: data.fullName || "",
-                    personType: data.personType || "null",
-                    birthDate: data.birthDate ? new Date(data.birthDate) : undefined,
-                    nationality: data.nationality || "",
-                    placeOfBirth: data.placeOfBirth || "",
-                    age: data.birthDate ? String(calculateAge(new Date(data.birthDate).toISOString())) : '',
-                    maritalStatusId: data.maritalStatusId ? String(data.maritalStatusId) : "null",
-                    cpf: (data.cpf != null && !isNaN(Number(data.cpf)))
-                        ? format(data.cpf, { mask: masks.cpf, replacement: masks.replacement })
-                        : '',
-                    cnpj: (data.cnpj != null && !isNaN(Number(data.cnpj)))
-                        ? format(data.cnpj, { mask: masks.cnpj, replacement: masks.replacement })
-                        : '',
-                    companyName: data.companyName || "",
-                    educationLevelId: data.educationLevelId ? String(data.educationLevelId) : "null",
-                    profession: data.profession || "",
-                    workplace: data.workplace || "",
-                    currentJob: data.currentJob || "",
-                    phoneNumber: (data.phoneNumber != null && !isNaN(Number(data.phoneNumber)))
-                        ? format(data.phoneNumber, { mask: masks.cellphone, replacement: masks.replacement })
-                        : '',
-                    email: data.email || "",
-                    firstContactDate: data.firstContactDate ? new Date(data.firstContactDate) : undefined,
-                    cep: (data.cep != null && !isNaN(Number(data.cep)))
-                        ? format(data.cep, { mask: masks.cep, replacement: masks.replacement })
-                        : '',
-                    address: data.address || "",
-                    complement: data.complement || "",
-                    city: data.city || "",
-                    neighborhood: data.neighborhood || "",
-                    state: data.state || "",
-                    country: data.country || "",
-                    countryCode: data.countryCode ? String(data.countryCode) : "",
-                    religion: data.religion || "",
-                    genderId: data.genderId ? String(data.genderId) : "null",
-                    status: data.status === null ? "null" : data.status ? "1" : "0",
-                    isPatient: data.isPatient === null ? "null" : data.isPatient ? "1" : "0",
-                    isStudent: data.isStudent === null ? "null" : data.isStudent ? "1" : "0",
-                    interestedInCourses: data.interestedInCourses === null ? "null" : data.interestedInCourses ? "1" : "0",
-                    receiveInfoMethodId: data.receiveInfoMethodId ? String(data.receiveInfoMethodId) : "null",
-                    additionalInfo: data.additionalInfo || "",
-                    referralSourceId: data.referralSourceId ? String(data.referralSourceId) : "null",
-                    otherReferral: data.otherReferral || "",
-                    referredByName: data.referredByName || ""
-                });
-            } catch (error) {
-                console.error("Error fetching general register:", error);
-                toast({
-                    title: "Erro",
-                    description: "Não foi possível carregar os dados do cadastro.",
-                    variant: "destructive"
-                });
-            } finally {
-                toggleLoader(false);
-            }
-        };
-
-        fetchGeneralRegister();
-    }, [generalRegisterId, maritalStatus, educationLevel, gender, referralSource, form, toggleLoader, toast]);
-
-    // Watch CEP changes and fetch address data if valid
-    useEffect(() => {
-        const subscription = form.watch((value, { name }) => {
-            if (name === "cep") {
-                const cepMask = value.cep;
-                if (typeof cepMask !== "string") return;
-
-                const cep = unformat(cepMask, { mask: masks.cep, replacement: masks.replacement });
-                if (cep.length !== 8) return;
-
-                (async () => {
-                    toggleLoader(true);
-                    try {
-                        const { data } = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-                        if (data?.erro) {
-                            toast({ title: "CEP Inválido!", variant: "destructive" });
-                            return;
-                        }
-                        // Set address fields from API response
-                        form.setValue("address", data.logradouro || "");
-                        form.setValue("city", data.localidade || "");
-                        form.setValue("neighborhood", data.bairro || "");
-                        form.setValue("state", data.uf || "");
-                    } catch (error) {
-                        console.error("Error fetching address data:", error);
-                        toast({
-                            title: "Erro na API de CEP!",
-                            description: "Contate Suporte",
-                            variant: "destructive"
-                        });
-                    } finally {
-                        toggleLoader(false);
-                    }
-                })();
-            }
+        form.reset({
+          photo: generalRegister.photo || "",
+          fullName: generalRegister.fullName || "",
+          personType: generalRegister.personType || "null",
+          birthDate: generalRegister.birthDate ? new Date(generalRegister.birthDate) : undefined,
+          nationality: generalRegister.nationality || "",
+          placeOfBirth: generalRegister.placeOfBirth || "",
+          age: generalRegister.birthDate ? String(calculateAge(new Date(generalRegister.birthDate).toISOString())) : '',
+          maritalStatusId: generalRegister.maritalStatusId ? String(generalRegister.maritalStatusId) : "null",
+          cpf: (generalRegister.cpf != null && !isNaN(Number(generalRegister.cpf)))
+            ? format(generalRegister.cpf, { mask: masks.cpf, replacement: masks.replacement })
+            : '',
+          cnpj: (generalRegister.cnpj != null && !isNaN(Number(generalRegister.cnpj)))
+            ? format(generalRegister.cnpj, { mask: masks.cnpj, replacement: masks.replacement })
+            : '',
+          companyName: generalRegister.companyName || "",
+          educationLevelId: generalRegister.educationLevelId ? String(generalRegister.educationLevelId) : "null",
+          profession: generalRegister.profession || "",
+          workplace: generalRegister.workplace || "",
+          currentJob: generalRegister.currentJob || "",
+          phoneNumber: (generalRegister.phoneNumber != null && !isNaN(Number(generalRegister.phoneNumber)))
+            ? format(generalRegister.phoneNumber, { mask: masks.cellphone, replacement: masks.replacement })
+            : '',
+          email: generalRegister.email || "",
+          firstContactDate: generalRegister.firstContactDate ? new Date(generalRegister.firstContactDate) : undefined,
+          cep: (generalRegister.cep != null && !isNaN(Number(generalRegister.cep)))
+            ? format(generalRegister.cep, { mask: masks.cep, replacement: masks.replacement })
+            : '',
+          address: generalRegister.address || "",
+          complement: generalRegister.complement || "",
+          city: generalRegister.city || "",
+          neighborhood: generalRegister.neighborhood || "",
+          state: generalRegister.state || "",
+          country: generalRegister.country || "",
+          countryCode: generalRegister.countryCode ? String(generalRegister.countryCode) : "",
+          religion: generalRegister.religion || "",
+          genderId: generalRegister.genderId ? String(generalRegister.genderId) : "null",
+          status: generalRegister.status === null ? "null" : generalRegister.status ? "1" : "0",
+          isPatient: generalRegister.isPatient === null ? "null" : generalRegister.isPatient ? "1" : "0",
+          isStudent: generalRegister.isStudent === null ? "null" : generalRegister.isStudent ? "1" : "0",
+          interestedInCourses: generalRegister.interestedInCourses === null ? "null" : generalRegister.interestedInCourses ? "1" : "0",
+          receiveInfoMethodId: generalRegister.receiveInfoMethodId ? String(generalRegister.receiveInfoMethodId) : "null",
+          additionalInfo: generalRegister.additionalInfo || "",
+          referralSourceId: generalRegister.referralSourceId ? String(generalRegister.referralSourceId) : "null",
+          otherReferral: generalRegister.otherReferral || "",
+          referredByName: generalRegister.referredByName || "",
+          // Patients Fields
+          attendanceLocation: patient?.attendanceLocation || "",
+          attendanceType: patient?.attendanceLocation || "null",
+          familyOfOrigin: patient?.familyOfOrigin || "",
+          currentFamily: patient?.currentFamily || "",
+          peopleInHousehold: String(patient?.peopleInHousehold) || '',
+          previousPsychotherapyTreatment: patient?.previousPsychotherapyTreatment === null || patient?.previousPsychotherapyTreatment === undefined ?
+            "null" : patient?.previousPsychotherapyTreatment ? "1" : "0",
+          psychotherapyTreatmentDetails: patient?.psychotherapyTreatmentDetails || "",
+          pastPsychiatricTreatment: patient?.pastPsychiatricTreatment === null || patient?.pastPsychiatricTreatment === undefined ?
+            "null" : patient?.pastPsychiatricTreatment ? "1" : "0",
+          pastPsychiatricTreatmentDate: patient?.pastPsychiatricTreatmentDate ?
+            new Date(patient?.pastPsychiatricTreatmentDate) : undefined,
+          currentPsychiatricTreatment: patient?.currentPsychiatricTreatment === null || patient?.currentPsychiatricTreatment === undefined ?
+            "null" : patient?.currentPsychiatricTreatment ? "1" : "0",
+          currentPsychiatricTreatmentStartDate: patient?.currentPsychiatricTreatmentStartDate ?
+            new Date(patient?.currentPsychiatricTreatmentStartDate) : undefined,
+          psychiatrist: patient?.psychiatrist || "",
+          psychiatristPhone: !isNaN(Number(patient!.psychiatristPhone!)) ? format(patient!.psychiatristPhone!, { mask: masks.cellphone, replacement: masks.replacement }) : '',
+          currentMedications: patient?.currentMedications || "",
+          medicationDiagnosis: patient?.medicationDiagnosis || "",
+          generalMedicalTreatment: patient?.generalMedicalTreatment === null || patient?.generalMedicalTreatment === undefined ?
+            "null" : patient?.generalMedicalTreatment ? "1" : "0",
+          generalMedicalTreatmentDetails: patient?.generalMedicalTreatmentDetails || "",
+          nonPsychiatricMedications: patient?.nonPsychiatricMedications || "",
+          ongoingLegalProcess: patient?.ongoingLegalProcess === null || patient?.ongoingLegalProcess === undefined ?
+            "null" : patient?.ongoingLegalProcess ? "1" : "0",
+          legalProcessDetails: patient?.legalProcessDetails || "",
+          reasonForSeekingHelp: patient?.reasonForSeekingHelp || "",
+          psychologicalDisorders: patient?.psychologicalDisorders ? patient.psychologicalDisorders.length > 0 ? patient?.psychologicalDisorders.map(v => v.value) : [] : [],
+          observations: patient?.observations || "",
+          physicalAndMentalDevelopment: patient?.physicalAndMentalDevelopment || "",
+          educationalAndProfessionalHistory: patient?.educationalAndProfessionalHistory || "",
+          familyAndAffectiveHistory: patient?.familyAndAffectiveHistory || "",
+          patientComplaintHistory: patient?.patientComplaintHistory || "",
+          therapyExpectations: patient?.therapyExpectations || "",
+          medicalRecord: patient?.medicalRecord || "",
         });
-        return () => subscription.unsubscribe();
-    }, [form, toggleLoader, toast]);
-
-    // Watch birthDate changes to update age
-    useEffect(() => {
-        const subscription = form.watch((value, { name }) => {
-            if (name === "birthDate" && value.birthDate) {
-                form.setValue("age", String(calculateAge(new Date(value.birthDate).toISOString())));
-            }
+      } catch (error) {
+        console.error("Error fetching general register:", error);
+        toast({
+          title: "Erro",
+          description: "Não foi possível carregar os dados do cadastro.",
+          variant: "destructive"
         });
-        return () => subscription.unsubscribe();
-    }, [form]);
+      } finally {
+        toggleLoader(false);
+      }
+    };
 
-    return (
-        <Section title="Cadastro Geral">
-            <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 gap-4 text-black sm:grid-cols-2 lg:grid-cols-3">
-                    <GeneralRegisterFormFields
-                        form={form}
-                        communicationMethod={communicationMethod}
-                        educationLevel={educationLevel}
-                        gender={gender}
-                        maritalStatus={maritalStatus}
-                        referralSource={referralSource}
-                        mode="edit"
-                        readOnly
-                        path="pacientes"
-                    >
-                    </GeneralRegisterFormFields>
-                </form>
-            </Form>
-        </Section>
-    );
+    fetchGeneralRegister();
+  }, [generalRegisterId, maritalStatus, educationLevel, gender, referralSource, psychologicalDisorders, form, toggleLoader, toast]);
+
+  return (
+    <Section title="Pacientes">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 gap-4 text-black sm:grid-cols-2 lg:grid-cols-3">
+          <GeneralRegisterFormFields
+            form={form}
+            communicationMethod={communicationMethod}
+            educationLevel={educationLevel}
+            gender={gender}
+            maritalStatus={maritalStatus}
+            referralSource={referralSource}
+            mode="edit"
+            readOnly
+            path="pacientes"
+          >
+            <PatientsFormFields
+              form={form}
+              mode="edit"
+              path="pacientes"
+              psychologicalDisorders={psychologicalDisorders}
+            />
+          </GeneralRegisterFormFields>
+        </form>
+      </Form>
+    </Section>
+  );
 }

@@ -24,6 +24,7 @@ interface PatientsFormFieldsProps {
 const PatientsFormFields: FC<PatientsFormFieldsProps> = ({
   form,
   readOnly = false,
+  psychologicalDisorders,
 }) => {
   return (
     <>
@@ -340,8 +341,9 @@ const PatientsFormFields: FC<PatientsFormFieldsProps> = ({
         name="psychologicalDisorders"
         render={({ field }) => (
           <MultiSelect
-            options={[{ label: "ABC", value: '1' }, { label: "DEF", value: '2' }, { label: "GHI", value: '3' }, { label: "GHI", value: '4' }, { label: "GHI", value: '5' }, { label: "GHI", value: '6' }, { label: "GHI", value: '7' }, { label: "GHI", value: '8' }, { label: "GHI", value: '9' }, { label: "GHI", value: '10' }]}
+            options={psychologicalDisorders}
             onValueChange={field.onChange}
+            defaultValue={field.value !== undefined ? field.value : []}
             // placeholder="Select options"
             // maxCount={6}
             labelBold
@@ -360,19 +362,6 @@ const PatientsFormFields: FC<PatientsFormFieldsProps> = ({
             className="col-span-1 sm:col-span-2 lg:col-span-3"
             field={field}
             label="Observação:"
-            labelBold
-            isDisabled={readOnly}
-          />
-        )}
-      />
-      <FormField
-        control={form.control}
-        name="physicalAndMentalDevelopment"
-        render={({ field }) => (
-          <FormTextAreaWithLabel
-            className="col-span-1 sm:col-span-2 lg:col-span-3"
-            field={field}
-            label="Desenvolvimento Físico e Mental?"
             labelBold
             isDisabled={readOnly}
           />
