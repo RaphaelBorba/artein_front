@@ -190,6 +190,12 @@ export const MultiSelect = React.forwardRef<
       onValueChange(newSelectedValues);
     };
 
+    React.useEffect(()=>{
+      if (defaultValue.length > 0){
+        setSelectedValues(defaultValue)
+      }
+    },[defaultValue])
+
     const toggleAll = () => {
       if (selectedValues.length === options.length) {
         handleClear();

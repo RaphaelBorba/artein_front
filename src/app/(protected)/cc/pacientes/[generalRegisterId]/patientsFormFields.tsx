@@ -344,7 +344,7 @@ const PatientsFormFields: FC<PatientsFormFieldsProps> = ({
             options={psychologicalDisorders}
             onValueChange={field.onChange}
             defaultValue={field.value !== undefined ? field.value : []}
-            // placeholder="Select options"
+            placeholder="Selecione as Opções"
             // maxCount={6}
             labelBold
             labelText="Transtornos Psicológicos Presentes?"

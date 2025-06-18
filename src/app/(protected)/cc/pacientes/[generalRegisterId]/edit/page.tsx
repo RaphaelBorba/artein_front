@@ -32,12 +32,15 @@ export default function GeneralRegisterViewPage() {
 
   // State for the general register and options
   const [generalRegister, setGeneralRegister] = useState<GeneralRegister | null>(null);
+  const [patient, setPatient] = useState<Patient | null>(null);
   const [psychologicalDisorders, setPsychologicalDisordersRes] = useState<PsychologicalDisorders[]>([]);
   const [communicationMethod, setCommunicationMethod] = useState<CommunicationMethod[]>([]);
   const [maritalStatus, setMaritalStatus] = useState<MaritalStatus[]>([]);
   const [educationLevel, setEducationLevel] = useState<EducationLevel[]>([]);
   const [gender, setGender] = useState<Gender[]>([]);
   const [referralSource, setReferralSource] = useState<ReferralSource[]>([]);
+
+
 
   // Initialize react-hook-form with Zod resolver and default values
   const form = useForm<PatientWithGeneralSchemaType>({
@@ -115,47 +118,93 @@ export default function GeneralRegisterViewPage() {
   });
 
   // onSubmit handler with error handling and proper formatting
-  const onSubmit = useCallback(async (values: GeneralRegisterSchemaType) => {
-    console.log(values);
-    // toggleLoader(true);
-    // try {
-    //     // Format fields based on masks
-    //     values.cpf = parseField(values.cpf, masks.cpf);
-    //     values.cnpj = parseField(values.cnpj, masks.cnpj);
-    //     values.cep = parseField(values.cep, masks.cep);
-    //     values.phoneNumber = parseField(values.phoneNumber, masks.cellphone);
+  const onSubmit = useCallback<
+    (values: Partial<PatientWithGeneralSchemaType>) => Promise<void>
+  >(async (values) => {
+    toggleLoader(true);
 
-    //     // Convert IDs from string to number (or undefined if "null")
-    //     values.maritalStatusId = parseNullableNumber(values.maritalStatusId);
-    //     values.educationLevelId = parseNullableNumber(values.educationLevelId);
-    //     values.genderId = parseNullableNumber(values.genderId);
-    //     values.referralSourceId = parseNullableNumber(values.referralSourceId);
-    //     values.receiveInfoMethodId = parseNullableNumber(values.receiveInfoMethodId);
+    try {
+      if (!generalRegister) {
+        toast({
+          title: "Erro",
+          description: "Registro geral não encontrado.",
+          variant: "destructive",
+        });
+        return;
+      }
 
-    //     // Convert boolean fields
-    //     values.status = parseBoolean(values.status);
-    //     values.isPatient = parseBoolean(values.isPatient);
-    //     values.isStudent = parseBoolean(values.isStudent);
-    //     values.interestedInCourses = parseBoolean(values.interestedInCourses);
+      const {
+        fullName,
+        email,
+        photo,
+        personType,
+        birthDate,
+        nationality,
+        placeOfBirth,
+        age,
+        maritalStatusId,
+        cpf,
+        cnpj,
+        companyName,
+        educationLevelId,
+        profession,
+        workplace,
+        currentJob,
+        phoneNumber,
+        firstContactDate,
+        cep,
+        address,
+        complement,
+        city,
+        neighborhood,
+        state,
+        country,
+        countryCode,
+        religion,
+        genderId,
+        status,
+        isPatient,
+        isStudent,
+        interestedInCourses,
+        receiveInfoMethodId,
+        additionalInfo,
+        referralSourceId,
+        otherReferral,
+        referredByName,
+        ...rest
+      } = values;
 
-    //     delete values.age;
+      const payload = {
+        ...rest,
+        generalRegisterId: generalRegister.id,
+        psychiatristPhone: rest.psychiatristPhone
+          ? parseField(rest.psychiatristPhone, masks.cellphone)
+          : undefined,
+        previousPsychotherapyTreatment: parseBoolean(
+          rest.previousPsychotherapyTreatment
+        ),
+        pastPsychiatricTreatment: parseBoolean(
+          rest.pastPsychiatricTreatment
+        ),
+        ongoingLegalProcess: parseBoolean(rest.ongoingLegalProcess),
+        generalMedicalTreatment: parseBoolean(rest.generalMedicalTreatment),
+        currentPsychiatricTreatment: parseBoolean(
+          rest.currentPsychiatricTreatment
+        ),
+      };
 
-    //     if (generalRegister) {
-    //         await api.patch(`/general-register/${generalRegister.id}`, values);
-    //         router.push('/cc/cadastro_geral');
-    //     } else {
-    //         toast({ title: "Erro", description: "Registro geral não encontrado.", variant: "destructive" });
-    //     }
-    // } catch (error) {
-    //     console.error("Error updating general register:", error);
-    //     toast({
-    //         title: "Erro",
-    //         description: "Ocorreu um erro ao atualizar o registro geral.",
-    //         variant: "destructive"
-    //     });
-    // } finally {
-    //     toggleLoader(false);
-    // }
+      await api.post("/patient/", payload);
+      router.push("/cc/pacientes");
+    } catch (error) {
+      console.error("Error saving patient:", error);
+      toast({
+        title: "Erro",
+        description: "Ocorreu um erro ao atualizar o paciente.",
+        variant: "destructive",
+      });
+    } finally {
+      toggleLoader(false);
+    }
   }, [generalRegister, router, toggleLoader, toast]);
 
   // Fetch options data on mount
@@ -219,9 +268,10 @@ export default function GeneralRegisterViewPage() {
     const fetchGeneralRegister = async () => {
       toggleLoader(true);
       try {
-        const response = await api.get<{ patient?: Patient, generalRegister: GeneralRegister }>(`/patient/${generalRegisterId}`);
+        const response = await api.get<{ patient: Patient, generalRegister: GeneralRegister }>(`/patient/${generalRegisterId}`);
         const { generalRegister, patient } = response.data;
         setGeneralRegister(generalRegister);
+        setPatient(patient)
 
         form.reset({
           photo: generalRegister.photo || "",
