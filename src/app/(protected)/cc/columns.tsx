@@ -32,8 +32,8 @@ export const getColumns = (baseRoute: string): ColumnDef<GeneralRegisterI, any>[
       info.getValue() === "Pessoa Física"
         ? "Pessoa Física"
         : info.getValue() === "Pessoa Jurídica"
-        ? "Pessoa Jurídica"
-        : "",
+          ? "Pessoa Jurídica"
+          : "",
   },
   {
     accessorKey: "birthDate",
@@ -275,12 +275,15 @@ export const getColumns = (baseRoute: string): ColumnDef<GeneralRegisterI, any>[
             <Edit className="text-green-500" />
           </button>
         </Link>
-        <button
-          onClick={() => console.log("delete", info.row.original)}
-          title="Deletar"
-        >
-          <Trash className="text-red-500" />
-        </button>
+        {
+          baseRoute === "cadastro_geral" &&
+          <button
+            onClick={() => console.log("delete", info.row.original)}
+            title="Deletar"
+          >
+            <Trash className="text-red-500" />
+          </button>
+        }
       </div>
     ),
   },
