@@ -37,7 +37,7 @@ const form = useForm<CourseClassFormSchemaType>({
     startTime:   "",
     endTime:     "",
     daysOfWeek:  [],
-    price:       0,           // ← use empty string instead of undefined
+    price:       0,
   },
 });
 

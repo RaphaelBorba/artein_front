@@ -26,19 +26,18 @@ export default function GeneralRegister() {
     hasPreviousPage: true,
   })
 
-    const router = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
       toggleLoader(true);
       try {
-        const generalRes= await  api.get<IDataTableResposne<CourseI[]>>("/course-classes", {
-            params: {
-              'page': pagination.page,
-              'limit': pagination.pageSize
-            }
-          })
-          console.log(generalRes)
+        const generalRes = await api.get<IDataTableResposne<CourseI[]>>("/course-classes", {
+          params: {
+            'page': pagination.page,
+            'limit': pagination.pageSize
+          }
+        })
         setRegisters(generalRes.data.records);
         setPagination(generalRes.data.pagination)
       } catch (error) {
@@ -79,7 +78,7 @@ export default function GeneralRegister() {
           setPagination={setPagination}
         />
       </div>
-            <div className="flex w-full justify-end">
+      <div className="flex w-full justify-end">
         <Button
           onClick={() => router.push('turmas/create')}
           type="button"

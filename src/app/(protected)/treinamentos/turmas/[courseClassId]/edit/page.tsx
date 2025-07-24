@@ -9,41 +9,45 @@ import { useCallback, useEffect, useState } from "react";
 import { useLoader } from "@/hooks/useLoader";
 import { useToast } from "@/hooks/use-toast";
 import { useParams, useRouter } from "next/navigation";
-import { CourseFormSchemaType, courseSchema } from "@/schemas/courses/coursesSchema";
-import { CourseI } from "@/types/courses";
-import CoursesFormFields from "../../coursesFormFields";
+import { CourseClassesI } from "@/types/couseClasses";
+import { CourseClassFormSchemaType, courseClassSchema } from "@/schemas/courseClass/courseClassSchema";
+import CoursesClassesFormFields from "../../courseClassesFormFields";
 
 export default function CoursePagePage() {
-  const { courseId } = useParams<{ courseId: string }>();
+  const { courseClassId } = useParams<{ courseClassId: string }>();
 
   const { toggleLoader } = useLoader();
   const { toast } = useToast();
   const router = useRouter();
 
-  const [course, setCourse] = useState<CourseI>()
-  console.log(course)
+  const [courseClass, setCourseClass] = useState<CourseClassesI>()
 
-  const form = useForm<CourseFormSchemaType>({
-    resolver: zodResolver(courseSchema),
+  const form = useForm<CourseClassFormSchemaType>({
+    resolver: zodResolver(courseClassSchema),
     defaultValues: {
-      description: "",
       name: "",
+      workload: "",
+      classNumber: "",
+      location: "",
+      address: "",
+      shift: "",
+      sessionDates: [],
+      startDate: undefined,
+      endDate: undefined,
+      startTime: "",
+      endTime: "",
+      daysOfWeek: [],
       price: 0,
-      workload: ""
     },
   });
 
-    useEffect(() => {
-    console.log('Validation Errors:', form.formState.errors)
-  }, [form.formState.errors])
-
 
   const onSubmit = useCallback<
-    (values: CourseFormSchemaType) => Promise<void>
+    (values: CourseClassFormSchemaType) => Promise<void>
   >(async (values) => {
     toggleLoader(true);
     try {
-      if (!course || !courseId) {
+      if (!courseClass || !courseClassId) {
         toast({
           title: "Erro",
           description: "Registro geral não encontrado.",
@@ -52,15 +56,9 @@ export default function CoursePagePage() {
         return;
       }
 
-      const payload: Partial<CourseI> = {
-        name: values.name,
-        description: values.description,
-        workload: values.workload,
-        price: values.price
-      }
-      console.log(payload)
-      await api.patch(`/courses/${courseId}`, payload);
-      router.push("/treinamentos/cursos");
+
+      await api.patch(`/course-classes/${courseClassId}`, { ...values, sessionDates: values.sessionDates.map((obj) => obj.date) });
+      router.push("/treinamentos/turmas");
     } catch (error) {
       console.error("Error saving patient:", error);
       toast({
@@ -71,22 +69,33 @@ export default function CoursePagePage() {
     } finally {
       toggleLoader(false);
     }
-  }, [course, router, toggleLoader, toast]);
+  }, [courseClass, router, toggleLoader, toast]);
 
   useEffect(() => {
     // Now load the general register data after options have loaded
     const fetchCourse = async () => {
       toggleLoader(true);
       try {
-        const response = await api.get<CourseI>(`/courses/${courseId}`);
-        const courseResp = response.data
-        setCourse(courseResp)
+        const response = await api.get<CourseClassesI>(`/course-classes/${courseClassId}`);
+        const courseClassResp = response.data
+        setCourseClass(courseClassResp)
         // Map fetched numeric IDs to strings (and use "null" if no value)
         form.reset({
-          name: courseResp.name || "",
-          description: courseResp.description || "",
-          workload: courseResp.workload || "",
-          price: courseResp.price || 0,
+          name: courseClassResp.name || "",
+          workload: courseClassResp.workload || "",
+          classNumber: courseClassResp.classNumber || "",
+          location: courseClassResp.location || "",
+          address: courseClassResp.address || "",
+          shift: courseClassResp.shift || "",
+          sessionDates: courseClassResp.sessionDates
+            ? courseClassResp.sessionDates.map((d: string | number | Date) => ({ date: new Date(d) }))
+            : [],
+          startDate: courseClassResp.startDate ? new Date(courseClassResp.startDate) : undefined,
+          endDate: courseClassResp.endDate ? new Date(courseClassResp.endDate) : undefined,
+          startTime: courseClassResp.startTime || "",
+          endTime: courseClassResp.endTime || "",
+          daysOfWeek: courseClassResp.daysOfWeek || [],
+          price: courseClassResp.price || 0,
         });
       } catch (error) {
         console.error("Error fetching general register:", error);
@@ -102,13 +111,13 @@ export default function CoursePagePage() {
 
     fetchCourse();
 
-  }, [courseId]);
+  }, [courseClassId]);
 
   return (
     <Section title="Turmas">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 gap-4 text-black sm:grid-cols-2 lg:grid-cols-3">
-          <CoursesFormFields
+          <CoursesClassesFormFields
             mode="edit"
             form={form}
           />
