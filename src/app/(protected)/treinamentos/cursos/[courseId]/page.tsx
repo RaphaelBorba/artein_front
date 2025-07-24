@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useParams } from "next/navigation";
 import { CourseFormSchemaType, courseSchema } from "@/schemas/courses/coursesSchema";
 import { CourseI } from "@/types/courses";
-import CoursesFormFields from "./coursesFormFields";
+import CoursesFormFields from "../coursesFormFields";
 
 export default function CourseViewPage() {
     const { courseId } = useParams<{ courseId: string }>();
@@ -60,7 +60,7 @@ export default function CourseViewPage() {
     }, [courseId]);
 
     return (
-        <Section title="Pacientes">
+        <Section title="Cursos">
             <Form {...form}>
                 <form className="grid grid-cols-1 gap-4 text-black sm:grid-cols-2 lg:grid-cols-3">
                     <CoursesFormFields

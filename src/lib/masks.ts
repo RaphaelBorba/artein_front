@@ -3,5 +3,6 @@ export const masks = {
     cnpj: "__.___.___/____-__",
     cellphone: "(__) _____-____",
     cep: "_____-___",
+    hour: "__:__",
     replacement: { _: /\d/ }
 }
