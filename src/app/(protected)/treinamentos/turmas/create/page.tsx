@@ -11,10 +11,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useParams, useRouter } from "next/navigation";
 import CoursesClassesFormFields from "../courseClassesFormFields";
 import { CourseClassFormSchemaType, courseClassSchema } from "@/schemas/courseClass/courseClassSchema";
-import { CourseClassesI } from "@/types/couseClasses";
 
 export default function CourseCreatePage() {
-    const { courseId } = useParams<{ courseId: string }>();
 
     const { toggleLoader } = useLoader();
     const { toast } = useToast();
