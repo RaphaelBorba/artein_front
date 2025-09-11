@@ -23,6 +23,7 @@ interface FormSelectWithLabelProps {
   labelBold?: boolean
   isDisabled?:boolean
   className?:string
+  observation?:string
 }
 
 export default function FormSelectWithLabel({
@@ -33,13 +34,15 @@ export default function FormSelectWithLabel({
   field,
   labelBold,
   isDisabled,
-  className
+  className,
+  observation
 }: FormSelectWithLabelProps) {
   return (
     <FormItem className={className}>
       <FormLabel className={`pl-1 ${labelBold ? 'font-bold' : ''}`} htmlFor={idLabel}>
         {labelText}
       </FormLabel>
+      <p className="text-sm text-gray-500 ml-1">{observation}</p>
       <Select disabled={isDisabled} value={field.value} onValueChange={field.onChange}>
         <FormControl>
           <SelectTrigger >

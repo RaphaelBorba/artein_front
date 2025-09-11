@@ -34,7 +34,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   const isOpen = sidebar.state === "expanded";
 
   const [activeCollapsible, setActiveCollapsible] = React.useState<string | null>(null);
-  const { user} = useAuthStore()
+  const { user } = useAuthStore()
   const logout = useLogout()
 
   const handleMenuClick = (nav: NavigationItem, event: React.MouseEvent) => {
@@ -77,9 +77,17 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
       isDropdown: true,
       title: "Fichas",
       sons: [
-        { title: "Curso 1", path: "" },
-        { title: "Curso 2", path: "" },
-        { title: "Curso 3", path: "" },
+        { title: "Curso Introdutório em Mindfulness", path: "/fichas/curso_introdutorio_em_mindfulness" },
+        { title: "P8S em Mindfulness", path: "/fichas/p8s_em_mindfulness" },
+        { title: "Curso Aprofundamento Mindfulness", path: "/fichas/curso_aprofundamento_mindfulness" },
+        { title: "Inscrição Imersão em Mindfulness", path: "/fichas/inscricao_imersao_em_mindfulness" },
+        { title: "Formulário de Inscrição em Eventos", path: "/fichas/formulario_de_inscricao_em_eventos" },
+        { title: "Formulário Aulas Regulares", path: "/fichas/formulario_aulas_regulares" },
+        { title: "Formulário de Avaliação P8S Mindfulness", path: "/fichas/formulario_de_avaliacao_p8s_mindfulness" },
+        { title: "Formulário de Avaliação Curso Aprofundamento em Mindfulness", path: "/fichas/formulario_de_avaliacao_curso_aprofundamento_em_mindfulness" },
+        { title: "Formulário de Avaliação Curso Introdutório em Mindfulness", path: "/fichas/formulario_de_avaliacao_curso_introdutorio_em_mindfulness" },
+        { title: "Formulário de Ava Imersão em Mindfulness", path: "/fichas/formulario_de_ava_imersao_em_mindfulness" },
+        { title: "Formulário de Ava", path: "/fichas/formulario_de_ava" },
       ],
     },
     {

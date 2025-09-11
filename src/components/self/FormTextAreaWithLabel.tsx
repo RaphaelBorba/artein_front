@@ -15,16 +15,32 @@ interface FormTextAreaWithLabelI {
     className?: string,
     labelBold?: boolean,
     isDisabled?: boolean,
-    type?: HTMLInputTypeAttribute
+    type?: HTMLInputTypeAttribute,
+    startHeight?: number | string
 }
 
-export default function FormTextAreaWithLabel({ field, label, placeholder, className, labelBold, isDisabled, type }: FormTextAreaWithLabelI) {
+export default function FormTextAreaWithLabel({ 
+    field,
+    label,
+    placeholder,
+    className, 
+    labelBold, 
+    isDisabled, 
+    type, 
+    startHeight 
+}: FormTextAreaWithLabelI) {
 
     return (
         <FormItem className={className} >
             <FormLabel className={`pl-1 ${labelBold ? "font-bold" : ""}`}>{label}</FormLabel>
             <FormControl>
-                <Textarea type={type} placeholder={placeholder} {...field} disabled={isDisabled} />
+                <Textarea
+                    type={type}
+                    placeholder={placeholder}
+                    {...field}
+                    disabled={isDisabled}
+                    style={startHeight !== undefined ? { height: typeof startHeight === "number" ? `${startHeight}px` : startHeight } : undefined}
+                />
             </FormControl>
             {/* <FormMessage /> */}
         </FormItem>
