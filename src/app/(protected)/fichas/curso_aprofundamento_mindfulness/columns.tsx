@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Edit, Eye } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import type { SubmissionRecord } from "@/types/formResponse";
-import { COMMON_LABELS, QUESTIONS_CURSO_INTRODUTORIO_FORM } from "@/constants/forms";
+import { COMMON_LABELS, QUESTIONS_CURSO_APROFUNDAMENTO_FORM } from "@/constants/forms";
 
 function pickField(row: SubmissionRecord, keys: string[]): string {
   for (const key of keys) {
@@ -30,19 +30,10 @@ export const getColumns = (baseRoute: string): ColumnDef<SubmissionRecord, any>[
       cell: ({ row }) => pickField(row.original, ["fullName", "nomeCompleto", "nome_completo"]),
     },
     {
-      id: "profession",
-      header: COMMON_LABELS.profession,
-      size: 220,
-      cell: ({ row }) => pickField(row.original, ["profession", "profissao"]),
-    },
-    {
-      id: "birthDate",
-      header: COMMON_LABELS.birthDate,
-      size: 200,
-      cell: ({ row }) => {
-        const raw = pickField(row.original, ["birthDate", "dataDeNascimento", "nascimento"]);
-        return raw ? formatDate(raw) : "";
-      },
+      id: "phone",
+      header: COMMON_LABELS.phone,
+      size: 180,
+      cell: ({ row }) => pickField(row.original, ["phone", "telefone"]),
     },
     {
       id: "cep",
@@ -75,31 +66,31 @@ export const getColumns = (baseRoute: string): ColumnDef<SubmissionRecord, any>[
       cell: ({ row }) => pickField(row.original, ["state", "estado"]),
     },
     {
-      id: "phone",
-      header: COMMON_LABELS.phone,
-      size: 180,
-      cell: ({ row }) => pickField(row.original, ["phone", "telefone"]),
-    },
-    {
       id: "email",
       header: COMMON_LABELS.email,
       size: 240,
       cell: ({ row }) => pickField(row.original, ["email", "eMail"]),
     },
     {
-      id: "indication",
-      header: `${COMMON_LABELS.indication}:`,
-      size: 240,
-      cell: ({ row }) => pickField(row.original, ["indication", "indicacao"]),
+      id: "alreadyParticipatedInCourse",
+      header: COMMON_LABELS.alreadyParticipatedInCourse,
+      size: COMMON_LABELS.alreadyParticipatedInCourse.length*7.5,
+      cell: ({ row }) => pickField(row.original, ["alreadyParticipatedInCourse", "participouCurso"]),
     },
     {
-      id: "paymentForm",
+      id: "alreadyParticipatedInCourseIntrodutorio",
+      header: COMMON_LABELS.alreadyParticipatedInCourseIntrodutorio,
+      size: COMMON_LABELS.alreadyParticipatedInCourseIntrodutorio.length*7,
+      cell: ({ row }) => pickField(row.original, ["alreadyParticipatedInCourseIntrodutorio", "participouCursoIntrodutorio"]),
+    },
+    {
+      id: "payment",
       header: COMMON_LABELS.payment,
       size: 260,
       cell: ({ row }) => pickField(row.original, ["payment", "valorEFormaPagamento"]),
     },
     {
-      id: "otherPaymentForm",
+      id: "otherPayment",
       header: COMMON_LABELS.otherPayment,
       size: 260,
       cell: ({ row }) => pickField(row.original, ["otherPayment", "outraFormaPagamento"]),
@@ -111,66 +102,72 @@ export const getColumns = (baseRoute: string): ColumnDef<SubmissionRecord, any>[
       cell: ({ row }) => pickField(row.original, ["paymentMedium", "meioDePagamento"]),
     },
     {
-      id: "discount",
-      header: COMMON_LABELS.discount,
-      size: 160,
-      cell: ({ row }) => pickField(row.original, ["discount", "desconto"]),
-    },
-    {
-      id: "otherDiscounts",
-      header: COMMON_LABELS.otherDiscounts,
-      size: 220,
-      cell: ({ row }) => pickField(row.original, ["otherDiscounts", "outrosDescontos"]),
-    },
-    {
-      id: "depositInitialInfo",
-      header: COMMON_LABELS.bankAndInitialDepositDateAndInstallments,
-      size: 360,
+      id: "bankAndInitialDepositDate",
+      header: COMMON_LABELS.bankAndInitialDepositDate,
+      size: COMMON_LABELS.bankAndInitialDepositDate.length*8,
       cell: ({ row }) => pickField(row.original, ["bankAndInitialDepositDate", "infoDepositoInicial"]),
+    },
+    {
+      id: "paymentInstructions",
+      header: COMMON_LABELS.paymentInstructions,
+      size:   COMMON_LABELS.paymentInstructions.length*7.5,
+      cell: ({ row }) => pickField(row.original, ["paymentInstructions", "instrucoesPagamento"]),
     },
     {
       id: "depositData",
       header: COMMON_LABELS.depositData,
-      size: 340,
+      size: 360,
       cell: ({ row }) => pickField(row.original, ["depositData", "dadosDeposito"]),
     },
     {
       id: "whyCourse",
-      header: QUESTIONS_CURSO_INTRODUTORIO_FORM.whyCourse,
-      size: QUESTIONS_CURSO_INTRODUTORIO_FORM.whyCourse.length*7,
+      header: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.whyCourse,
+      size: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.whyCourse.length*7,
       cell: ({ row }) => pickField(row.original, [
         "whyCourse",
         "porqueCurso",
       ]),
     },
     {
-      id: "meditationExperience",
-      header: QUESTIONS_CURSO_INTRODUTORIO_FORM.meditationExperience,
-      size: QUESTIONS_CURSO_INTRODUTORIO_FORM.meditationExperience.length*7,
-      cell: ({ row }) => pickField(row.original, ["meditationExperience", "experienciaMeditacao"]),
+      id: "frequentlyPracticed",
+      header: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.frequentlyPracticed,
+      size: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.frequentlyPracticed.length*7,
+      cell: ({ row }) => pickField(row.original, ["frequentlyPracticed", "experienciaMeditacao"]),
     },
     {
-      id: "mindfulnessContact",
-      header: QUESTIONS_CURSO_INTRODUTORIO_FORM.mindfulnessContact,
-      size: QUESTIONS_CURSO_INTRODUTORIO_FORM.mindfulnessContact.length*7,
-      cell: ({ row }) => pickField(row.original, ["mindfulnessContact", "contatoMindfulness"]),
+      id: "otherContact",
+      header: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.otherContact,
+      size: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.otherContact.length*7,
+      cell: ({ row }) => pickField(row.original, ["otherContact", "outroContato"]),
+    },  
+    {
+      id: "otherContactDescription",
+      header: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.otherContactDescription,
+      size: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.otherContactDescription.length*7,
+      cell: ({ row }) => pickField(row.original, ["otherContactDescription", "contatoMindfulness"]),
     },
     {
       id: "psychotherapy",
-      header: QUESTIONS_CURSO_INTRODUTORIO_FORM.psychotherapyTreatment,
-      size: QUESTIONS_CURSO_INTRODUTORIO_FORM.psychotherapyTreatment.length*7,
+      header: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.psychotherapyTreatment,
+      size: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.otherContactDescription.length*8.5,
       cell: ({ row }) => pickField(row.original, ["psychotherapyTreatment", "tratamentoPsicoterapico"]),
-    },
+    },  
     {
       id: "specialNeeds",
-      header: QUESTIONS_CURSO_INTRODUTORIO_FORM.specialNeeds,
-      size: QUESTIONS_CURSO_INTRODUTORIO_FORM.specialNeeds.length*7,
+      header: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.specialNeeds,
+      size: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.specialNeeds.length*7.5,
       cell: ({ row }) => pickField(row.original, ["specialNeeds", "necessidadeEspecial"]),
     },
     {
+      id: "greatestGain",
+      header: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.greatestGain,
+      size: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.greatestGain.length*7,
+      cell: ({ row }) => pickField(row.original, ["greatestGain", "maiorGanho"]),
+    },  
+    {
       id: "expectations",
-      header: QUESTIONS_CURSO_INTRODUTORIO_FORM.expectations,
-      size: QUESTIONS_CURSO_INTRODUTORIO_FORM.expectations.length*7,
+      header: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.expectations,
+      size: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.expectations.length*7,
       cell: ({ row }) => pickField(row.original, ["expectations", "expectativas"]),
     },
     {

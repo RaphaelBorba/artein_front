@@ -8,7 +8,7 @@ import api from "@/lib/api";
 import { useEffect, useState } from "react";
 import { useLoader } from "@/hooks/useLoader";
 import { useToast } from "@/hooks/use-toast";
-import { CursoIntrodutorioMindfulnessFormSchemaType, cursoIntrodutorioMindfulnessSchema } from "@/schemas/cursoIntrodutorioMindfulness/cursoIntrodutorioMindfulnessSchema";
+import { CursoIntrodutorioMindfulnessFormSchemaType, cursoIntrodutorioMindfulnessSchema } from "@/schemas/forms/cursoIntrodutorioMindfulness/cursoIntrodutorioMindfulnessSchema";
 import FormFields from "@/components/forms/curso_introdutorio_em_mindfulness";
 import axios from "axios";
 import { unformat } from "@react-input/mask";
@@ -127,7 +127,7 @@ Titular: Angélica Gurjão Borba`,
     }, [form.watch('cep')]);
 
     return (
-        <div className="flex justify-center p-5 sm:p-10">
+        <div className="flex justify-center sm:p-10">
             <div className="p-10 bg-white rounded-lg">
                 <h1 className="text-2xl font-bold text-black mb-5">Curso Introdutório em Mindfulness</h1>
                 {wasSubmitted ? (

@@ -11,7 +11,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useParams } from "next/navigation";
 import { CursoIntrodutorioMindfulnessFormSchemaType, cursoIntrodutorioMindfulnessSchema } from "@/schemas/forms/cursoIntrodutorioMindfulness/cursoIntrodutorioMindfulnessSchema";
 import type { CursoIntrodutorioMindfulnessI } from "@/types/cursoIntrodutorioMindfulness";
-import FormFields from "@/components/forms/curso_introdutorio_em_mindfulness";
+import FormFields from "@/components/forms/p8s_em_mindfulness";
 
 export default function CursoIntrodutorioViewPage() {
     const { submissionId } = useParams<{ submissionId: string }>();
@@ -62,7 +62,7 @@ export default function CursoIntrodutorioViewPage() {
         const fetchRecord = async () => {
             toggleLoader(true);
             try {
-                const response = await api.get<CursoIntrodutorioMindfulnessI>(`/forms/curso_introdutorio_em_mindfulness/submissions/${submissionId}`);
+                const response = await api.get<CursoIntrodutorioMindfulnessI>(`/forms/p8s_em_mindfulness/submissions/${submissionId}`);
                 const data = response.data;
                 form.reset({
                     fullName: data.fullName || "",
@@ -106,7 +106,7 @@ export default function CursoIntrodutorioViewPage() {
     }, [submissionId]);
 
     return (
-        <Section title="Curso Introdutório de Mindfulness">
+        <Section title="P8S em Mindfulness">
             <Form {...form}>
                 <form className="grid grid-cols-1 gap-4 text-black sm:grid-cols-2 lg:grid-cols-3">
                     <FormFields mode="view" form={form} readOnly />

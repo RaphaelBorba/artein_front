@@ -9,9 +9,10 @@ import { useEffect } from "react";
 import { useLoader } from "@/hooks/useLoader";
 import { useToast } from "@/hooks/use-toast";
 import { useParams } from "next/navigation";
-import { CursoIntrodutorioMindfulnessFormSchemaType, cursoIntrodutorioMindfulnessSchema } from "@/schemas/forms/cursoIntrodutorioMindfulness/cursoIntrodutorioMindfulnessSchema";
-import type { CursoIntrodutorioMindfulnessI } from "@/types/cursoIntrodutorioMindfulness";
-import FormFields from "@/components/forms/curso_introdutorio_em_mindfulness";
+import FormFields from "@/components/forms/curso_aprofundamento_mindfulness";
+import { CursoAprofundamentoMindfulnessFormSchemaType, cursoAprofundamentoMindfulnessSchema } from "@/schemas/forms/curso_aprofundamento_mindfulness";
+import { CursoAprofundamentoMindfulnessI } from "@/types/cursoAprofundamentoMindfulness";
+
 
 export default function CursoIntrodutorioViewPage() {
     const { submissionId } = useParams<{ submissionId: string }>();
@@ -19,12 +20,10 @@ export default function CursoIntrodutorioViewPage() {
     const { toggleLoader } = useLoader();
     const { toast } = useToast();
 
-    const form = useForm<CursoIntrodutorioMindfulnessFormSchemaType>({
-        resolver: zodResolver(cursoIntrodutorioMindfulnessSchema),
+    const form = useForm<CursoAprofundamentoMindfulnessFormSchemaType>({
+        resolver: zodResolver(cursoAprofundamentoMindfulnessSchema),
         defaultValues: {
             fullName: "",
-            profession: "",
-            birthDate: undefined,
             cep: "",
             address: "",
             city: "",
@@ -32,13 +31,12 @@ export default function CursoIntrodutorioViewPage() {
             state: "",
             phone: "",
             email: "",
-            indication: "",
+            alreadyParticipatedInCourse: "",
+            alreadyParticipatedInCourseIntrodutorio: "",
             payment: "null",
-            otherPayment: "",
-            paymentMedium: "null",
-            discount: "null",
-            otherDiscounts: "",
             bankAndInitialDepositDate: "",
+            paymentMedium: "null",
+            paymentInstructions: "Para garantir sua vaga no curso é necessário o pagamento de um depósito/transferência do valor combinado a ser enviado por whatsapp (anterior ao início do curso) e o pagamento do restante do valor no primeiro dia de curso (em dinheiro ou cheques pré-datados), juntamente com a entrega do presente formulário preenchido.",
             depositData: `•	BANCO DO BRASIL \n
             Ag. 3111-9\n
             C.C. 21.000-5\n
@@ -50,10 +48,13 @@ export default function CursoIntrodutorioViewPage() {
             CPF 072227657-51\n
             Titular: Angélica Gurjão Borba`,
             whyCourse: "",
-            meditationExperience: "",
-            mindfulnessContact: "",
+            keptTraining: "",
+            frequentlyPracticed: "",
+            otherContact: "",
+            otherContactDescription: "",
             psychotherapyTreatment: "",
             specialNeeds: "",
+            greatestGain: "",
             expectations: "",
         },
     });
@@ -62,33 +63,34 @@ export default function CursoIntrodutorioViewPage() {
         const fetchRecord = async () => {
             toggleLoader(true);
             try {
-                const response = await api.get<CursoIntrodutorioMindfulnessI>(`/forms/curso_introdutorio_em_mindfulness/submissions/${submissionId}`);
+                const response = await api.get<CursoAprofundamentoMindfulnessI>(`/forms/curso_aprofundamento_mindfulness/submissions/${submissionId}`);
                 const data = response.data;
                 form.reset({
                     fullName: data.fullName || "",
-                    profession: data.profession || "",
-                    birthDate: data.birthDate ? new Date(data.birthDate) : undefined,
+                    phone: data.phone || "",
                     cep: data.cep || "",
                     address: data.address || "",
                     city: data.city || "",
                     district: data.district || "",
                     state: data.state || "",
-                    phone: data.phone || "",
                     email: data.email || "",
-                    indication: data.indication || "",
+                    alreadyParticipatedInCourse: data.alreadyParticipatedInCourse || "",
+                    alreadyParticipatedInCourseIntrodutorio: data.alreadyParticipatedInCourseIntrodutorio || "",
                     payment: data.payment || "",
-                    otherPayment: data.otherPayment || "",
                     paymentMedium: data.paymentMedium || "",
-                    discount: data.discount || "",
-                    otherDiscounts: data.otherDiscounts || "",
+                    paymentInstructions: data.paymentInstructions || "",
                     bankAndInitialDepositDate: data.bankAndInitialDepositDate || "",
                     depositData: data.depositData || "",
                     whyCourse: data.whyCourse || "",
-                    meditationExperience: data.meditationExperience || "",
-                    mindfulnessContact: data.mindfulnessContact || "",
+                    keptTraining: data.keptTraining || "",
+                    frequentlyPracticed: data.frequentlyPracticed || "",
+                    otherContact: data.otherContact || "",
+                    otherContactDescription: data.otherContactDescription || "",
                     psychotherapyTreatment: data.psychotherapyTreatment || "",
                     specialNeeds: data.specialNeeds || "",
+                    greatestGain: data.greatestGain || "",
                     expectations: data.expectations || "",
+                    
                 });
             } catch (error) {
                 console.error("Error fetching record:", error);
@@ -106,7 +108,7 @@ export default function CursoIntrodutorioViewPage() {
     }, [submissionId]);
 
     return (
-        <Section title="Curso Introdutório de Mindfulness">
+        <Section title="Curso Aprofundamento em Mindfulness">
             <Form {...form}>
                 <form className="grid grid-cols-1 gap-4 text-black sm:grid-cols-2 lg:grid-cols-3">
                     <FormFields mode="view" form={form} readOnly />

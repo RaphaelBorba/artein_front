@@ -4,13 +4,14 @@ import { FormField } from "@/components/ui/form";
 import FormInputWithLabel from "@/components/self/FormInputWithLabel";
 import FormTextAreaWithLabel from "@/components/self/FormTextAreaWithLabel";
 import FormDatePicker from "@/components/self/FormDatePicker";
-import type { CursoIntrodutorioMindfulnessFormSchemaType } from "@/schemas/cursoIntrodutorioMindfulness/cursoIntrodutorioMindfulnessSchema";
-import Link from "next/link";
+import type { CursoIntrodutorioMindfulnessFormSchemaType } from "@/schemas/forms/cursoIntrodutorioMindfulness/cursoIntrodutorioMindfulnessSchema";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Plus } from "lucide-react";
 import { masks } from "@/lib/masks";
 import FormMaskInputWithLabel from "@/components/self/FormMaskInputWIthLabel";
 import FormSelectWithLabel from "@/components/self/FormSelectWithLabel";
+import Link from "next/link";
+import { COMMON_LABELS, PAYMENT_OPTIONS_CURSO_INTRODUTORIO_EM_MINDFULLNESS, PAYMENT_MEDIUM_OPTIONS_GLOBAL, DISCOUNT_OPTIONS_GLOBAL, QUESTIONS_CURSO_INTRODUTORIO_FORM } from "@/constants/forms";
 
 interface FormFieldsProps {
 	form: UseFormReturn<CursoIntrodutorioMindfulnessFormSchemaType>;
@@ -25,7 +26,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormInputWithLabel
 					className="col-span-1 sm:col-span-2 lg:col-span-3"
 					field={field}
-					label="Nome Completo"
+					label={COMMON_LABELS.fullName}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
@@ -34,14 +35,14 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormInputWithLabel
 					className="col-span-1 sm:col-span-2 lg:col-span-2"
 					field={field}
-					label="Profissão"
+					label={COMMON_LABELS.profession}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
 
 			<FormField control={form.control} name="birthDate" render={({ field }) => (
 				<FormDatePicker
-					labelText="Data de Nascimento"
+					labelText={COMMON_LABELS.birthDate}
 					field={field}
 					labelBold
 					isDisabled={readOnly} />
@@ -51,7 +52,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormMaskInputWithLabel
 					className="col-span-1"
 					field={field}
-					label="CEP"
+					label={COMMON_LABELS.cep}
 					labelBold
 					isDisabled={readOnly}
 					mask={masks.cep}
@@ -61,7 +62,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormInputWithLabel
 					className="col-span-1 sm:col-span-2"
 					field={field}
-					label="Endereço"
+					label={COMMON_LABELS.address}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
@@ -69,7 +70,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormInputWithLabel
 					className="col-span-1"
 					field={field}
-					label="Cidade"
+					label={COMMON_LABELS.city}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
@@ -77,7 +78,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormInputWithLabel
 					className="col-span-1"
 					field={field}
-					label="Bairro"
+					label={COMMON_LABELS.district}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
@@ -85,7 +86,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormInputWithLabel
 					className="col-span-1"
 					field={field}
-					label="Estado"
+					label={COMMON_LABELS.state}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
@@ -94,7 +95,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormMaskInputWithLabel
 					className="col-span-1"
 					field={field}
-					label="Telefone"
+					label={COMMON_LABELS.phone}
 					labelBold
 					isDisabled={readOnly}
 					mask={masks.cellphone}
@@ -104,7 +105,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormInputWithLabel
 					className="col-span-1 sm:col-span-2"
 					field={field}
-					label="E-mail"
+					label={COMMON_LABELS.email}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
@@ -113,7 +114,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormInputWithLabel
 					className="col-span-1 sm:col-span-2 lg:col-span-3"
 					field={field}
-					label="Indicação de"
+					label={COMMON_LABELS.indication}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
@@ -121,72 +122,50 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 			<FormField control={form.control} name="payment" render={({ field }) => (
 				<FormSelectWithLabel
 					field={field}
-					labelText="Valor e Forma de Pagamento"
+					labelText={COMMON_LABELS.payment}
 					className="col-span-1 sm:col-span-2 lg:col-span-2"
 					labelBold
 					isDisabled={readOnly}
 					idLabel=""
-					options={[
-						{ value: 'null', label: "---" },
-						{ value: "R$950 à vista", label: "R$950 à vista" },
-						{ value: "R$1000,00 em 2 vezes de R$500,00", label: "R$1000,00 em 2 vezes de R$500,00" },
-						{ value: "R$1005,00 em 3 vezes de R$335,00", label: "R$1005,00 em 3 vezes de R$335,00" },
-						{ value: "R$1008,00 em 4 vezes de R$252,00", label: "R$1008,00 em 4 vezes de R$252,00" },
-						{ value: "R$1010,00 em 5 vezes de R$202,00", label: "R$1010,00 em 5 vezes de R$202,00" },
-						{ value: "EX-ALUNOS: R$800,00 à vista ou em 2 vezes de R$410,00", label: "EX-ALUNOS: R$800,00 à vista ou em 2 vezes de R$410,00" },
-					]}
+					options={PAYMENT_OPTIONS_CURSO_INTRODUTORIO_EM_MINDFULLNESS}
 				/>
 			)} />
 			<FormField control={form.control} name="otherPayment" render={({ field }) => (
 				<FormInputWithLabel
 					field={field}
-					label="Outra Forma de Pagamento"
+					label={COMMON_LABELS.otherPayment}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
 			<FormField control={form.control} name="paymentMedium" render={({ field }) => (
 				<FormSelectWithLabel
 					field={field}
-					labelText="Meio de Pagamento"
+					labelText={COMMON_LABELS.paymentMedium}
 					className="col-span-1 sm:col-span-2 lg:col-span-2"
 					labelBold
 					isDisabled={readOnly}
 					idLabel=""
-					options={[
-						{ value: 'null', label: "---" },
-						{ value: "Cartão de Crédito", label: "Cartão de Crédito" },
-						{ value: "Cartão de Débito", label: "Cartão de Débito" },
-						{ value: "Cheque", label: "Cheque" },
-						{ value: "Depósito Bancário", label: "Depósito Bancário" },
-						{ value: "Dinheiro", label: "Dinheiro" },
-						{ value: "Pix", label: "Pix" },
-						{ value: "Transferência Bancária", label: "Transferência Bancária" },
-					]}
+					options={PAYMENT_MEDIUM_OPTIONS_GLOBAL}
 				/>
 			)} />
 
 			<FormField control={form.control} name="discount" render={({ field }) => (
 				<FormSelectWithLabel
 					field={field}
-					labelText="Desconto"
+					labelText={COMMON_LABELS.discount}
 					className="col-span-1 sm:col-span-2 lg:col-span-3"
 					labelBold
 					isDisabled={readOnly}
 					idLabel=""
 					observation="Obs: Descontos não acumulativos"
-					options={[
-						{ value: 'null', label: "---" },
-						{ value: "Desconto de 10% para sócios da ATC, FBTC e ABRAMIND", label: "Desconto de 10% para sócios da ATC, FBTC e ABRAMIND" },
-						{ value: "Desconto de R$100,00 em qualquer forma de pagamento, caso o participante traga um parete ou amigo para fazer o mesmo curso", label: "Desconto de R$100,00 em qualquer forma de pagamento, caso o participante traga um parete ou amigo para fazer o mesmo curso" },
-						{ value: "Outra Opção. Qual?", label: "Outra Opção. Qual?" },
-					]}
+					options={DISCOUNT_OPTIONS_GLOBAL}
 				/>
 			)} />
 			<FormField control={form.control} name="otherDiscounts" render={({ field }) => (
 				<FormInputWithLabel
 					className="col-span-1 sm:col-span-2 lg:col-span-3"
 					field={field}
-					label="Outros Descontos"
+					label={COMMON_LABELS.otherDiscounts}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
@@ -195,7 +174,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormTextAreaWithLabel
 					className="col-span-1 sm:col-span-2 lg:col-span-3"
 					field={field}
-					label="Se Possível, Informe-nos o BANCO e a DATA DO DEPÓSITO INICIAL, Assim Como a Data Para Pagamento Das DEMAIS PARCELAS:"
+					label={COMMON_LABELS.bankAndInitialDepositDate}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
@@ -203,7 +182,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormTextAreaWithLabel
 					className="col-span-1 sm:col-span-2 lg:col-span-3"
 					field={field}
-					label="Dados para depósito ou transferência"
+					label={COMMON_LABELS.depositData}
 					labelBold
 					startHeight={220}
 					isDisabled={true} />
@@ -217,7 +196,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormTextAreaWithLabel
 					className="col-span-1 sm:col-span-2 lg:col-span-3"
 					field={field}
-					label="Por que você deseja fazer este CURSO INTRODUTÓRIO de Mindfulness (Consciência Plena)? O que o/a mobilizou a ingressar neste programa de auto-desenvolvimento?"
+					label={QUESTIONS_CURSO_INTRODUTORIO_FORM.whyCourse}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
@@ -225,7 +204,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormTextAreaWithLabel
 					className="col-span-1 sm:col-span-2 lg:col-span-3"
 					field={field}
-					label="Você possui alguma experiência em práticas de meditação? Caso sim, qual(is)?"
+					label={QUESTIONS_CURSO_INTRODUTORIO_FORM.meditationExperience}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
@@ -233,7 +212,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormTextAreaWithLabel
 					className="col-span-1 sm:col-span-2 lg:col-span-3"
 					field={field}
-					label="Já teve algum contato com o tema ou experiências Mindfulness (leituras, palestras, vivências etc)? Descreva quais:"
+					label={QUESTIONS_CURSO_INTRODUTORIO_FORM.mindfulnessContact}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
@@ -241,7 +220,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormTextAreaWithLabel
 					className="col-span-1 sm:col-span-2 lg:col-span-3"
 					field={field}
-					label="Você já realizou algum tipo de tratamento psicoterapêutico ou está atualmente sob os cuidados de algum psicólogo/psiquiatra? Descreva em poucas palavras o que houve ou o que está havendo:"
+					label={QUESTIONS_CURSO_INTRODUTORIO_FORM.psychotherapyTreatment}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
@@ -249,7 +228,7 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormTextAreaWithLabel
 					className="col-span-1 sm:col-span-2 lg:col-span-3"
 					field={field}
-					label="Tem alguma necessidade ou cuidado especial? Qual? (Exemplo: cadeirante, dificuldade auditiva, etc)."
+					label={QUESTIONS_CURSO_INTRODUTORIO_FORM.specialNeeds}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
@@ -257,12 +236,20 @@ const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
 				<FormTextAreaWithLabel
 					className="col-span-1 sm:col-span-2 lg:col-span-3"
 					field={field}
-					label="Diga suas expectativas em relação a este curso de Mindfulness (Consciência Plena):"
+					label={QUESTIONS_CURSO_INTRODUTORIO_FORM.expectations}
 					labelBold
 					isDisabled={readOnly} />
 			)} />
 
-			<div className="col-span-1 flex justify-end sm:col-span-2 lg:col-span-3">
+			<div className={`col-span-1 flex sm:col-span-2 lg:col-span-3 ${mode === "view" ? "justify-between" : "justify-end"}`}>
+				{mode === "view" && (
+					<Link href={`/fichas/curso_introdutorio_em_mindfulness`}>
+                    <Button
+                        type="submit"
+                        variant="outline"
+                        className="flex items-center text-base"><ArrowLeft strokeWidth={4} /> Voltar</Button>
+                </Link>
+				)}
 				{mode !== 'view' && (
 					<Button type="submit" variant="default" className="flex items-center text-base"><Plus strokeWidth={5} /> {mode === 'create' ? 'Cadastrar' : 'Atualizar'}</Button>
 				)}
