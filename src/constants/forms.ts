@@ -172,3 +172,24 @@ export const QUESTIONS_HEALTH_FORMULARIO_AULAS_REGULARES = {
   underPsychiatricCare: "Atualmente, você se encontra sob cuidado Psiquiátrico?",
   whichPsychiatricCare: "Quais?",
 }
+
+export const QUESTIONS_FORMULARIO_DE_AVALIACAO_P8S_MINDFULLNESS = {
+  satisfactionLevel: "Qual Seu Nível de Satisfação Com O Programa De 8 Semanas em Mindfulness?",
+  likedMostAndTakeaways: "1. O que você mais gostou e se destacou do programa para você? E o que levará para sua vida?",
+  likedLeastSuggestions: "2. O que você menos gostou? E ou não sentiu como útil para você? Sugestões?",
+  personalChange: "3. Você experienciou alguma mudança pessoal? Qual(is)?",
+  selfDifference: "4. Como você se vê diferente? Como você se sente diferente? O que você está fazendo que seja diferente a partir de seus entendimentos e práticas advindos deste programa?",
+  knowledgeMomentsImportance: "5. De que forma você percebe os momentos de conhecimento como favorecedores de seu entendimento acerca de mindfulness? E qual a importância deles para a prática de sua atitude de estar presente na vida?",
+  tellAFriend: "6. O que você diria sobre esse programa para um grande amigo?",
+  benefits: "7. Quais os benefícios que você obtém ou acredita poder obter a partir de seu exercício da atitude mindfulness na vida?",
+  authorizeUse: "8. Você gostaria de autorizar o uso de trechos de sua avaliação para divulgação do curso?",
+}
+
+export const SATISFACTION_LEVEL_OPTIONS = [ 
+  { value: "null", label: "---" },
+  { value: "(1-2) Muito insatisfeito", label: "(1-2) Muito insatisfeito" },
+  { value: "(3-4) Insatisfeito", label: "(3-4) Insatisfeito" },
+  { value: "(5-6) Meio satisfeito", label: "(5-6) Meio satisfeito" },
+  { value: "(7-8) Satisfeito", label: "(7-8) Satisfeito" },
+  { value: "(9-10) Muito satisfeito", label: "(9-10) Muito satisfeito" },
+]
