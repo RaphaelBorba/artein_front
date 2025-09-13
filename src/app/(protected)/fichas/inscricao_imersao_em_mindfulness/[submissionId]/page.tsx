@@ -1,0 +1,121 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+"use client";
+import Section from "@/components/self/Section";
+import { Form } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import api from "@/lib/api";
+import { useEffect } from "react";
+import { useLoader } from "@/hooks/useLoader";
+import { useToast } from "@/hooks/use-toast";
+import { useParams } from "next/navigation";
+import FormFields from "@/components/forms/inscricao_imersao_em_mindfulness";
+import { InscricaoImersaoEmMindfulnessI } from "@/types/inscricaoImersaoEmMindfulness";
+import { InscricaoImersaoEmMindfulnessFormSchemaType, inscricaoImersaoEmMindfulnessSchema } from "@/schemas/forms/inscricao_imersao_em_mindfulness";
+
+
+export default function InscricaoImersaoEmMindfulnessViewPage() {
+    const { submissionId } = useParams<{ submissionId: string }>();
+
+    const { toggleLoader } = useLoader();
+    const { toast } = useToast();
+
+    const form = useForm<InscricaoImersaoEmMindfulnessFormSchemaType>({
+        resolver: zodResolver(inscricaoImersaoEmMindfulnessSchema),
+        defaultValues: {
+            fullName: "",
+            cep: "",
+            address: "",
+            city: "",
+            district: "",
+            state: "",
+            phone: "",
+            email: "",
+            alreadyParticipatedInCourseArtin: "",
+            alreadyParticipatedInCourseOther: "",
+            payment: "null",
+            bankAndInitialDepositDate: "",
+            paymentMedium: "null",
+            paymentInstructions: "Para garantir sua vaga no curso é necessário o pagamento de um depósito/transferência do valor combinado a ser enviado por whatsapp (anterior ao início do curso) e o pagamento do restante do valor no primeiro dia de curso (em dinheiro ou cheques pré-datados), juntamente com a entrega do presente formulário preenchido.",
+            depositData: `•	BANCO DO BRASIL \n
+            Ag. 3111-9\n
+            C.C. 21.000-5\n
+
+            •	BANCO BRADESCO\n
+            Ag. 2788\n
+            C.C. 15.707-4\n
+
+            CPF 072227657-51\n
+            Titular: Angélica Gurjão Borba`,
+            whyCourse: "",
+            keptTraining: "",
+            frequentlyPracticed: "",
+            otherContact: "",
+            otherContactDescription: "",
+            psychotherapyTreatment: "",
+            specialNeeds: "",
+            greatestGain: "",
+            expectations: "",
+        },
+    });
+
+    useEffect(() => {
+        const fetchRecord = async () => {
+            toggleLoader(true);
+            try {
+                const response = await api.get<InscricaoImersaoEmMindfulnessI>(`/forms/inscricao_imersao_em_mindfulness/submissions/${submissionId}`);
+                const data = response.data;
+                form.reset({
+                    fullName: data.fullName || "",
+                    phone: data.phone || "",
+                    cep: data.cep || "",
+                    address: data.address || "",
+                    city: data.city || "",
+                    district: data.district || "",
+                    state: data.state || "",
+                    email: data.email || "",
+                    alreadyParticipatedInCourseArtin: data.alreadyParticipatedInCourseArtin || "",
+                    alreadyParticipatedInCourseOther: data.alreadyParticipatedInCourseOther || "",
+                    payment: data.payment || "",
+                    paymentMedium: data.paymentMedium || "",
+                    paymentInstructions: data.paymentInstructions || "",
+                    bankAndInitialDepositDate: data.bankAndInitialDepositDate || "",
+                    depositData: data.depositData || "",
+                    whyCourse: data.whyCourse || "",
+                    keptTraining: data.keptTraining || "",
+                    frequentlyPracticed: data.frequentlyPracticed || "",
+                    otherContact: data.otherContact || "",
+                    otherContactDescription: data.otherContactDescription || "",
+                    psychotherapyTreatment: data.psychotherapyTreatment || "",
+                    specialNeeds: data.specialNeeds || "",
+                    greatestGain: data.greatestGain || "",
+                    expectations: data.expectations || "",
+                    
+                });
+            } catch (error) {
+                console.error("Error fetching record:", error);
+                toast({
+                    title: "Erro",
+                    description: "Não foi possível carregar os dados.",
+                    variant: "destructive",
+                });
+            } finally {
+                toggleLoader(false);
+            }
+        };
+
+        fetchRecord();
+    }, [submissionId]);
+
+    return (
+        <Section title="Inscrição em Imersão em Mindfulness">
+            <Form {...form}>
+                <form className="grid grid-cols-1 gap-4 text-black sm:grid-cols-2 lg:grid-cols-3">
+                    <FormFields mode="view" form={form} readOnly />
+                </form>
+            </Form>
+        </Section>
+    );
+}
+
+

@@ -25,6 +25,8 @@ export const COMMON_LABELS = {
   paymentBankAndDate: "Formas de Pagamento (Banco escolhido e data de depósito):",
   paymentMediumLabel: "Meio de Pagamento",
   paymentInstructions: "Instruções de Pagamento e Inscrição:",
+  alreadyParticipatedInCourseArtin: "Curso em Mindfulness anteriormente realizado no Arte-in?",
+  alreadyParticipatedInCourseOther: "Curso em Mindfulness anteriormente realizado em outra Instituição? Qual?"
 };
 
 export const YES_NO_NULL_OPTIONS = [
@@ -128,3 +130,15 @@ export const QUESTIONS_CURSO_APROFUNDAMENTO_FORM = {
 export const PAYMENT_OPTIONS_CURSO_APROFUNDAMENTO_MINDFULLNESS = [
   { value: "null", label: "---" }
 ];
+
+export const QUESTIONS_INSCRICAO_IMERSAO_MINDFULLNESS = {
+  whyCourse: "1. Descreva, em poucas palavras, por que você deseja fazer esta Imersão em Mindfulness (Consciência Plena)? O que mobilizou-o(a) a ingressar nela?",
+  keptTraining: "2. Você realiza práticas de Mindfulness (Consciência Plena ou Atenção Plena)? ",
+  frequentlyPracticed: "3. Caso sim, quais práticas habitualmente exercitou e em qual frequência, aproximadamente?",
+  otherContact: "4. Teve algum outro contato com o tema ou experiências Mindfulness (leituras, palestras, vivências etc)? ",
+  otherContactDescription: "5. Caso sim, descreva seus contatos com Mindfulness aqui, mencionando qual(is) foi(ram) sua(s) experiência(s) e local(is) de realização, caso exista(m):",
+  psychotherapyTreatment: "6. Você está realizando algum tipo de tratamento psicoterapêutico ou está atualmente sob os cuidados de algum psicólogo/psiquiatra? Descreva em poucas palavras o que houve ou o que está havendo:",
+  specialNeeds: "7. Tem alguma necessidade ou cuidado especial? Ou alguma situação de saúde em tratamento? Qual?",
+  greatestGain: "8. Diga qual foi o seu maior ganho em despertar e treinar a Atitude de Consciência Plena no Presente até este exato momento? O que mudou em sua vida?",
+  expectations: "9. Diga suas expectativas em relação a esta Imersão em Mindfulness (Consciência Plena):",
+}
