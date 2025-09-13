@@ -142,3 +142,13 @@ export const QUESTIONS_INSCRICAO_IMERSAO_MINDFULLNESS = {
   greatestGain: "8. Diga qual foi o seu maior ganho em despertar e treinar a Atitude de Consciência Plena no Presente até este exato momento? O que mudou em sua vida?",
   expectations: "9. Diga suas expectativas em relação a esta Imersão em Mindfulness (Consciência Plena):",
 }
+
+export const QUESTIONS_FORMULARIO_DE_INSCRICAO_EM_EVENTOS = {
+  previousActivityArtin: "1. Já participou de alguma atividade no Centro ARTE-In? Se sim, qual atividade e quando?",
+  inspiration: "2. O que te inspirou a buscar este Evento?",
+  expectations: "3. Qual a sua Expectativa em Relação ao Evento?",
+  personalDevelopmentInterests: "4. Tem interesse em frequentar atividades que apoiem o seu desenvolvimento pessoal? Caso sim, quais já realizou em sua vida e quais gostaria de realizar? Por quê?",
+  wantsToReceiveInfo: "5. Tem interesse em receber informações sobre nossos cursos de Mindfulness, Alongamento Orgânico, Dança Terapêutica, Manejo Emocional etc.?",
+  suggestions: "6. Deseja sugerir algo visando o aprimoramento de nossos serviços e espaço físico?",
+  wouldRecommend: "7. Indicaria nossas atividades para alguém? Quem?",
+}
