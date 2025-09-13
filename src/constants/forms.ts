@@ -152,3 +152,23 @@ export const QUESTIONS_FORMULARIO_DE_INSCRICAO_EM_EVENTOS = {
   suggestions: "6. Deseja sugerir algo visando o aprimoramento de nossos serviços e espaço físico?",
   wouldRecommend: "7. Indicaria nossas atividades para alguém? Quem?",
 }
+
+export const QUESTIONS_FORMULARIO_AULAS_REGULARES = {
+  healthImportantInfo: "1. O que mais considera importante sabermos sobre sua saúde?",
+  previousActivityArtin: "2. Já participou de alguma atividade no ARTE-In? Se sim, qual atividade e quando?",
+  inspiration: "3. O que te inspirou a buscar essa [s] atividade [s] na qual você se inscreveu como aluno?",
+  otherRegularClassInterest: "4. Tem interesse em frequentar alguma outra aula regular? Caso sim, qual? Por que?",
+  wantsCourseInfo: "5. Quer receber informações sobre nossos cursos: ",
+  suggestions: "6. Deseja sugerir algo visando o aprimoramento de nossos serviços e espaço físico?",
+  wouldRecommend: "7. Indicaria nossas atividades para alguém? Quem?",
+}
+
+export const QUESTIONS_HEALTH_FORMULARIO_AULAS_REGULARES = {
+  specialNeeds: "Você tem alguma necessidade ou cuidado especial? Qual? (ex.: cadeirante etc):",
+  underMedicalCare: "Atualmente, você se encontra sob cuidado Médico?",
+  whichMedicalCare: "Quais?",
+  underPsychologicalCare: "Atualmente, você se encontra sob cuidado Psicológico?",
+  whichPsychologicalCare: "Quais?",
+  underPsychiatricCare: "Atualmente, você se encontra sob cuidado Psiquiátrico?",
+  whichPsychiatricCare: "Quais?",
+}
