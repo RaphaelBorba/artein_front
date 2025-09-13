@@ -4,13 +4,11 @@ import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import api from "@/lib/api";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useLoader } from "@/hooks/useLoader";
 import { useToast } from "@/hooks/use-toast";
 import FormFields from "@/components/forms/p8s_em_mindfulness";
-import axios from "axios";
-import { unformat } from "@react-input/mask";
-import { masks } from "@/lib/masks";
+import { useCepAddress } from "@/hooks/useCepAddress";
 import { P8SEmMindfulnessFormSchemaType, ps8EmMindfulnessSchema } from "@/schemas/forms/ps8_em_mindfulness";
 
 export default function CursoIntrodutorioViewPage() {
@@ -88,43 +86,7 @@ Titular: Angélica Gurjão Borba`,
     }
 
 
-    useEffect(() => {
-        async function fetchAddressByCep() {
-            const cepMask = form.getValues('cep');
-
-            if (typeof cepMask !== 'string') return;
-
-            const cep = unformat(cepMask, { mask: masks.cep, replacement: masks.replacement });
-            if (cep.length !== 8) return;
-
-            toggleLoader(true);
-
-            try {
-                const { data } = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-                if (data?.erro) {
-                    toast({
-                        title: "CEP Inválido!",
-                        variant: "destructive"
-                    })
-                }
-                form.setValue('address', data?.logradouro)
-                form.setValue('city', data?.localidade)
-                form.setValue('district', data?.bairro)
-                form.setValue('state', data?.estado)
-            } catch (error) {
-                console.error('Error fetching address data:', error);
-                toast({
-                    title: "Erro na API de CEP!",
-                    description: "Contate Suporte",
-                    variant: "destructive"
-                })
-            } finally {
-                toggleLoader(false);
-            }
-        }
-
-        fetchAddressByCep();
-    }, [form.watch('cep')]);
+    useCepAddress({ form });
 
     return (
         <div className="flex justify-center sm:p-10">

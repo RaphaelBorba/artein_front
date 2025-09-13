@@ -1,16 +1,12 @@
 
 import { FC } from "react";
 import { UseFormReturn } from "react-hook-form";
-import { FormField } from "@/components/ui/form";
-import FormInputWithLabel from "@/components/self/FormInputWithLabel";
-import FormTextAreaWithLabel from "@/components/self/FormTextAreaWithLabel";
 import type { CursoAprofundamentoMindfulnessFormSchemaType } from "@/schemas/forms/curso_aprofundamento_mindfulness";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Plus } from "lucide-react";
-import { masks } from "@/lib/masks";
-import FormMaskInputWithLabel from "@/components/self/FormMaskInputWIthLabel";
-import FormSelectWithLabel from "@/components/self/FormSelectWithLabel";
 import Link from "next/link";
+import FormBuilder, { FieldConfig } from "@/components/self/FormBuilder";
+import { masks } from "@/lib/masks";
 import { COMMON_LABELS, PAYMENT_MEDIUM_OPTIONS_GLOBAL, QUESTIONS_CURSO_APROFUNDAMENTO_FORM, PAYMENT_OPTIONS_CURSO_APROFUNDAMENTO_MINDFULLNESS, YES_NO_NULL_OPTIONS } from "@/constants/forms";
 
 interface FormFieldsProps {
@@ -20,228 +16,46 @@ interface FormFieldsProps {
 }
 
 const FormFields: FC<FormFieldsProps> = ({ form, readOnly = false, mode }) => {
+    const baseFields: FieldConfig<CursoAprofundamentoMindfulnessFormSchemaType>[] = [
+        { type: "input", name: "fullName", label: COMMON_LABELS.fullName, className: "col-span-1 sm:col-span-2 lg:col-span-2" },
+        { type: "mask", name: "phone", label: COMMON_LABELS.phone, className: "col-span-1", mask: masks.cellphone },
+        { type: "mask", name: "cep", label: COMMON_LABELS.cep, className: "col-span-1", mask: masks.cep },
+        { type: "input", name: "address", label: COMMON_LABELS.address, className: "col-span-1 sm:col-span-2 lg:col-span-2" },
+        { type: "input", name: "city", label: COMMON_LABELS.city, className: "col-span-1" },
+        { type: "input", name: "district", label: COMMON_LABELS.district, className: "col-span-1" },
+        { type: "input", name: "state", label: COMMON_LABELS.state, className: "col-span-1" },
+        { type: "input", name: "email", label: COMMON_LABELS.email, className: "col-span-1 sm:col-span-2 lg:col-span-3" },
+        { type: "input", name: "alreadyParticipatedInCourse", label: COMMON_LABELS.alreadyParticipatedInCourse, className: "col-span-1 sm:col-span-2 lg:col-span-3" },
+        { type: "input", name: "alreadyParticipatedInCourseIntrodutorio", label: COMMON_LABELS.alreadyParticipatedInCourseIntrodutorio, className: "col-span-1 sm:col-span-2 lg:col-span-3" },
+        { type: "select", name: "payment", label: COMMON_LABELS.paymentChosen, className: "col-span-1 sm:col-span-2 lg:col-span-3", options: PAYMENT_OPTIONS_CURSO_APROFUNDAMENTO_MINDFULLNESS },
+        { type: "input", name: "bankAndInitialDepositDate", label: COMMON_LABELS.paymentBankAndDate, className: "col-span-1 sm:col-span-2 lg:col-span-3" },
+        { type: "select", name: "paymentMedium", label: COMMON_LABELS.paymentMediumLabel, className: "col-span-1 sm:col-span-2 lg:col-span-3", options: PAYMENT_MEDIUM_OPTIONS_GLOBAL },
+        { type: "textarea", name: "paymentInstructions", label: COMMON_LABELS.paymentInstructions, className: "col-span-1 sm:col-span-2 lg:col-span-3", alwaysDisabled: true },
+        { type: "textarea", name: "depositData", label: COMMON_LABELS.depositData, className: "col-span-1 sm:col-span-2 lg:col-span-3", startHeight: 220, alwaysDisabled: true },
+    ];
+
+    const questionsFields: FieldConfig<CursoAprofundamentoMindfulnessFormSchemaType>[] = [
+        { type: "textarea", name: "whyCourse", label: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.whyCourse, className: "col-span-1 sm:col-span-2 lg:col-span-3" },
+        { type: "select", name: "keptTraining", label: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.keptTraining, className: "col-span-1 sm:col-span-2 lg:col-span-3", options: YES_NO_NULL_OPTIONS },
+        { type: "textarea", name: "frequentlyPracticed", label: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.frequentlyPracticed, className: "col-span-1 sm:col-span-2 lg:col-span-3" },
+        { type: "select", name: "otherContact", label: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.otherContact, className: "col-span-1 sm:col-span-2 lg:col-span-3", options: YES_NO_NULL_OPTIONS },
+        { type: "textarea", name: "otherContactDescription", label: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.otherContactDescription, className: "col-span-1 sm:col-span-2 lg:col-span-3" },
+        { type: "textarea", name: "psychotherapyTreatment", label: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.psychotherapyTreatment, className: "col-span-1 sm:col-span-2 lg:col-span-3" },
+        { type: "textarea", name: "specialNeeds", label: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.specialNeeds, className: "col-span-1 sm:col-span-2 lg:col-span-3" },
+        { type: "textarea", name: "greatestGain", label: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.greatestGain, className: "col-span-1 sm:col-span-2 lg:col-span-3" },
+        { type: "textarea", name: "expectations", label: QUESTIONS_CURSO_APROFUNDAMENTO_FORM.expectations, className: "col-span-1 sm:col-span-2 lg:col-span-3" },
+    ];
+
     return (
         <>
-            <FormField control={form.control} name="fullName" render={({ field }) => (
-                <FormInputWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-2"
-                    field={field}
-                    label={COMMON_LABELS.fullName}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-
-            <FormField control={form.control} name="phone" render={({ field }) => (
-                <FormMaskInputWithLabel
-                    className="col-span-1"
-                    field={field}
-                    label={COMMON_LABELS.phone}
-                    labelBold
-                    isDisabled={readOnly}
-                    mask={masks.cellphone}
-                />
-            )} />
-
-            <FormField control={form.control} name="cep" render={({ field }) => (
-                <FormMaskInputWithLabel
-                    className="col-span-1"
-                    field={field}
-                    label={COMMON_LABELS.cep}
-                    labelBold
-                    isDisabled={readOnly}
-                    mask={masks.cep}
-                />
-            )} />
-            <FormField control={form.control} name="address" render={({ field }) => (
-                <FormInputWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-2"
-                    field={field}
-                    label={COMMON_LABELS.address}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-            <FormField control={form.control} name="city" render={({ field }) => (
-                <FormInputWithLabel
-                    className="col-span-1"
-                    field={field}
-                    label={COMMON_LABELS.city}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-            <FormField control={form.control} name="district" render={({ field }) => (
-                <FormInputWithLabel
-                    className="col-span-1"
-                    field={field}
-                    label={COMMON_LABELS.district}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-            <FormField control={form.control} name="state" render={({ field }) => (
-                <FormInputWithLabel
-                    className="col-span-1"
-                    field={field}
-                    label={COMMON_LABELS.state}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-
-            <FormField control={form.control} name="email" render={({ field }) => (
-                <FormInputWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    label={COMMON_LABELS.email}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-
-            <FormField control={form.control} name="alreadyParticipatedInCourse" render={({ field }) => (
-                <FormInputWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    label={COMMON_LABELS.alreadyParticipatedInCourse}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-
-            <FormField control={form.control} name="alreadyParticipatedInCourseIntrodutorio" render={({ field }) => (
-                <FormInputWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    label={COMMON_LABELS.alreadyParticipatedInCourseIntrodutorio}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-
-            <FormField control={form.control} name="payment" render={({ field }) => (
-                <FormSelectWithLabel
-                    field={field}
-                    labelText={COMMON_LABELS.paymentChosen}
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    labelBold
-                    isDisabled={readOnly}
-                    idLabel=""
-                    options={PAYMENT_OPTIONS_CURSO_APROFUNDAMENTO_MINDFULLNESS}
-                />
-            )} />
-            <FormField control={form.control} name="bankAndInitialDepositDate" render={({ field }) => (
-                <FormInputWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    label={COMMON_LABELS.paymentBankAndDate}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-            <FormField control={form.control} name="paymentMedium" render={({ field }) => (
-                <FormSelectWithLabel
-                    field={field}
-                    labelText={COMMON_LABELS.paymentMediumLabel}
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    labelBold
-                    isDisabled={readOnly}
-                    idLabel=""
-                    options={PAYMENT_MEDIUM_OPTIONS_GLOBAL}
-                />
-            )} />
-            <FormField control={form.control} name="paymentInstructions" render={({ field }) => (
-                <FormTextAreaWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    label={COMMON_LABELS.paymentInstructions}
-                    labelBold
-                    isDisabled={true} />
-            )} />
-            <FormField control={form.control} name="depositData" render={({ field }) => (
-                <FormTextAreaWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    label={COMMON_LABELS.depositData}
-                    labelBold
-                    startHeight={220}
-                    isDisabled={true} />
-            )} />
+            <FormBuilder form={form} fields={baseFields} readOnly={readOnly} />
 
             <div className="col-span-1 sm:col-span-2 lg:col-span-3">
                 <h1>Perguntas</h1>
             </div>
 
-            <FormField control={form.control} name="whyCourse" render={({ field }) => (
-                <FormTextAreaWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    label={QUESTIONS_CURSO_APROFUNDAMENTO_FORM.whyCourse}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-            <FormField control={form.control} name="keptTraining" render={({ field }) => (
-                <FormSelectWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    labelText={QUESTIONS_CURSO_APROFUNDAMENTO_FORM.keptTraining}
-                    options={YES_NO_NULL_OPTIONS}
-                    idLabel=""
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-            <FormField control={form.control} name="frequentlyPracticed" render={({ field }) => (
-                <FormTextAreaWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    label={QUESTIONS_CURSO_APROFUNDAMENTO_FORM.frequentlyPracticed}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-            <FormField control={form.control} name="otherContact" render={({ field }) => (
-                <FormSelectWithLabel    
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    labelText={QUESTIONS_CURSO_APROFUNDAMENTO_FORM.otherContact}
-                    options={YES_NO_NULL_OPTIONS}
-                    idLabel=""
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-            <FormField control={form.control} name="otherContactDescription" render={({ field }) => (
-                <FormTextAreaWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    label={QUESTIONS_CURSO_APROFUNDAMENTO_FORM.otherContactDescription}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-            <FormField control={form.control} name="psychotherapyTreatment" render={({ field }) => (
-                <FormTextAreaWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    label={QUESTIONS_CURSO_APROFUNDAMENTO_FORM.psychotherapyTreatment}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
+            <FormBuilder form={form} fields={questionsFields} readOnly={readOnly} />
 
-            <FormField control={form.control} name="specialNeeds" render={({ field }) => (
-                <FormTextAreaWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    label={QUESTIONS_CURSO_APROFUNDAMENTO_FORM.specialNeeds}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-
-            <FormField control={form.control} name="greatestGain" render={({ field }) => (
-                <FormTextAreaWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    label={QUESTIONS_CURSO_APROFUNDAMENTO_FORM.greatestGain}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
-            <FormField control={form.control} name="expectations" render={({ field }) => (
-                <FormTextAreaWithLabel
-                    className="col-span-1 sm:col-span-2 lg:col-span-3"
-                    field={field}
-                    label={QUESTIONS_CURSO_APROFUNDAMENTO_FORM.expectations}
-                    labelBold
-                    isDisabled={readOnly} />
-            )} />
             <div className={`col-span-1 flex sm:col-span-2 lg:col-span-3 ${mode === "view" ? "justify-between" : "justify-end"}`}>
                 {mode === "view" && (
                     <Link href={`/fichas/curso_aprofundamento_mindfulness`}>

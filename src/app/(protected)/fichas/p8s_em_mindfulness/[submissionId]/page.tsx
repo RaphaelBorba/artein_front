@@ -4,10 +4,8 @@ import Section from "@/components/self/Section";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import api from "@/lib/api";
 import { useEffect } from "react";
-import { useLoader } from "@/hooks/useLoader";
-import { useToast } from "@/hooks/use-toast";
+import { useFetchSubmission } from "@/hooks/useFetchSubmission";
 import { useParams } from "next/navigation";
 import { CursoIntrodutorioMindfulnessFormSchemaType, cursoIntrodutorioMindfulnessSchema } from "@/schemas/forms/cursoIntrodutorioMindfulness/cursoIntrodutorioMindfulnessSchema";
 import type { CursoIntrodutorioMindfulnessI } from "@/types/cursoIntrodutorioMindfulness";
@@ -15,9 +13,6 @@ import FormFields from "@/components/forms/p8s_em_mindfulness";
 
 export default function CursoIntrodutorioViewPage() {
     const { submissionId } = useParams<{ submissionId: string }>();
-
-    const { toggleLoader } = useLoader();
-    const { toast } = useToast();
 
     const form = useForm<CursoIntrodutorioMindfulnessFormSchemaType>({
         resolver: zodResolver(cursoIntrodutorioMindfulnessSchema),
@@ -58,52 +53,37 @@ export default function CursoIntrodutorioViewPage() {
         },
     });
 
-    useEffect(() => {
-        const fetchRecord = async () => {
-            toggleLoader(true);
-            try {
-                const response = await api.get<CursoIntrodutorioMindfulnessI>(`/forms/p8s_em_mindfulness/submissions/${submissionId}`);
-                const data = response.data;
-                form.reset({
-                    fullName: data.fullName || "",
-                    profession: data.profession || "",
-                    birthDate: data.birthDate ? new Date(data.birthDate) : undefined,
-                    cep: data.cep || "",
-                    address: data.address || "",
-                    city: data.city || "",
-                    district: data.district || "",
-                    state: data.state || "",
-                    phone: data.phone || "",
-                    email: data.email || "",
-                    indication: data.indication || "",
-                    payment: data.payment || "",
-                    otherPayment: data.otherPayment || "",
-                    paymentMedium: data.paymentMedium || "",
-                    discount: data.discount || "",
-                    otherDiscounts: data.otherDiscounts || "",
-                    bankAndInitialDepositDate: data.bankAndInitialDepositDate || "",
-                    depositData: data.depositData || "",
-                    whyCourse: data.whyCourse || "",
-                    meditationExperience: data.meditationExperience || "",
-                    mindfulnessContact: data.mindfulnessContact || "",
-                    psychotherapyTreatment: data.psychotherapyTreatment || "",
-                    specialNeeds: data.specialNeeds || "",
-                    expectations: data.expectations || "",
-                });
-            } catch (error) {
-                console.error("Error fetching record:", error);
-                toast({
-                    title: "Erro",
-                    description: "Não foi possível carregar os dados.",
-                    variant: "destructive",
-                });
-            } finally {
-                toggleLoader(false);
-            }
-        };
-
-        fetchRecord();
-    }, [submissionId]);
+    useFetchSubmission<CursoIntrodutorioMindfulnessFormSchemaType>({
+        form,
+        submissionId,
+        endpoint: `/forms/p8s_em_mindfulness/submissions/${submissionId}`,
+        mapResponse: (data: CursoIntrodutorioMindfulnessI) => ({
+            fullName: data.fullName || "",
+            profession: data.profession || "",
+            birthDate: data.birthDate ? new Date(data.birthDate) : undefined,
+            cep: data.cep || "",
+            address: data.address || "",
+            city: data.city || "",
+            district: data.district || "",
+            state: data.state || "",
+            phone: data.phone || "",
+            email: data.email || "",
+            indication: data.indication || "",
+            payment: data.payment || "",
+            otherPayment: data.otherPayment || "",
+            paymentMedium: data.paymentMedium || "",
+            discount: data.discount || "",
+            otherDiscounts: data.otherDiscounts || "",
+            bankAndInitialDepositDate: data.bankAndInitialDepositDate || "",
+            depositData: data.depositData || "",
+            whyCourse: data.whyCourse || "",
+            meditationExperience: data.meditationExperience || "",
+            mindfulnessContact: data.mindfulnessContact || "",
+            psychotherapyTreatment: data.psychotherapyTreatment || "",
+            specialNeeds: data.specialNeeds || "",
+            expectations: data.expectations || "",
+        })
+    });
 
     return (
         <Section title="P8S em Mindfulness">

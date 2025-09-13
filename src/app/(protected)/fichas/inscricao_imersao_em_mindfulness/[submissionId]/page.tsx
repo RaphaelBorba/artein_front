@@ -4,10 +4,8 @@ import Section from "@/components/self/Section";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import api from "@/lib/api";
 import { useEffect } from "react";
-import { useLoader } from "@/hooks/useLoader";
-import { useToast } from "@/hooks/use-toast";
+import { useFetchSubmission } from "@/hooks/useFetchSubmission";
 import { useParams } from "next/navigation";
 import FormFields from "@/components/forms/inscricao_imersao_em_mindfulness";
 import { InscricaoImersaoEmMindfulnessI } from "@/types/inscricaoImersaoEmMindfulness";
@@ -16,9 +14,6 @@ import { InscricaoImersaoEmMindfulnessFormSchemaType, inscricaoImersaoEmMindfuln
 
 export default function InscricaoImersaoEmMindfulnessViewPage() {
     const { submissionId } = useParams<{ submissionId: string }>();
-
-    const { toggleLoader } = useLoader();
-    const { toast } = useToast();
 
     const form = useForm<InscricaoImersaoEmMindfulnessFormSchemaType>({
         resolver: zodResolver(inscricaoImersaoEmMindfulnessSchema),
@@ -59,53 +54,37 @@ export default function InscricaoImersaoEmMindfulnessViewPage() {
         },
     });
 
-    useEffect(() => {
-        const fetchRecord = async () => {
-            toggleLoader(true);
-            try {
-                const response = await api.get<InscricaoImersaoEmMindfulnessI>(`/forms/inscricao_imersao_em_mindfulness/submissions/${submissionId}`);
-                const data = response.data;
-                form.reset({
-                    fullName: data.fullName || "",
-                    phone: data.phone || "",
-                    cep: data.cep || "",
-                    address: data.address || "",
-                    city: data.city || "",
-                    district: data.district || "",
-                    state: data.state || "",
-                    email: data.email || "",
-                    alreadyParticipatedInCourseArtin: data.alreadyParticipatedInCourseArtin || "",
-                    alreadyParticipatedInCourseOther: data.alreadyParticipatedInCourseOther || "",
-                    payment: data.payment || "",
-                    paymentMedium: data.paymentMedium || "",
-                    paymentInstructions: data.paymentInstructions || "",
-                    bankAndInitialDepositDate: data.bankAndInitialDepositDate || "",
-                    depositData: data.depositData || "",
-                    whyCourse: data.whyCourse || "",
-                    keptTraining: data.keptTraining || "",
-                    frequentlyPracticed: data.frequentlyPracticed || "",
-                    otherContact: data.otherContact || "",
-                    otherContactDescription: data.otherContactDescription || "",
-                    psychotherapyTreatment: data.psychotherapyTreatment || "",
-                    specialNeeds: data.specialNeeds || "",
-                    greatestGain: data.greatestGain || "",
-                    expectations: data.expectations || "",
-                    
-                });
-            } catch (error) {
-                console.error("Error fetching record:", error);
-                toast({
-                    title: "Erro",
-                    description: "Não foi possível carregar os dados.",
-                    variant: "destructive",
-                });
-            } finally {
-                toggleLoader(false);
-            }
-        };
-
-        fetchRecord();
-    }, [submissionId]);
+    useFetchSubmission<InscricaoImersaoEmMindfulnessFormSchemaType>({
+        form,
+        submissionId,
+        endpoint: `/forms/inscricao_imersao_em_mindfulness/submissions/${submissionId}`,
+        mapResponse: (data: InscricaoImersaoEmMindfulnessI) => ({
+            fullName: data.fullName || "",
+            phone: data.phone || "",
+            cep: data.cep || "",
+            address: data.address || "",
+            city: data.city || "",
+            district: data.district || "",
+            state: data.state || "",
+            email: data.email || "",
+            alreadyParticipatedInCourseArtin: data.alreadyParticipatedInCourseArtin || "",
+            alreadyParticipatedInCourseOther: data.alreadyParticipatedInCourseOther || "",
+            payment: data.payment || "",
+            paymentMedium: data.paymentMedium || "",
+            paymentInstructions: data.paymentInstructions || "",
+            bankAndInitialDepositDate: data.bankAndInitialDepositDate || "",
+            depositData: data.depositData || "",
+            whyCourse: data.whyCourse || "",
+            keptTraining: data.keptTraining || "",
+            frequentlyPracticed: data.frequentlyPracticed || "",
+            otherContact: data.otherContact || "",
+            otherContactDescription: data.otherContactDescription || "",
+            psychotherapyTreatment: data.psychotherapyTreatment || "",
+            specialNeeds: data.specialNeeds || "",
+            greatestGain: data.greatestGain || "",
+            expectations: data.expectations || "",
+        })
+    });
 
     return (
         <Section title="Inscrição em Imersão em Mindfulness">
