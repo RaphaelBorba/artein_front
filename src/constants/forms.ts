@@ -194,6 +194,42 @@ export const SATISFACTION_LEVEL_OPTIONS = [
   { value: "(9-10) Muito satisfeito", label: "(9-10) Muito satisfeito" },
 ]
 
+export const QUESTIONS_FORMULARIO_DE_AVALIACAO_IMERSAO_EM_MINDFULLNESS = {
+  satisfactionLevel: "1. O quanto você se sentiu satisfeito com este treinamento em Mindfulness (Imersão Final de Semana):",
+  likedMostAndHighlights: "2. Do que mais gostou e o que se destacou nesta IMERSÃO para você?",
+  likedLeastSuggestions: "3. O que você menos gostou? E ou não sentiu como útil para você? Alguma sugestão:",
+  personalChange: "4. Você experienciou alguma mudança pessoal de percepção e ou atitude? Qual(is)?",
+  selfDifference: "5. Como você se vê diferente? Como você se sente diferente? O que você já está fazendo ou pode fazer diferente a partir de seus entendimentos e práticas advindas deste treino em Mindfulness (Consciência Plena)?",
+  knowledgeMomentsImportance: "6. De que forma você percebe os momentos de conhecimento (ensinamentos teóricos), como favorecedores de sua compreensão acerca de Mindfulness (Consciência Plena)? E qual a importância deles para a prática de sua atitude de estar presente na vida?",
+  tellAFriend: "7. O que você diria sobre esse programa para um grande amigo?",
+  benefitsBeyondPrevious: "8. Quais benefícios você acredita ter obtido com este treinamento atual em Mindfulness, para além dos obtidos nos treinamentos anteriores? O que você percebe que se acrescentou ao seu aprendizado?",
+  personalPracticeStimulation: "9. Como sente que este curso estimulará sua prática pessoal?",
+  authorizeUse: "10. Você gostaria de autorizar o uso de trechos de sua avaliação para divulgação do curso?",
+}
+
+export const QUESTIONS_FORMULARIO_DE_AVA = {
+  satisfactionLevel: "1. O quanto você se sentiu satisfeita com esta nossa II Jornada Saúde de Mulher:",
+  likedMostAndHighlights: "2. Refletindo sobre o Evento como Um Todo, o que você mais gostou e se destacou como útil para você?",
+  likedLeastDiscomfort: "3. O que você menos gostou? E ou não sentiu como útil ou confortável para você?",
+  personalChange: "4. A partir de sua participação nas palestras e vivências de hoje, você experienciou alguma mudança pessoal de percepção? Algum Insight e ou nova atitude? Qual(is)?",
+  takeHomeCare: "5. Refletindo sobre os temas abordados e as experiências vivenciadas na “II Jornada Saúde da Mulher”, o que você está levando para casa, que sente merecer sua atenção e ou cuidado, e que pode fazer a diferença em sua vida e na vida de quem está ao seu redor, caso pratique?",
+  tellAFriend: "6. O que você diria sobre esta “II Jornada Saúde da Mulher” para uma grande amiga?",
+  praiseOrComplaint: "7. Algum elogio e ou reclamação?",
+  improvementSuggestions: "8. Alguma sugestão de pontos a melhorar?",
+  nextTopics: "9. Qual(is) tema(s) de seu interesse gostaria de sugerir para uma próxima programação da “Jornada Saúde da Mulher” na Ilha do Governador?",
+  wantsInfo: "10. Você teria interesse em receber informações sobre nossos próximos eventos, cursos e ou aulas?",
+  preferredMedia: "11. Caso sim, em qual(is) mídia(s) gostaria de receber?",
+  authorizeUse: "12. Você gostaria de autorizar o uso de trechos de sua avaliação para divulgação do Evento?",
+}
+
+export const FORMULARIO_DE_AVA_PREFERRED_MEDIA_OPTIONS = [
+  { value: "null", label: "---" },
+  { value: "Whatsapp", label: "Whatsapp" },
+  { value: "Instagram", label: "Instagram" },
+  { value: "Facebook", label: "Facebook" },
+  { value: "E-mail", label: "E-mail" },
+]
+
 export const QUESTIONS_FORMULARIO_DE_AVALIACAO_CURSO_APROFUNDAMENTO_EM_MINDFULLNESS = {
   satisfactionLevel: "Qual Seu Nível de Satisfação Com O Programa De Aprofundamento em Mindfulness?",
   likedMostAndHighlights: "1. O que você mais gostou e se destacou do programa para você? E o que levará para sua vida?",
