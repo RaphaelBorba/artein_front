@@ -202,7 +202,19 @@ export const QUESTIONS_FORMULARIO_DE_AVALIACAO_CURSO_APROFUNDAMENTO_EM_MINDFULLN
   selfDifference: "4. Como você se vê diferente? Como você se sente diferente? O que você está fazendo que seja diferente a partir de seus entendimentos e práticas advindos deste programa?",
   knowledgeMomentsImportance: "5. De que forma você percebe os momentos de conhecimento como favorecedores de seu entendimento acerca de mindfulness? E qual a importância deles para a prática de sua atitude de estar presente na vida?",
   tellAFriend: "6. O que você diria sobre esse programa para um grande amigo?",
-  benefitsBeyondPrevious: "7. Quais os benefícios que você obtém ou acredita poder obter a partir de seu exercício da atitude mindfulness na vida?",
-  personalPracticeStimulation: "8. Você gostaria de ser estimulado a praticar a atitude mindfulness na sua vida?",
+  benefitsBeyondPrevious: "7. Quais benefícios você acredita ter obtido com este treinamento atual em Mindfulness, para além dos obtidos nos treinamentos anteriores? O que você percebe que se acrescentou ao seu aprendizado?",
+  personalPracticeStimulation: "8. Como sente que este curso estimulará sua prática pessoal?",
   authorizeUse: "9. Você gostaria de autorizar o uso de trechos de sua avaliação para divulgação do curso?",
+}
+
+export const QUESTIONS_FORMULARIO_DE_AVALIACAO_CURSO_INTRODUTORIO_EM_MINDFULLNESS = {
+  satisfactionLevel: "1. O quanto você se sentiu satisfeito com este treinamento em Mindfulness (consciência plena):",
+  likedMostAndHighlights: "2. O que você mais gostou e se destacou neste Curso Introdutório em Mindfulness (consciência plena), que você levará para a sua vida?",
+  likedLeastSuggestions: "3. O que você menos gostou? E ou não sentiu como útil para você? Alguma sugestão:",
+  personalChange: "4. Você experienciou alguma mudança pessoal de percepção e ou atitude? Qual(is)?",
+  selfDifference: "5. Como você se vê diferente? Como você se sente diferente? O que você já pode fazer diferente a partir de seus entendimentos e práticas advindos deste treinamento em mindfulness (consciência plena)?",
+  knowledgeMomentsImportance: "6. De que forma você percebe os momentos de conhecimento (ensinamentos teóricos) como favorecedores de sua compreensão acerca de Mindfulness (consciência plena)? E qual a importância deles para a prática de sua atitude de estar presente na vida?",
+  tellAFriend: "7. O que você diria sobre esse programa para um grande amigo?",
+  benefits: "8. Quais os benefícios que você obtém ou acredita poder obter a partir de seu exercício da atitude Mindfulness (consciência plena) na vida diária?",
+  authorizeUse: "9. Você gostaria de autorizar o uso de trechos de sua avaliação para a divulgação do curso?",
 }
