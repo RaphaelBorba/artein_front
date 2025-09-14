@@ -193,3 +193,16 @@ export const SATISFACTION_LEVEL_OPTIONS = [
   { value: "(7-8) Satisfeito", label: "(7-8) Satisfeito" },
   { value: "(9-10) Muito satisfeito", label: "(9-10) Muito satisfeito" },
 ]
+
+export const QUESTIONS_FORMULARIO_DE_AVALIACAO_CURSO_APROFUNDAMENTO_EM_MINDFULLNESS = {
+  satisfactionLevel: "Qual Seu Nível de Satisfação Com O Programa De Aprofundamento em Mindfulness?",
+  likedMostAndHighlights: "1. O que você mais gostou e se destacou do programa para você? E o que levará para sua vida?",
+  likedLeastSuggestions: "2. O que você menos gostou? E ou não sentiu como útil para você? Sugestões?",
+  personalChange: "3. Você experienciou alguma mudança pessoal? Qual(is)?",
+  selfDifference: "4. Como você se vê diferente? Como você se sente diferente? O que você está fazendo que seja diferente a partir de seus entendimentos e práticas advindos deste programa?",
+  knowledgeMomentsImportance: "5. De que forma você percebe os momentos de conhecimento como favorecedores de seu entendimento acerca de mindfulness? E qual a importância deles para a prática de sua atitude de estar presente na vida?",
+  tellAFriend: "6. O que você diria sobre esse programa para um grande amigo?",
+  benefitsBeyondPrevious: "7. Quais os benefícios que você obtém ou acredita poder obter a partir de seu exercício da atitude mindfulness na vida?",
+  personalPracticeStimulation: "8. Você gostaria de ser estimulado a praticar a atitude mindfulness na sua vida?",
+  authorizeUse: "9. Você gostaria de autorizar o uso de trechos de sua avaliação para divulgação do curso?",
+}
