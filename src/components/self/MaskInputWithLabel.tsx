@@ -27,7 +27,9 @@ export default function MaskInputWithLabel({
         replacement: { _: /\d/ },
     };
     const inputRef = useMask(options);
-    const defaultValue = format(value, options);
+    const defaultValue = typeof value === 'string' && value.length > 0
+        ? format(value, options)
+        : '';
 
     return (
         <div className="flex flex-col gap-2">

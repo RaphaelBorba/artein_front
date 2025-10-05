@@ -24,7 +24,9 @@ export default function FormMaskInputWithLabel({ field, label, className, labelB
         replacement: { _: /\d/ },
     };
     const inputRef = useMask(options);
-    const defaultValue = format(field.value, options);
+    const defaultValue = typeof field.value === 'string' && field.value.length > 0
+        ? format(field.value, options)
+        : '';
 
     return (
         <FormItem className={className} >

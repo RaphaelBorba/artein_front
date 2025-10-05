@@ -125,6 +125,7 @@ export default function GeneralRegisterViewPage() {
             try {
                 const response = await api.get<GeneralRegister>(`general-register/${generalRegisterId}`);
                 const data = response.data;
+                console.log(data);
                 // Map fetched numeric IDs to strings (and use "null" if no value)
                 form.reset({
                     photo: data.photo || "",
@@ -135,17 +136,25 @@ export default function GeneralRegisterViewPage() {
                     placeOfBirth: data.placeOfBirth || "",
                     age: data.birthDate ? String(calculateAge(new Date(data.birthDate!).toISOString())): '',
                     maritalStatusId: `${data.maritalStatusId}` || "null",
-                    cpf: !isNaN(Number(data.cpf!)) ? format(data.cpf!, { mask: masks.cpf, replacement: masks.replacement }) : "",
-                    cnpj: !isNaN(Number(data.cnpj!)) ? format(data.cnpj!, { mask: masks.cnpj, replacement: masks.replacement }) : "",
+                    cpf: (data.cpf != null && !isNaN(Number(data.cpf)))
+                        ? format(data.cpf, { mask: masks.cpf, replacement: masks.replacement })
+                        : "",
+                    cnpj: (data.cnpj != null && !isNaN(Number(data.cnpj)))
+                        ? format(data.cnpj, { mask: masks.cnpj, replacement: masks.replacement })
+                        : "",
                     companyName: data.companyName || "",
                     educationLevelId: data.educationLevelId ? String(data.educationLevelId) : "null",
                     profession: data.profession || "",
                     workplace: data.workplace || "",
                     currentJob: data.currentJob || "",
-                    phoneNumber: !isNaN(Number(data.phoneNumber!)) ? format(data.phoneNumber!, { mask: masks.cellphone, replacement: masks.replacement }) : '',
+                    phoneNumber: (data.phoneNumber != null && !isNaN(Number(data.phoneNumber)))
+                        ? format(data.phoneNumber, { mask: masks.cellphone, replacement: masks.replacement })
+                        : '',
                     email: data.email || "",
                     firstContactDate: data.firstContactDate ? new Date(data.firstContactDate) : undefined,
-                    cep: !isNaN(Number(data.cep!)) ? format(data.cep!, { mask: masks.cep, replacement: masks.replacement }) : '',
+                    cep: (data.cep != null && !isNaN(Number(data.cep)))
+                        ? format(data.cep, { mask: masks.cep, replacement: masks.replacement })
+                        : '',
                     address: data.address || "",
                     complement: data.complement || "",
                     city: data.city || "",

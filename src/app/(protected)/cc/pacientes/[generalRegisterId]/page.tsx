@@ -173,17 +173,25 @@ export default function PatientViewPage() {
           placeOfBirth: generalRegister.placeOfBirth || "",
           age: generalRegister.birthDate ? String(calculateAge(new Date(generalRegister.birthDate!).toISOString())) : '',
           maritalStatusId: `${generalRegister.maritalStatusId}` || "null",
-          cpf: !isNaN(Number(generalRegister.cpf!)) ? format(generalRegister.cpf!, { mask: masks.cpf, replacement: masks.replacement }) : "",
-          cnpj: !isNaN(Number(generalRegister.cnpj!)) ? format(generalRegister.cnpj!, { mask: masks.cnpj, replacement: masks.replacement }) : "",
+          cpf: (generalRegister.cpf != null && !isNaN(Number(generalRegister.cpf)))
+            ? format(generalRegister.cpf, { mask: masks.cpf, replacement: masks.replacement })
+            : "",
+          cnpj: (generalRegister.cnpj != null && !isNaN(Number(generalRegister.cnpj)))
+            ? format(generalRegister.cnpj, { mask: masks.cnpj, replacement: masks.replacement })
+            : "",
           companyName: generalRegister.companyName || "",
           educationLevelId: generalRegister.educationLevelId ? String(generalRegister.educationLevelId) : "null",
           profession: generalRegister.profession || "",
           workplace: generalRegister.workplace || "",
           currentJob: generalRegister.currentJob || "",
-          phoneNumber: !isNaN(Number(generalRegister.phoneNumber!)) ? format(generalRegister.phoneNumber!, { mask: masks.cellphone, replacement: masks.replacement }) : '',
+          phoneNumber: (generalRegister.phoneNumber != null && !isNaN(Number(generalRegister.phoneNumber)))
+            ? format(generalRegister.phoneNumber, { mask: masks.cellphone, replacement: masks.replacement })
+            : '',
           email: generalRegister.email || "",
           firstContactDate: generalRegister.firstContactDate ? new Date(generalRegister.firstContactDate) : undefined,
-          cep: !isNaN(Number(generalRegister.cep!)) ? format(generalRegister.cep!, { mask: masks.cep, replacement: masks.replacement }) : '',
+          cep: (generalRegister.cep != null && !isNaN(Number(generalRegister.cep)))
+            ? format(generalRegister.cep, { mask: masks.cep, replacement: masks.replacement })
+            : '',
           address: generalRegister.address || "",
           complement: generalRegister.complement || "",
           city: generalRegister.city || "",
@@ -221,7 +229,9 @@ export default function PatientViewPage() {
           currentPsychiatricTreatmentStartDate: patient?.currentPsychiatricTreatmentStartDate ?
             new Date(patient?.currentPsychiatricTreatmentStartDate) : undefined,
           psychiatrist: patient?.psychiatrist || "",
-          psychiatristPhone: !isNaN(Number(patient!.psychiatristPhone!)) ? format(patient!.psychiatristPhone!, { mask: masks.cellphone, replacement: masks.replacement }) : '',
+          psychiatristPhone: (patient?.psychiatristPhone != null && !isNaN(Number(patient.psychiatristPhone)))
+            ? format(patient.psychiatristPhone, { mask: masks.cellphone, replacement: masks.replacement })
+            : '',
           currentMedications: patient?.currentMedications || "",
           medicationDiagnosis: patient?.medicationDiagnosis || "",
           generalMedicalTreatment: patient?.generalMedicalTreatment === null || patient?.generalMedicalTreatment === undefined ?

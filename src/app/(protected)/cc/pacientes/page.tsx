@@ -115,7 +115,7 @@ export default function GeneralRegister() {
       <div className="overflow-x-auto">
         <DataTable<GeneralRegisterI, unknown>
           data={registers}
-          columns={getColumns('pacientes')}
+          columns={getColumns('pacientes', true, false)}
           pagination={pagination}
           setPagination={setPagination}
         />

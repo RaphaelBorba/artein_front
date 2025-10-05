@@ -8,7 +8,7 @@ import { masks } from "@/lib/masks";
 import Link from "next/link";
 
 // Create a function that accepts the base route as a parameter
-export const getColumns = (baseRoute: string): ColumnDef<GeneralRegisterI, any>[] => [
+export const getColumns = (baseRoute: string, canEdit = true, canDelete = true): ColumnDef<GeneralRegisterI, any>[] => [
   {
     accessorKey: "id",
     header: "Id do Cadastro",
@@ -267,16 +267,16 @@ export const getColumns = (baseRoute: string): ColumnDef<GeneralRegisterI, any>[
             <Eye className="text-blue-500" />
           </button>
         </Link>
-        <Link className="flex align-bottom" href={`${baseRoute}/${info.row.original.id}/edit`}>
+        {canEdit && <Link className="flex align-bottom" href={`${baseRoute}/${info.row.original.id}/edit`}>
           <button
             onClick={() => console.log("edit", info.row.original)}
             title="Editar"
           >
             <Edit className="text-green-500" />
           </button>
-        </Link>
-        {
-          baseRoute === "cadastro_geral" &&
+        </Link>}
+          {
+          canDelete &&
           <button
             onClick={() => console.log("delete", info.row.original)}
             title="Deletar"

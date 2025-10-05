@@ -120,7 +120,7 @@ export default function GeneralRegister() {
       <div className="overflow-x-auto">
         <DataTable<GeneralRegisterI, unknown>
           data={registers}
-          columns={getColumns('alunos')}
+          columns={getColumns('cadastro_geral', false, false)}
           pagination={pagination}
           setPagination={setPagination}
         />

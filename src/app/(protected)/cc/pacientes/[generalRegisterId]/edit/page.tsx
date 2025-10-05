@@ -337,7 +337,9 @@ export default function GeneralRegisterViewPage() {
           currentPsychiatricTreatmentStartDate: patient?.currentPsychiatricTreatmentStartDate ?
             new Date(patient?.currentPsychiatricTreatmentStartDate) : undefined,
           psychiatrist: patient?.psychiatrist || "",
-          psychiatristPhone: !isNaN(Number(patient!.psychiatristPhone!)) ? format(patient!.psychiatristPhone!, { mask: masks.cellphone, replacement: masks.replacement }) : '',
+          psychiatristPhone: (patient?.psychiatristPhone != null && !isNaN(Number(patient.psychiatristPhone)))
+            ? format(patient.psychiatristPhone, { mask: masks.cellphone, replacement: masks.replacement })
+            : '',
           currentMedications: patient?.currentMedications || "",
           medicationDiagnosis: patient?.medicationDiagnosis || "",
           generalMedicalTreatment: patient?.generalMedicalTreatment === null || patient?.generalMedicalTreatment === undefined ?
