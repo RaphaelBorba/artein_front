@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://artein.angelicaborba.com"),
   title: "Gestão de Clientes",
   description: "Gestão de Clientes",
   openGraph: {
