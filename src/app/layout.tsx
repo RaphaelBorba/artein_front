@@ -17,6 +17,30 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Gestão de Clientes",
   description: "Gestão de Clientes",
+  openGraph: {
+    title: "Gestão de Clientes",
+    description: "Gestão de Clientes",
+    url: "/",
+    type: "website",
+    locale: "pt_BR",
+    images: [
+      {
+        url: "/logo.jpeg",
+        width: 1200,
+        height: 630,
+        alt: "Gestão de Clientes",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["/logo.jpeg"],
+  },
+  icons: {
+    icon: "/logo.jpeg",
+    apple: "/logo.jpeg",
+    shortcut: "/logo.jpeg",
+  },
 };
 
 export default function RootLayout({
