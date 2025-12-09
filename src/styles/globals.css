@@ -115,3 +115,138 @@ body {
 * {
   scrollbar-width: thin;
 }
+
+/* Print Styles */
+@media print {
+  /* Hide sidebar, navigation and interactive elements */
+  [data-sidebar],
+  [data-sidebar-trigger],
+  .print\\:hidden {
+    display: none !important;
+  }
+
+  /* Show print-only elements */
+  .print-header {
+    display: flex !important;
+  }
+
+  /* Reset page margins */
+  @page {
+    margin: 1.5cm;
+    size: A4;
+  }
+
+  /* Body adjustments */
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Form layout for print - single column for better readability */
+  form {
+    display: block !important;
+  }
+
+  form > div,
+  form > label {
+    page-break-inside: avoid;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Input and textarea styling for print - underline style */
+  input,
+  textarea,
+  select {
+    border: none !important;
+    border-bottom: 1px solid #333 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    padding: 0.25rem 0 !important;
+    font-size: 12px !important;
+    min-height: auto !important;
+  }
+
+  /* DatePicker button styling for print - show as underlined text */
+  form button {
+    display: flex !important;
+    border: none !important;
+    border-bottom: 1px solid #333 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    padding: 0.25rem 0 !important;
+    font-size: 12px !important;
+    box-shadow: none !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Hide the calendar icon inside DatePicker button */
+  form button svg {
+    display: none !important;
+  }
+
+  /* Hide action buttons (submit, back, etc) */
+  button[type="submit"],
+  button[type="button"]:not(form button),
+  a button {
+    display: none !important;
+  }
+
+  /* Labels */
+  label {
+    font-weight: 600 !important;
+    font-size: 11px !important;
+    color: #333 !important;
+  }
+
+  /* Ensure text is black for better printing */
+  * {
+    color: #000 !important;
+  }
+
+  /* Remove shadows and borders for cleaner print */
+  .rounded-sm,
+  .rounded-md,
+  .rounded-lg {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* For empty fields: show label but hide the input/response area */
+  .print-field[data-empty="true"] input,
+  .print-field[data-empty="true"] textarea,
+  .print-field[data-empty="true"] select,
+  .print-field[data-empty="true"] button,
+  .print-empty input,
+  .print-empty textarea,
+  .print-empty select,
+  .print-empty button {
+    display: none !important;
+  }
+
+  /* Style for empty fields - add underline to the label */
+  .print-field[data-empty="true"],
+  .print-empty {
+    margin-bottom: 0.5rem !important;
+    padding-bottom: 0.25rem !important;
+    border-bottom: 1px solid #999 !important;
+  }
+
+  /* Ensure the label in empty fields has proper spacing */
+  .print-field[data-empty="true"] label,
+  .print-empty label {
+    margin-bottom: 0 !important;
+    padding-bottom: 0.25rem !important;
+  }
+
+  /* Keep page breaks sensible */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+
+  /* Prevent orphans and widows */
+  p, li {
+    orphans: 3;
+    widows: 3;
+  }
+}

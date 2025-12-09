@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
-import Section from "@/components/self/Section";
+import PrintableSection from "@/components/self/PrintableSection";
 import { Form } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -51,13 +51,13 @@ export default function FormularioDeAvaliacaoP8sMindfulnessViewPage() {
     });
 
     return (
-        <Section title="Formulário de Avaliação P8S em Mindfulness">
+        <PrintableSection title="Formulário de Avaliação P8S em Mindfulness">
             <Form {...form}>
                 <form className="grid grid-cols-1 gap-4 text-black sm:grid-cols-2 lg:grid-cols-3">
                     <FormFields mode="view" form={form} readOnly />
                 </form>
             </Form>
-        </Section>
+        </PrintableSection>
     );
 }
 

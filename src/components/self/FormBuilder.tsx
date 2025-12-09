@@ -69,6 +69,15 @@ interface FormBuilderProps<TValues extends FieldValues> {
     readOnly?: boolean;
 }
 
+// Helper to check if a field value is empty
+const isFieldEmpty = (value: any): boolean => {
+    if (value === null || value === undefined) return true;
+    if (typeof value === "string") return value.trim() === "" || value === "null";
+    if (value instanceof Date) return false;
+    if (Array.isArray(value)) return value.length === 0;
+    return false;
+};
+
 const FormBuilder = <TValues extends FieldValues>({ form, fields, readOnly = false }: FormBuilderProps<TValues>) => {
     return (
         <>
@@ -80,47 +89,54 @@ const FormBuilder = <TValues extends FieldValues>({ form, fields, readOnly = fal
                     render={({ field }) => {
                         const isDisabled = readOnly || fieldConfig.alwaysDisabled === true;
                         const labelBold = fieldConfig.labelBold ?? true;
+                        const isEmpty = isFieldEmpty(field.value);
+
+                        // Wrapper div with data-empty attribute for print styling
+                        const wrapperClass = `print-field ${fieldConfig.className || ""} ${isEmpty ? "print-empty" : ""}`.trim();
 
                         if (fieldConfig.type === "input") {
                             return (
-                                <FormInputWithLabel
-                                    className={fieldConfig.className}
-                                    field={field}
-                                    label={fieldConfig.label}
-                                    labelBold={labelBold}
-                                    isDisabled={isDisabled}
-                                    type={fieldConfig.inputType}
-                                    placeholder={fieldConfig.placeholder}
-                                />
+                                <div className={wrapperClass} data-empty={isEmpty}>
+                                    <FormInputWithLabel
+                                        field={field}
+                                        label={fieldConfig.label}
+                                        labelBold={labelBold}
+                                        isDisabled={isDisabled}
+                                        type={fieldConfig.inputType}
+                                        placeholder={fieldConfig.placeholder}
+                                    />
+                                </div>
                             );
                         }
 
                         if (fieldConfig.type === "mask") {
                             return (
-                                <FormMaskInputWithLabel
-                                    className={fieldConfig.className}
-                                    field={field}
-                                    label={fieldConfig.label}
-                                    labelBold={labelBold}
-                                    isDisabled={isDisabled}
-                                    mask={(fieldConfig as MaskFieldConfig<TValues>).mask}
-                                />
+                                <div className={wrapperClass} data-empty={isEmpty}>
+                                    <FormMaskInputWithLabel
+                                        field={field}
+                                        label={fieldConfig.label}
+                                        labelBold={labelBold}
+                                        isDisabled={isDisabled}
+                                        mask={(fieldConfig as MaskFieldConfig<TValues>).mask}
+                                    />
+                                </div>
                             );
                         }
 
                         if (fieldConfig.type === "select") {
                             const cfg = fieldConfig as SelectFieldConfig<TValues>;
                             return (
-                                <FormSelectWithLabel
-                                    className={cfg.className}
-                                    field={field}
-                                    labelText={cfg.label}
-                                    labelBold={labelBold}
-                                    isDisabled={isDisabled}
-                                    idLabel={cfg.idLabel ?? ""}
-                                    options={cfg.options}
-                                    observation={cfg.observation}
-                                />
+                                <div className={wrapperClass} data-empty={isEmpty}>
+                                    <FormSelectWithLabel
+                                        field={field}
+                                        labelText={cfg.label}
+                                        labelBold={labelBold}
+                                        isDisabled={isDisabled}
+                                        idLabel={cfg.idLabel ?? ""}
+                                        options={cfg.options}
+                                        observation={cfg.observation}
+                                    />
+                                </div>
                             );
                         }
 
@@ -128,28 +144,33 @@ const FormBuilder = <TValues extends FieldValues>({ form, fields, readOnly = fal
                         if (fieldConfig.type === "textarea") {
                             const cfg = fieldConfig as TextAreaFieldConfig<TValues>;
                             return (
-                                <FormTextAreaWithLabel
-                                    className={cfg.className}
-                                    field={field}
-                                    label={cfg.label}
-                                    labelBold={labelBold}
-                                    isDisabled={isDisabled}
-                                    placeholder={cfg.placeholder}
-                                    startHeight={cfg.startHeight}
-                                />
+                                <div className={wrapperClass} data-empty={isEmpty}>
+                                    <FormTextAreaWithLabel
+                                        field={field}
+                                        label={cfg.label}
+                                        labelBold={labelBold}
+                                        isDisabled={isDisabled}
+                                        placeholder={cfg.placeholder}
+                                        startHeight={cfg.startHeight}
+                                    />
+                                </div>
                             );
                         }
 
                         // date
+                        if (fieldConfig.type === "date") {
+                        }
                         const cfg = fieldConfig as DateFieldConfig<TValues>;
                         return (
-                            <FormDatePicker
-                                labelText={cfg.label}
-                                field={field}
-                                labelBold={labelBold}
-                                isDisabled={isDisabled}
-                                isNextToTextarea={(cfg as DateFieldConfig<TValues>).isNextToTextarea}
-                            />
+                            <div className={`print-field flex ${wrapperClass}`} data-empty={isEmpty}>
+                                <FormDatePicker
+                                    labelText={cfg.label}
+                                    field={field}
+                                    labelBold={labelBold}
+                                    isDisabled={isDisabled}
+                                    isNextToTextarea={(cfg as DateFieldConfig<TValues>).isNextToTextarea}
+                                />
+                            </div>
                         );
                     }}
                 />
