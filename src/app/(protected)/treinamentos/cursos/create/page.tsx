@@ -12,6 +12,7 @@ import { useParams, useRouter } from "next/navigation";
 import { CourseFormSchemaType, courseSchema } from "@/schemas/courses/coursesSchema";
 import { CourseI } from "@/types/courses";
 import CoursesFormFields from "../coursesFormFields";
+import axios from "axios";
 
 export default function CourseCreatePage() {
   const { courseId } = useParams<{ courseId: string }>();
@@ -52,10 +53,12 @@ export default function CourseCreatePage() {
       await api.post(`/courses`, payload);
       router.push("/treinamentos/cursos");
     } catch (error) {
-      console.error("Error saving patient:", error);
+      console.error("Error saving course:", error);
       toast({
         title: "Erro",
-        description: "Ocorreu um erro ao atualizar o paciente.",
+        description: axios.isAxiosError(error)
+          ? JSON.stringify(error.response?.data)
+          : "Ocorreu um erro ao cadastrar o curso.",
         variant: "destructive",
       });
     } finally {
