@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { masks } from "./masks";
 import { unformat } from "@react-input/mask";
+import axios from "axios";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -56,4 +57,20 @@ export function parseNullableNumber(value: string | undefined): string | undefin
 
 export function parseBoolean(value: string | undefined): string | undefined {
   return value === '1' ? 'true' : value === '0' ? 'false' : undefined;
+}
+
+/**
+ * Extracts a user-friendly message from an API error, unwrapping Nest's
+ * validation/exception response shape ({ message: string | string[] })
+ * instead of surfacing the raw JSON payload.
+ */
+export function getApiErrorMessage(error: unknown): string {
+  if (axios.isAxiosError(error)) {
+    const data = error.response?.data as { message?: string | string[] } | undefined;
+    if (data?.message) {
+      return Array.isArray(data.message) ? data.message.join(" ") : data.message;
+    }
+    return "Ocorreu um erro. Tente novamente.";
+  }
+  return "Ocorreu um erro inesperado.";
 }

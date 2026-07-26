@@ -52,6 +52,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
         { title: "Cadastro Geral", path: "/cc/cadastro_geral" },
         { title: "Pacientes", path: "/cc/pacientes" },
         { title: "Alunos", path: "/cc/alunos" },
+        { title: "Leads", path: "/cc/leads" },
       ],
     },
     {
