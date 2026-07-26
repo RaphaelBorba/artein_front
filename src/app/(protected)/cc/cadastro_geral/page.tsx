@@ -8,8 +8,10 @@ import { Button } from "@/components/ui/button";
 import { CommunicationMethod } from "@/types/smallModels";
 import { GeneralRegister as GeneralRegisterI } from "@/types/generalRegister";
 import { DataTable } from "@/components/self/DataTable";
-import { Plus } from "lucide-react";
-import { parseBoolean, parseField, parseNullableNumber } from "@/lib/utils";
+import { Plus, Download } from "lucide-react";
+import { getApiErrorMessage, parseBoolean, parseField, parseNullableNumber } from "@/lib/utils";
+import { fetchAllRecords } from "@/lib/fetchAllRecords";
+import { columnsToCsv, downloadCsv } from "@/lib/csvExport";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { masks } from "@/lib/masks";
@@ -101,6 +103,23 @@ export default function GeneralRegister() {
     setValuesChanged(!valuesChanged)
   }
 
+  const handleExport = async () => {
+    toggleLoader(true);
+    try {
+      const all = await fetchAllRecords<GeneralRegisterI>("/general-register");
+      const csv = columnsToCsv(getColumns('cadastro_geral'), all);
+      downloadCsv(`cadastro_geral_${new Date().toISOString().slice(0, 10)}.csv`, csv);
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: getApiErrorMessage(error),
+        variant: "destructive",
+      });
+    } finally {
+      toggleLoader(false);
+    }
+  }
+
   return (
     <Section title="Cadastro Geral">
       <div className="space-y-8">
@@ -124,7 +143,12 @@ export default function GeneralRegister() {
           setPagination={setPagination}
         />
       </div>
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-end gap-2">
+        <Button
+          onClick={handleExport}
+          type="button"
+          variant="outline"
+          className="flex items-center gap-2 text-base"><Download strokeWidth={2} /> Exportar CSV</Button>
         <Button
           onClick={() => router.push('cadastro_geral/create')}
           type="button"

@@ -11,7 +11,10 @@ import { getColumns } from "./columns";
 import { CourseI } from "@/types/courses";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { Plus } from "lucide-react";
+import { Plus, Download } from "lucide-react";
+import { getApiErrorMessage } from "@/lib/utils";
+import { fetchAllRecords } from "@/lib/fetchAllRecords";
+import { columnsToCsv, downloadCsv } from "@/lib/csvExport";
 
 export default function GeneralRegister() {
   const { toast } = useToast();
@@ -65,6 +68,23 @@ export default function GeneralRegister() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggleLoader, toast, pagination.page, pagination.pageSize]);
 
+  const handleExport = async () => {
+    toggleLoader(true);
+    try {
+      const all = await fetchAllRecords<CourseI>("/course-classes");
+      const csv = columnsToCsv(getColumns('turmas'), all);
+      downloadCsv(`turmas_${new Date().toISOString().slice(0, 10)}.csv`, csv);
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: getApiErrorMessage(error),
+        variant: "destructive",
+      });
+    } finally {
+      toggleLoader(false);
+    }
+  }
+
   return (
     <Section title="Turmas">
       <div className="space-y-8">
@@ -78,7 +98,12 @@ export default function GeneralRegister() {
           setPagination={setPagination}
         />
       </div>
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-end gap-2">
+        <Button
+          onClick={handleExport}
+          type="button"
+          variant="outline"
+          className="flex items-center gap-2 text-base"><Download strokeWidth={2} /> Exportar CSV</Button>
         <Button
           onClick={() => router.push('turmas/create')}
           type="button"

@@ -8,9 +8,12 @@ import api from "@/lib/api";
 import { DataTable } from "@/components/self/DataTable";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { Plus } from "lucide-react";
+import { Plus, Download } from "lucide-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { getApiErrorMessage } from "@/lib/utils";
+import { fetchAllRecords } from "@/lib/fetchAllRecords";
+import { columnsToCsv, downloadCsv } from "@/lib/csvExport";
 
 
 import { Option } from "@/types/smallModels";
@@ -100,6 +103,23 @@ export default function PresenceList() {
 
   const onSubmit = () => setValuesChanged((v) => !v);
 
+  const handleExport = async () => {
+    toggleLoader(true);
+    try {
+      const all = await fetchAllRecords<PresenceListI>("/presence-list");
+      const csv = columnsToCsv(getColumns("lista_de_presenca"), all);
+      downloadCsv(`lista_de_presenca_${new Date().toISOString().slice(0, 10)}.csv`, csv);
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: getApiErrorMessage(error),
+        variant: "destructive",
+      });
+    } finally {
+      toggleLoader(false);
+    }
+  };
+
   return (
     <Section title="Lista de Presença">
       <div className="space-y-8">
@@ -126,7 +146,16 @@ export default function PresenceList() {
         />
       </div>
 
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-end gap-2">
+        <Button
+          variant="outline"
+          type="button"
+          onClick={handleExport}
+          className="flex items-center space-x-2 text-base"
+        >
+          <Download strokeWidth={2} />
+          <span>Exportar CSV</span>
+        </Button>
         <Button
           variant="outline"
           type="button"

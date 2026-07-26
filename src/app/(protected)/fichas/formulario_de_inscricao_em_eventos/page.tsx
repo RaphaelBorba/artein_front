@@ -9,7 +9,10 @@ import axios from "axios";
 import { IDataTableResposne, IPagination } from "@/types/dataTableResponse";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { Plus } from "lucide-react";
+import { Plus, Download } from "lucide-react";
+import { getApiErrorMessage } from "@/lib/utils";
+import { fetchAllRecords } from "@/lib/fetchAllRecords";
+import { columnsToCsv, downloadCsv } from "@/lib/csvExport";
 import type { SubmissionRecord } from "@/types/formResponse";
 import { getColumns } from "./columns";
 
@@ -65,6 +68,23 @@ export default function FormularioDeInscricaoEmEventosPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [toggleLoader, toast, pagination.page, pagination.pageSize]);
 
+  const handleExport = async () => {
+    toggleLoader(true);
+    try {
+      const all = await fetchAllRecords<SubmissionRecord>("/forms/formulario_de_inscricao_em_eventos/submissions");
+      const csv = columnsToCsv(getColumns('formulario_de_inscricao_em_eventos'), all);
+      downloadCsv(`formulario_de_inscricao_em_eventos_${new Date().toISOString().slice(0, 10)}.csv`, csv);
+    } catch (error) {
+      toast({
+        title: "Erro",
+        description: getApiErrorMessage(error),
+        variant: "destructive",
+      });
+    } finally {
+      toggleLoader(false);
+    }
+  }
+
   return (
     <Section title="Formulário de Inscrição em Eventos">
       <div className="space-y-8">
@@ -77,7 +97,12 @@ export default function FormularioDeInscricaoEmEventosPage() {
           setPagination={setPagination}
         />
       </div>
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-end gap-2">
+        <Button
+          onClick={handleExport}
+          type="button"
+          variant="outline"
+          className="flex items-center gap-2 text-base"><Download strokeWidth={2} /> Exportar CSV</Button>
         <Button
           onClick={() => router.push('/forms/formulario_de_inscricao_em_eventos')}
           type="button"
