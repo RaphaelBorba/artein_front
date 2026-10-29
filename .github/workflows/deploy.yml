@@ -1,0 +1,80 @@
+name: Deploy Front
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+
+# Nunca dois deploys ao mesmo tempo; o segundo espera o primeiro terminar.
+concurrency:
+  group: deploy-front
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  # Versão usada só para BUILDAR no runner. A VPS executa o resultado com Node 18.19.1
+  # (compatível com o Next 15.5, que exige >= 18.18).
+  NODE_VERSION: '22'
+  SITE_URL: https://artein.angelicaborba.com/login
+  NEXT_TELEMETRY_DISABLED: '1'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # NEXT_PUBLIC_* é gravada dentro do bundle no build, então precisa existir aqui.
+      - name: Build
+        env:
+          NEXT_PUBLIC_API_URL: ${{ vars.NEXT_PUBLIC_API_URL }}
+        run: |
+          test -n "$NEXT_PUBLIC_API_URL" || { echo "Defina a variable NEXT_PUBLIC_API_URL no repositório" >&2; exit 1; }
+          npm run build
+
+      - name: Configure SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Upload release to the server
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          rsync -rlt --delete --exclude='/.next/cache' \
+            -e "ssh -i $HOME/.ssh/deploy_key -o BatchMode=yes -o StrictHostKeyChecking=yes" \
+            .next public package.json package-lock.json next.config.ts \
+            "$SSH_USER@$SSH_HOST:/srv/artein-deploy/front/"
+
+      - name: Deploy (restart)
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+        run: |
+          ssh -i "$HOME/.ssh/deploy_key" -o BatchMode=yes -o StrictHostKeyChecking=yes \
+            "$SSH_USER@$SSH_HOST" "sudo -n -u angelicaborba-artein /usr/local/sbin/artein-deploy-front.sh"
+
+      - name: Health check
+        run: |
+          curl --fail --silent --show-error --output /dev/null \
+            --retry 6 --retry-delay 5 --retry-connrefused \
+            "$SITE_URL"
