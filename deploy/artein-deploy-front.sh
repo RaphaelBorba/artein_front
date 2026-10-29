@@ -1,52 +1,57 @@
 #!/usr/bin/env bash
-# Deploy do frontend (Next.js). Executado como root via `sudo` pelo GitHub Actions.
+# Deploy do frontend (Next.js).
+#
+# Executado pelo GitHub Actions como o usuário DONO do site, via
+#   sudo -n -u angelicaborba-artein /usr/local/sbin/artein-deploy-front.sh
+# Nenhuma etapa roda como root: npm e pm2 usam o mesmo usuário que já roda o front.
 #
 # Instalar em /usr/local/sbin (dono root, modo 755) -- ver CICD_SETUP.md.
-# Este arquivo NÃO deve ser editável pelo usuário de deploy: ele é a fronteira
-# entre "quem faz upload da release" e "quem tem permissão de root".
+# O usuário de deploy consegue executar este arquivo, mas não alterá-lo.
 #
 # O build acontece no GitHub; aqui só se troca o .next e reinicia o PM2,
 # o que evita estourar a memória da VPS com `next build`.
 set -euo pipefail
 
-STAGE=/home/artein-deploy/releases/front
+APP_USER=angelicaborba-artein
+STAGE=/srv/artein-deploy/front
 APP=/home/angelicaborba-artein/htdocs/artein.angelicaborba.com
 PM2_NAME=nextjs-front
 HEALTH_URL=http://127.0.0.1:3000/login
-STATE_DIR=/var/lib/artein-deploy
 
-export HOME=/root
-export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export HOME=/home/angelicaborba-artein
+export PATH=/usr/local/bin:/usr/bin:/bin
 
+[ "$(id -un)" = "$APP_USER" ] || { echo "Este script deve rodar como $APP_USER" >&2; exit 1; }
 [ -f "$STAGE/.next/BUILD_ID" ] || { echo "Release incompleta em $STAGE" >&2; exit 1; }
 
-mkdir -p "$STATE_DIR"
-exec 9>/var/lock/artein-deploy-front.lock
+exec 9>/tmp/artein-deploy-front.lock
 flock -n 9 || { echo "Outro deploy do frontend em andamento" >&2; exit 1; }
 
-# Falha cedo, antes de alterar qualquer arquivo, se o processo não estiver no PM2 do root.
+# Falha cedo, antes de alterar qualquer arquivo, se o processo não estiver no PM2 deste usuário.
 if ! pm2 describe "$PM2_NAME" >/dev/null 2>&1; then
-  echo "Processo '$PM2_NAME' não encontrado no PM2 do root. Nada foi alterado." >&2
+  echo "Processo '$PM2_NAME' não encontrado no PM2 de $APP_USER. Nada foi alterado." >&2
   exit 1
 fi
 
 cd "$APP"
 
 echo "==> Atualizando manifestos, config e public"
-install -m 644 -o root -g root \
-  "$STAGE/package.json" "$STAGE/package-lock.json" "$STAGE/next.config.ts" "$APP/"
+need_install=1
+if cmp -s "$STAGE/package-lock.json" "$APP/package-lock.json" && [ -f "$APP/node_modules/.deploy-ok" ]; then
+  need_install=0
+fi
+install -m 644 "$STAGE/package.json" "$STAGE/package-lock.json" "$STAGE/next.config.ts" "$APP/"
 if [ -d "$STAGE/public" ]; then
-  rsync -rlt --delete --chown=root:root "$STAGE/public/" "$APP/public/"
+  rsync -rlt --delete "$STAGE/public/" "$APP/public/"
 fi
 
 echo "==> Dependências"
-new_hash=$(sha256sum "$APP/package-lock.json" | cut -d' ' -f1)
-old_hash=$(cat "$STATE_DIR/front.lock.sha256" 2>/dev/null || true)
-if [ "$new_hash" != "$old_hash" ] || [ ! -d "$APP/node_modules" ]; then
+if [ "$need_install" = 1 ]; then
+  rm -f "$APP/node_modules/.deploy-ok"
   # Instala também as devDependencies: o next.config.ts precisa de typescript.
-  # --ignore-scripts: scripts de instalação de terceiros não rodam como root.
+  # --ignore-scripts: scripts de instalação de terceiros não rodam.
   npm ci --no-audit --no-fund --ignore-scripts
-  echo "$new_hash" > "$STATE_DIR/front.lock.sha256"
+  touch "$APP/node_modules/.deploy-ok"
 else
   echo "package-lock.json inalterado, pulando npm ci"
 fi
@@ -54,7 +59,7 @@ fi
 echo "==> Trocando .next (backup em .next.prev)"
 rm -rf "$APP/.next.prev"
 if [ -d "$APP/.next" ]; then mv "$APP/.next" "$APP/.next.prev"; fi
-rsync -rlt --chown=root:root "$STAGE/.next/" "$APP/.next/"
+rsync -rlt "$STAGE/.next/" "$APP/.next/"
 
 echo "==> Reiniciando $PM2_NAME"
 pm2 restart "$PM2_NAME" --update-env

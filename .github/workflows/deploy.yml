@@ -63,7 +63,7 @@ jobs:
           rsync -rlt --delete --exclude='/.next/cache' \
             -e "ssh -i $HOME/.ssh/deploy_key -o BatchMode=yes -o StrictHostKeyChecking=yes" \
             .next public package.json package-lock.json next.config.ts \
-            "$SSH_USER@$SSH_HOST:releases/front/"
+            "$SSH_USER@$SSH_HOST:/srv/artein-deploy/front/"
 
       - name: Deploy (restart)
         env:
@@ -71,7 +71,7 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
         run: |
           ssh -i "$HOME/.ssh/deploy_key" -o BatchMode=yes -o StrictHostKeyChecking=yes \
-            "$SSH_USER@$SSH_HOST" "sudo -n /usr/local/sbin/artein-deploy-front.sh"
+            "$SSH_USER@$SSH_HOST" "sudo -n -u angelicaborba-artein /usr/local/sbin/artein-deploy-front.sh"
 
       - name: Health check
         run: |
