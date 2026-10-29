@@ -24,6 +24,12 @@ mkdir -p "$STATE_DIR"
 exec 9>/var/lock/artein-deploy-front.lock
 flock -n 9 || { echo "Outro deploy do frontend em andamento" >&2; exit 1; }
 
+# Falha cedo, antes de alterar qualquer arquivo, se o processo não estiver no PM2 do root.
+if ! pm2 describe "$PM2_NAME" >/dev/null 2>&1; then
+  echo "Processo '$PM2_NAME' não encontrado no PM2 do root. Nada foi alterado." >&2
+  exit 1
+fi
+
 cd "$APP"
 
 echo "==> Atualizando manifestos, config e public"

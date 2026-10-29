@@ -16,7 +16,8 @@ permissions:
   contents: read
 
 env:
-  # Manter alinhado com `node -v` da VPS.
+  # Versão usada só para BUILDAR no runner. A VPS executa o resultado com Node 18.19.1
+  # (compatível com o Next 15.5, que exige >= 18.18).
   NODE_VERSION: '22'
   SITE_URL: https://artein.angelicaborba.com/login
   NEXT_TELEMETRY_DISABLED: '1'
