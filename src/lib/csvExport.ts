@@ -34,8 +34,12 @@ function resolveCellValue<T>(col: ColumnDef<T, any>, row: T): string {
   return "";
 }
 
+// Excel em pt-BR usa ";" como separador de lista (a vírgula é o separador decimal).
+// Com "," tudo cai numa coluna só. O Google Sheets detecta ";" automaticamente.
+const CSV_DELIMITER = ";";
+
 function escapeCsvValue(value: string): string {
-  if (/[",\n\r]/.test(value)) {
+  if (/[";,\n\r]/.test(value)) {
     return `"${value.replace(/"/g, '""')}"`;
   }
   return value;
@@ -43,9 +47,9 @@ function escapeCsvValue(value: string): string {
 
 export function columnsToCsv<T>(columns: ColumnDef<T, any>[], rows: T[]): string {
   const exportableColumns = columns.filter((col) => col.id !== "actions");
-  const headerLine = exportableColumns.map((col) => escapeCsvValue(resolveHeader(col))).join(",");
+  const headerLine = exportableColumns.map((col) => escapeCsvValue(resolveHeader(col))).join(CSV_DELIMITER);
   const lines = rows.map((row) =>
-    exportableColumns.map((col) => escapeCsvValue(resolveCellValue(col, row))).join(",")
+    exportableColumns.map((col) => escapeCsvValue(resolveCellValue(col, row))).join(CSV_DELIMITER)
   );
   return "﻿" + [headerLine, ...lines].join("\r\n");
 }
